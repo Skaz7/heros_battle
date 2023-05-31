@@ -143,15 +143,38 @@ class Inventory:
 
 
 class Item:
-    pass
+    def __init__(self, name: str, description: str, value: int):
+        self.name = name
+        self.description = description
+        self.value = value
+
+    def destroy(self):
+        print(f"\n{self.name} is destroyed!\n")
+        Hero.inventory.remove(self)
 
 
-class Weapon:
-    pass
+class Weapon(Item):
+    def __init__(self, name: str, description: str, value: int, damage: int):
+        super().__init__(name, description, value)
+        self.damage = damage
 
 
 class Consumable:
-    pass
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        value: int,
+        heal: int,
+        mana: int,
+        strength: int,
+        dexterity: int,
+    ):
+        super().__init__(name, description, value)
+        self.heal = heal
+        self.mana = mana
+        self.strength = strength
+        self.dexterity = dexterity
 
 
 class Enemy:
