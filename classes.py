@@ -1,3 +1,6 @@
+import random
+
+
 class Hero:
     def __init__(
         self,
@@ -9,6 +12,7 @@ class Hero:
         health: int = 100,
         strength: int = 10,
         dexterity: int = 10,
+        armor: int = 10,
         mana: int = 10,
         gold: int = 10,
         status: str = None,
@@ -22,6 +26,7 @@ class Hero:
         self.health = health
         self.strength = strength
         self.dexterity = dexterity
+        self.armor = armor
         self.mana = mana
         self.gold = gold
         self.status = status
@@ -58,6 +63,10 @@ class Hero:
     @property
     def dexterity(self):
         return self._dexterity
+
+    @property
+    def armor(self):
+        return self._armor
 
     @property
     def mana(self):
@@ -107,6 +116,10 @@ class Hero:
     def dexterity(self, new_dexterity):
         self._dexterity = new_dexterity
 
+    @armor.setter
+    def armor(self, new_armor):
+        self._armor = new_armor
+
     @mana.setter
     def mana(self, new_mana):
         self._mana = new_mana
@@ -136,6 +149,124 @@ class Hero:
         damage = self.strength
         print(f"\n{self.name} attacks {target.name} for {damage} damage!\n")
         target.health -= damage
+
+
+class Enemy:
+    def __init__(
+        self,
+        race: str = "Hero",
+        level: int = 1,
+        attack: int = 10,
+        health: int = 100,
+        armor: int = 10,
+        xp: int = 0,
+        gold: int = 10,
+        status: str = None,
+    ):
+        self.race = race
+        self.level = level
+        self.attack = attack
+        self.health = health
+        self.armor = armor
+        self.xp = xp
+        self.gold = gold
+        self.status = status
+
+    @property
+    def level(self):
+        return self._level
+
+    @property
+    def race(self):
+        return self._race
+
+    @property
+    def attack(self):
+        return self._attack
+
+    @property
+    def health(self):
+        return self._health
+
+    @property
+    def armor(self):
+        return self._armor
+
+    @property
+    def xp(self):
+        return self._xp
+
+    @property
+    def gold(self):
+        return self._gold
+
+    @property
+    def status(self):
+        return self._status
+
+    @race.setter
+    def race(self, new_race):
+        self._race = new_race
+
+    @level.setter
+    def level(self, new_level):
+        self._level = new_level
+
+    @attack.setter
+    def attack(self, new_attack):
+        self._attack = new_attack
+
+    @health.setter
+    def health(self, new_health):
+        self._health = new_health
+
+    @armor.setter
+    def armor(self, new_armor):
+        self._armor = new_armor
+
+    @xp.setter
+    def xp(self, new_xp):
+        self._xp = new_xp
+
+    @gold.setter
+    def gold(self, new_gold):
+        self._gold = new_gold
+
+    @status.setter
+    def status(self, new_status):
+        self._status = new_status
+
+
+class Battle:
+    def __init__(self, hero, enemy):
+        self.hero = hero
+        self.enemy = enemy
+
+    def attack(self, attacker, defender):
+        damage = 15
+        defender.health -= damage
+        print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
+        if defender.health <= 0:
+            self.win()
+
+    def defend(self, defender):
+        defender.armor *= 1.5
+        print(f"\n{defender.name} is defending!\n")
+
+    def fight(self):
+        pass
+
+    def flee(self):
+        pass
+
+    def win(self):
+        pass
+
+    def lose(self):
+        pass
+
+    def end(self):
+        return
 
 
 class Inventory:
@@ -175,10 +306,6 @@ class Consumable:
         self.mana = mana
         self.strength = strength
         self.dexterity = dexterity
-
-
-class Enemy:
-    pass
 
 
 class Spell:
