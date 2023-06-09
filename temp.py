@@ -45,9 +45,27 @@ def print_enemy_stats(enemy):
 
 
 sword1 = Weapon("Excalibur", "Sword", 50, 5)
+staff1 = Weapon("Ice Blizzard", "Staff", 40, 4)
+hammer1 = Weapon("Destroyer", "Hammer", 10, 1)
+bow1 = Weapon("Elvish Eyes", "Bow", 20, 3)
+spear1 = Weapon("Long Spear", "Spear", 15, 4)
 
 player = Hero("Jimi Hendrix", 2, 0, "Gnome", 150, 27, 12, 8, 21, 129, "Sick", [])
 enemy = Enemy("Goblin", 1, 10, 20, 0, 10, 10, "Alive")
 
-print_player_stats(player)
-print_enemy_stats(enemy)
+# print_player_stats(player)
+# print_enemy_stats(enemy)
+
+inventory = Inventory()
+
+inventory.add_item_to_inventory(sword1)
+inventory.add_item_to_inventory(staff1)
+inventory.add_item_to_inventory(hammer1)
+inventory.add_item_to_inventory(bow1)
+inventory.add_item_to_inventory(spear1)
+
+inventory.show_inventory()
+
+inventory.remove_item_from_inventory(staff1)
+
+inventory.show_inventory()

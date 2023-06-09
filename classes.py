@@ -238,9 +238,34 @@ class Enemy:
 
 
 class Battle:
-    def __init__(self, hero, enemy):
-        self.hero = hero
+    def __init__(self, player, enemy):
+        self.player = player
         self.enemy = enemy
+
+    def battle_menu(self):
+        print(f"\n{self.player.name} vs {self.enemy.race}\n")
+        print("1. Attack")
+        print("2. Defend")
+        print("3. Use Item")
+        print("4. Flee")
+        print("0. End Game")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            self.attack(self.player, self.enemy)
+        elif choice == "2":
+            self.defend(self.player)
+        elif choice == "3":
+            self.use_item()
+        elif choice == "4":
+            self.flee()
+        elif choice == "0":
+            self.end()
+        else:
+            print("Invalid choice!")
+            self.battle_menu()
+
+    def hero_turn():
+        pass
 
     def attack(self, attacker, defender):
         damage = 15
@@ -253,11 +278,24 @@ class Battle:
         defender.armor *= 1.5
         print(f"\n{defender.name} is defending!\n")
 
-    def fight(self):
-        pass
+    def use_item(self):
+        print(f"\nWhich item would you like to use?\n")
+        choice = input("> ")
 
     def flee(self):
-        pass
+        flee_chance = random.randint(1, 10)
+        if flee_chance <= 2:
+            print(
+                f"\n{self.player.name} get hurt while running from battle and failed to escape!\n"
+            )
+            self.player.health -= int(self.player.max_health / 20)
+            return
+        elif 2 < flee_chance <= 5:
+            print(f"\n{self.player.name} failed to escape from the battlefield!\n")
+            return
+        elif 5 < flee_chance <= 10:
+            print(f"\n{self.player.name} escaped from the battlefield!\n")
+            exit()
 
     def win(self):
         pass
@@ -270,11 +308,37 @@ class Battle:
 
 
 class Inventory:
-    pass
+    def __init__(self, inventory: list = [], slots: int = 5):
+        """Initializes a new inventory with 5 item slots.
+        It is possible to upgrade number of slots to carry more items
+        """
+        self.inventory = inventory
+        self.slots = slots
+
+    def show_inventory(self):
+        """Prints all items from inventory."""
+        print(f"\nItems in your inventory:\n")
+        for i, item in enumerate(self.inventory):
+            print(f"{i + 1}. {item.name}")
+
+    def add_item_to_inventory(self, item):
+        """Adds a new item to the inventory."""
+        self.inventory.append(item)
+
+    def remove_item_from_inventory(self, item):
+        """Removes a item from the inventory."""
+        self.inventory.remove(item)
+
+    def upgrade_inventory(self, additional_slots: int = 0):
+        """Upgrades number of inventory slots."""
+        self.slots += additional_slots
 
 
 class Item:
     def __init__(self, name: str, description: str, value: int):
+        """Initializes a new instance of item.
+        Item type can be weapon, armor or consumable.
+        """
         self.name = name
         self.description = description
         self.value = value
@@ -286,8 +350,20 @@ class Item:
 
 class Weapon(Item):
     def __init__(self, name: str, description: str, value: int, damage: int):
+        """Initializes a new instance of Weapon item.
+        In addition to Item attributes, there is 'damage' attribute.
+        """
         super().__init__(name, description, value)
         self.damage = damage
+
+
+class Armor(Item):
+    def __init__(self, name: str, description: str, value: int, armor: int):
+        """Initializes a new instance of Armor item.
+        In addition to Item attributes,, there is 'armor' attribute.
+        """
+        super().__init__(name, description, value)
+        self.armor = armor
 
 
 class Consumable:
@@ -301,6 +377,9 @@ class Consumable:
         strength: int,
         dexterity: int,
     ):
+        """Initializes a Consumable Item.
+        Consuming one of this items will upgrade player statistics.
+        Upgrade can be temporary or permanent, depending of the item."""
         super().__init__(name, description, value)
         self.heal = heal
         self.mana = mana

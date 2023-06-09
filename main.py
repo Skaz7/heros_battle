@@ -1,6 +1,9 @@
-from classes import Hero, Enemy
+from classes import Hero, Enemy, Battle
 import os
 import time
+
+global player
+global enemy
 
 
 def create_player(
@@ -90,7 +93,11 @@ def print_enemy_stats(enemy):
 if __name__ == "__main__":
     os.system("cls")
 
-    create_player("Jimi Hendrix", 2, 0, "Gnome", 150, 27, 12, 8, 21, 129, "Sick", [])
+    create_player("Jimi Hendrix", 2, 0, "Human", 100, 100, 12, 8, 21, 129, "Sick", [])
     create_enemy("Goblin", 1, 10, 20, 0, 10, 10, "Alive")
     print_player_stats(player)
     print_enemy_stats(enemy)
+    battle = Battle(player, enemy)
+    while True:
+        print_player_stats(player)
+        battle.battle_menu()
