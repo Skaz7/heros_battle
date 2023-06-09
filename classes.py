@@ -161,6 +161,8 @@ class Enemy:
         armor: int = 10,
         xp: int = 0,
         gold: int = 10,
+        weakness: str = None,
+        resistance: str = None,
         status: str = None,
     ):
         self.race = race
@@ -170,6 +172,8 @@ class Enemy:
         self.armor = armor
         self.xp = xp
         self.gold = gold
+        self.weakness = weakness
+        self.resistance = resistance
         self.status = status
 
     @property
@@ -199,6 +203,14 @@ class Enemy:
     @property
     def gold(self):
         return self._gold
+
+    @property
+    def weakness(self):
+        return self._weakness
+
+    @property
+    def resistance(self):
+        return self._resistance
 
     @property
     def status(self):
@@ -231,6 +243,14 @@ class Enemy:
     @gold.setter
     def gold(self, new_gold):
         self._gold = new_gold
+
+    @weakness.setter
+    def weakness(self, new_weakness):
+        self._weakness = new_weakness
+
+    @resistance.setter
+    def resistance(self, new_resistance):
+        self._resistance = new_resistance
 
     @status.setter
     def status(self, new_status):
@@ -389,3 +409,10 @@ class Consumable:
 
 class Spell:
     pass
+
+
+class Status:
+    def __init__(self, name: str, description: str, duration: int):
+        self.name = name
+        self.description = description
+        self.duration = duration

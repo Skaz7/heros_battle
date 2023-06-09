@@ -41,6 +41,8 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Armor:      {enemy.armor}")
     slow_print(f"\n    XP:         {enemy.xp}")
     slow_print(f"\n    Gold:       {enemy.gold}")
+    slow_print(f"\n    Weakness:   {enemy.weakness}")
+    slow_print(f"\n    Resistance: {enemy.resistance}")
     slow_print(f"\n    Status:     {enemy.status}\n")
 
 
@@ -51,10 +53,10 @@ bow1 = Weapon("Elvish Eyes", "Bow", 20, 3)
 spear1 = Weapon("Long Spear", "Spear", 15, 4)
 
 player = Hero("Jimi Hendrix", 2, 0, "Gnome", 150, 27, 12, 8, 21, 129, "Sick", [])
-enemy = Enemy("Goblin", 1, 10, 20, 0, 10, 10, "Alive")
+enemy = Enemy("Goblin", 1, 10, 20, 0, 10, 10, None, None, "Alive")
 
-# print_player_stats(player)
-# print_enemy_stats(enemy)
+print_player_stats(player)
+print_enemy_stats(enemy)
 
 inventory = Inventory()
 
