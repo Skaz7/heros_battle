@@ -5,7 +5,7 @@ from classes import *
 def slow_print(text):
     for char in text:
         print(char, end="", flush=True)
-        time.sleep(0.01)
+        time.sleep(0.003)
 
 
 def print_one_line_in_frame(text):
@@ -55,19 +55,23 @@ spear1 = Weapon("Long Spear", "Spear", 15, 4)
 player = Hero("Jimi Hendrix", 2, 0, "Gnome", 150, 27, 12, 8, 21, 129, "Sick", [])
 enemy = Enemy("Goblin", 1, 10, 20, 0, 10, 10, None, None, "Alive")
 
-print_player_stats(player)
-print_enemy_stats(enemy)
+# print_player_stats(player)
+# print_enemy_stats(enemy)
 
-inventory = Inventory()
+player.inventory = Inventory()
 
-inventory.add_item_to_inventory(sword1)
-inventory.add_item_to_inventory(staff1)
-inventory.add_item_to_inventory(hammer1)
-inventory.add_item_to_inventory(bow1)
-inventory.add_item_to_inventory(spear1)
+player.inventory.add_item_to_inventory(sword1)
+player.inventory.add_item_to_inventory(staff1)
+player.inventory.add_item_to_inventory(hammer1)
+player.inventory.add_item_to_inventory(bow1)
+player.inventory.add_item_to_inventory(spear1)
 
-inventory.show_inventory()
+player.inventory.show_inventory()
 
-inventory.remove_item_from_inventory(staff1)
+player.inventory.remove_item_from_inventory(staff1)
 
-inventory.show_inventory()
+player.inventory.show_inventory()
+
+battle = Battle(player, enemy)
+
+battle.player_turn()

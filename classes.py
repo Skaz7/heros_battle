@@ -16,7 +16,7 @@ class Hero:
         mana: int = 10,
         gold: int = 10,
         status: str = None,
-        inventory: list = [],
+        inventory=None,
     ):
         self.name = name
         self.level = level
@@ -262,7 +262,7 @@ class Battle:
         self.player = player
         self.enemy = enemy
 
-    def battle_menu(self):
+    def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.race}\n")
         print("1. Attack")
         print("2. Defend")
@@ -284,12 +284,19 @@ class Battle:
             print("Invalid choice!")
             self.battle_menu()
 
-    def hero_turn():
+    def enemy_turn(self):
         pass
 
     def attack(self, attacker, defender):
-        damage = 15
-        defender.health -= damage
+        """Attack method for both players.
+        Damage dealt to defender is based on the attacker's strength and additional damage provided by equipped weapon.
+        If the defender is defending, the damage dealt is reduced by the defender's armor.
+        If the defender's health is reduced to 0 or below, the attacker wins.
+        """
+        base_attack = attacker.strength
+        additional_attack = equipped_weapon.damage
+        total_attack = base_attack + additional_attack
+        defender.health -= total_attack - defender.armor
         print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
         if defender.health <= 0:
             self.win()
@@ -299,8 +306,9 @@ class Battle:
         print(f"\n{defender.name} is defending!\n")
 
     def use_item(self):
-        print(f"\nWhich item would you like to use?\n")
-        choice = input("> ")
+        self.player.inventory.show_inventory()
+        choice = int(input("> "))
+        equipped_weapon = self.player.inventory[choice - 1]
 
     def flee(self):
         flee_chance = random.randint(1, 10)
