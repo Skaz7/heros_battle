@@ -1,10 +1,11 @@
 weaknesses = [
     "slash",
     "blunt",
-    "stab" "fire",
+    "stab",
+    "fire",
     "water",
     "wind",
-    "earth",
+    "ice",
     "poison",
     "electric",
 ]
@@ -15,7 +16,7 @@ resistances = [
     "fire",
     "water",
     "wind",
-    "earth",
+    "ice",
     "poison",
     "electric",
 ]

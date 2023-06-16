@@ -46,29 +46,53 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Status:     {enemy.status}\n")
 
 
-sword1 = Weapon("Excalibur", "Sword", 50, 5)
-staff1 = Weapon("Ice Blizzard", "Staff", 40, 4)
-hammer1 = Weapon("Destroyer", "Hammer", 10, 1)
-bow1 = Weapon("Elvish Eyes", "Bow", 20, 3)
-spear1 = Weapon("Long Spear", "Spear", 15, 4)
+excalibur = Weapon("Excalibur", "Sword", "slash", 50, 5)
+iceblizzard = Weapon("Ice Blizzard", "Staff", "ice", 40, 4)
+thorshammer = Weapon("Destroyer", "Hammer", "blunt", 10, 1)
+elvisheyes = Weapon("Elvish Eyes", "Bow", "stab", 20, 3)
+longspear = Weapon("Long Spear", "Spear", "stab", 15, 4)
 
-player = Hero("Jimi Hendrix", 2, 0, "Gnome", 150, 27, 12, 8, 21, 129, "Sick", [])
-enemy = Enemy("Goblin", 1, 10, 20, 0, 10, 10, None, None, "Alive")
+player = Hero(
+    name="Jimi Hendrix",
+    level=1,
+    experience=0,
+    race="Human",
+    max_health=150,
+    health=27,
+    strength=25,
+    dexterity=8,
+    armor=21,
+    mana=15,
+    gold=129,
+    status="Sick",
+    inventory=None,
+)
+enemy = Enemy(
+    race="Goblin",
+    level=1,
+    attack=10,
+    armor=10,
+    xp=0,
+    gold=10,
+    weakness=None,
+    resistance=None,
+    status="Alive",
+)
 
 # print_player_stats(player)
 # print_enemy_stats(enemy)
 
 player.inventory = Inventory()
 
-player.inventory.add_item_to_inventory(sword1)
-player.inventory.add_item_to_inventory(staff1)
-player.inventory.add_item_to_inventory(hammer1)
-player.inventory.add_item_to_inventory(bow1)
-player.inventory.add_item_to_inventory(spear1)
+player.inventory.add_item_to_inventory(excalibur)
+player.inventory.add_item_to_inventory(iceblizzard)
+player.inventory.add_item_to_inventory(thorshammer)
+player.inventory.add_item_to_inventory(elvisheyes)
+player.inventory.add_item_to_inventory(longspear)
 
 player.inventory.show_inventory()
 
-player.inventory.remove_item_from_inventory(staff1)
+player.inventory.remove_item_from_inventory(iceblizzard)
 
 player.inventory.show_inventory()
 

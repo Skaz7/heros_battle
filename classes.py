@@ -294,10 +294,11 @@ class Battle:
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
         base_attack = attacker.strength
-        additional_attack = equipped_weapon.damage
+        additional_attack = 0
         total_attack = base_attack + additional_attack
-        defender.health -= total_attack - defender.armor
-        print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
+        damage = total_attack - defender.armor
+        defender.health -= damage
+        print(f"\n{attacker.name} attacks {defender.race} for {damage} damage!\n")
         if defender.health <= 0:
             self.win()
 
@@ -346,8 +347,8 @@ class Inventory:
     def show_inventory(self):
         """Prints all items from inventory."""
         print(f"\nItems in your inventory:\n")
-        for i, item in enumerate(self.inventory):
-            print(f"{i + 1}. {item.name}")
+        for i, item in enumerate(self.inventory, start=1):
+            print(f"{i}. {item.name}")
 
     def add_item_to_inventory(self, item):
         """Adds a new item to the inventory."""
@@ -377,20 +378,31 @@ class Item:
 
 
 class Weapon(Item):
-    def __init__(self, name: str, description: str, value: int, damage: int):
+    def __init__(
+        self, name: str, description: str, damage_type: str, value: int, damage: int
+    ):
         """Initializes a new instance of Weapon item.
         In addition to Item attributes, there is 'damage' attribute.
         """
         super().__init__(name, description, value)
+        self.damage_type = damage_type
         self.damage = damage
 
 
 class Armor(Item):
-    def __init__(self, name: str, description: str, value: int, armor: int):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        additional_resistance: str,
+        value: int,
+        armor: int,
+    ):
         """Initializes a new instance of Armor item.
         In addition to Item attributes,, there is 'armor' attribute.
         """
         super().__init__(name, description, value)
+        self.additional_resistance = additional_resistance
         self.armor = armor
 
 
