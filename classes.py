@@ -1,6 +1,10 @@
 import random
 
 
+class Creature:
+    pass
+
+
 class Hero:
     def __init__(
         self,
@@ -154,9 +158,9 @@ class Hero:
 class Enemy:
     def __init__(
         self,
-        race: str = "Hero",
+        name: str = "Hero",
         level: int = 1,
-        attack: int = 10,
+        strength: int = 10,
         health: int = 100,
         armor: int = 10,
         xp: int = 0,
@@ -165,9 +169,9 @@ class Enemy:
         resistance: str = None,
         status: str = None,
     ):
-        self.race = race
+        self.name = name
         self.level = level
-        self.attack = attack
+        self.strength = strength
         self.health = health
         self.armor = armor
         self.xp = xp
@@ -181,12 +185,12 @@ class Enemy:
         return self._level
 
     @property
-    def race(self):
-        return self._race
+    def name(self):
+        return self._name
 
     @property
-    def attack(self):
-        return self._attack
+    def strength(self):
+        return self._strength
 
     @property
     def health(self):
@@ -216,17 +220,17 @@ class Enemy:
     def status(self):
         return self._status
 
-    @race.setter
-    def race(self, new_race):
-        self._race = new_race
+    @name.setter
+    def name(self, new_name):
+        self._name = new_name
 
     @level.setter
     def level(self, new_level):
         self._level = new_level
 
-    @attack.setter
-    def attack(self, new_attack):
-        self._attack = new_attack
+    @strength.setter
+    def strength(self, new_strength):
+        self._strength = new_strength
 
     @health.setter
     def health(self, new_health):
@@ -258,12 +262,14 @@ class Enemy:
 
 
 class Battle:
+    turn = 0
+
     def __init__(self, player, enemy):
         self.player = player
         self.enemy = enemy
 
     def player_turn(self):
-        print(f"\n{self.player.name} vs {self.enemy.race}\n")
+        print(f"\n{self.player.name} vs {self.enemy.name}\n")
         print("1. Attack")
         print("2. Defend")
         print("3. Use Item")
@@ -285,7 +291,8 @@ class Battle:
             self.battle_menu()
 
     def enemy_turn(self):
-        pass
+        print(f"\n{self.enemy.name} vs {self.player.name}\n")
+        self.attack(self.enemy, self.player)
 
     def attack(self, attacker, defender):
         """Attack method for both players.
@@ -298,7 +305,7 @@ class Battle:
         total_attack = base_attack + additional_attack
         damage = total_attack - defender.armor
         defender.health -= damage
-        print(f"\n{attacker.name} attacks {defender.race} for {damage} damage!\n")
+        print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
         if defender.health <= 0:
             self.win()
 
@@ -333,7 +340,7 @@ class Battle:
         pass
 
     def end(self):
-        return
+        exit()
 
 
 class Inventory:

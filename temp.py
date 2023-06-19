@@ -34,9 +34,9 @@ def print_player_stats(player):
 def print_enemy_stats(enemy):
     print()
     print_one_line_in_frame("Enemy Stats:")
-    slow_print(f"\n    Race:       {enemy.race}")
+    slow_print(f"\n    Name:       {enemy.name}")
     slow_print(f"\n    Level:      {enemy.level}")
-    slow_print(f"\n    Attack:     {enemy.attack}")
+    slow_print(f"\n    Attack:     {enemy.strength}")
     slow_print(f"\n    Health:     {enemy.health}")
     slow_print(f"\n    Armor:      {enemy.armor}")
     slow_print(f"\n    XP:         {enemy.xp}")
@@ -46,11 +46,11 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Status:     {enemy.status}\n")
 
 
-excalibur = Weapon("Excalibur", "Sword", "slash", 50, 5)
-iceblizzard = Weapon("Ice Blizzard", "Staff", "ice", 40, 4)
-thorshammer = Weapon("Destroyer", "Hammer", "blunt", 10, 1)
-elvisheyes = Weapon("Elvish Eyes", "Bow", "stab", 20, 3)
-longspear = Weapon("Long Spear", "Spear", "stab", 15, 4)
+excalibur = Weapon("Excalibur", "Sword", "slash", 50, 15)
+iceblizzard = Weapon("Ice Blizzard", "Staff", "ice", 40, 15)
+thorshammer = Weapon("Destroyer", "Hammer", "blunt", 10, 20)
+elvisheyes = Weapon("Elvish Eyes", "Bow", "stab", 20, 12)
+longspear = Weapon("Long Spear", "Spear", "stab", 15, 15)
 
 player = Hero(
     name="Jimi Hendrix",
@@ -59,18 +59,19 @@ player = Hero(
     race="Human",
     max_health=150,
     health=27,
-    strength=25,
+    strength=10,
     dexterity=8,
-    armor=21,
+    armor=5,
     mana=15,
     gold=129,
     status="Sick",
     inventory=None,
 )
 enemy = Enemy(
-    race="Goblin",
+    name="Goblin",
     level=1,
-    attack=10,
+    strength=10,
+    health=30,
     armor=10,
     xp=0,
     gold=10,
@@ -98,4 +99,13 @@ player.inventory.show_inventory()
 
 battle = Battle(player, enemy)
 
-battle.player_turn()
+print_player_stats(player)
+print_enemy_stats(enemy)
+
+while True:
+    battle.player_turn()
+    print_player_stats(player)
+    print_enemy_stats(enemy)
+    battle.enemy_turn()
+    print_player_stats(player)
+    print_enemy_stats(enemy)
