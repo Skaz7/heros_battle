@@ -39,7 +39,7 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Attack:     {enemy.strength}")
     slow_print(f"\n    Health:     {enemy.health}")
     slow_print(f"\n    Armor:      {enemy.armor}")
-    slow_print(f"\n    XP:         {enemy.xp}")
+    slow_print(f"\n    XP:         {enemy.experience}")
     slow_print(f"\n    Gold:       {enemy.gold}")
     slow_print(f"\n    Weakness:   {enemy.weakness}")
     slow_print(f"\n    Resistance: {enemy.resistance}")
@@ -52,36 +52,13 @@ thorshammer = Weapon("Destroyer", "Hammer", "blunt", 10, 20)
 elvisheyes = Weapon("Elvish Eyes", "Bow", "stab", 20, 12)
 longspear = Weapon("Long Spear", "Spear", "stab", 15, 15)
 
-player = Hero(
-    name="Jimi Hendrix",
-    level=1,
-    experience=0,
-    race="Human",
-    max_health=150,
-    health=27,
-    strength=10,
-    dexterity=8,
-    armor=5,
-    mana=15,
-    gold=129,
-    status="Sick",
-    inventory=None,
-)
-enemy = Enemy(
-    name="Goblin",
-    level=1,
-    strength=10,
-    health=30,
-    armor=10,
-    xp=0,
-    gold=10,
-    weakness=None,
-    resistance=None,
-    status="Alive",
-)
+creature1 = Creature()
+creature2 = Creature("creature", 5, 5, "monster", 5, 5, 5, 5, 5, "Alive", None)
+player = Hero("Jimi Hendrix", 1, 0, "Human", 27, 10, 8, 5, 129, "Sick", None, 150, 10)
+enemy = Enemy("Goblin", 1, 10, 30, 10, 0, 10, None, None, "Alive")
 
-# print_player_stats(player)
-# print_enemy_stats(enemy)
+print_player_stats(player)
+print_enemy_stats(enemy)
 
 player.inventory = Inventory()
 

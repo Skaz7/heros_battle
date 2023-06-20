@@ -1,41 +1,20 @@
 import random
+from dataclasses import dataclass
 
-
+@dataclass
 class Creature:
-    pass
-
-
-class Hero:
-    def __init__(
-        self,
-        name: str = "Hero",
-        level: int = 1,
-        experience: int = 0,
-        race: str = None,
-        max_health: int = 100,
-        health: int = 100,
-        strength: int = 10,
-        dexterity: int = 10,
-        armor: int = 10,
-        mana: int = 10,
-        gold: int = 10,
-        status: str = None,
-        inventory=None,
-    ):
-        self.name = name
-        self.level = level
-        self.experience = experience
-        self.race = race
-        self.max_health = max_health
-        self.health = health
-        self.strength = strength
-        self.dexterity = dexterity
-        self.armor = armor
-        self.mana = mana
-        self.gold = gold
-        self.status = status
-        self.inventory = inventory
-
+    name: str = "Hero"
+    level: int = 1
+    experience: int = 0
+    race: str = None
+    health: int = 100
+    strength: int = 10
+    dexterity: int = 10
+    armor: int = 10
+    gold: int = 10
+    status: str = None
+    inventory: dict=None
+        
     @property
     def name(self):
         return self._name
@@ -51,11 +30,7 @@ class Hero:
     @property
     def race(self):
         return self._race
-
-    @property
-    def max_health(self):
-        return self._max_health
-
+    
     @property
     def health(self):
         return self._health
@@ -71,11 +46,7 @@ class Hero:
     @property
     def armor(self):
         return self._armor
-
-    @property
-    def mana(self):
-        return self._mana
-
+    
     @property
     def gold(self):
         return self._gold
@@ -104,10 +75,6 @@ class Hero:
     def race(self, new_race):
         self._race = new_race
 
-    @max_health.setter
-    def max_health(self, new_max_health):
-        self._max_health = new_max_health
-
     @health.setter
     def health(self, new_health):
         self._health = new_health
@@ -123,10 +90,6 @@ class Hero:
     @armor.setter
     def armor(self, new_armor):
         self._armor = new_armor
-
-    @mana.setter
-    def mana(self, new_mana):
-        self._mana = new_mana
 
     @gold.setter
     def gold(self, new_gold):
@@ -154,59 +117,31 @@ class Hero:
         print(f"\n{self.name} attacks {target.name} for {damage} damage!\n")
         target.health -= damage
 
-
-class Enemy:
-    def __init__(
-        self,
-        name: str = "Hero",
-        level: int = 1,
-        strength: int = 10,
-        health: int = 100,
-        armor: int = 10,
-        xp: int = 0,
-        gold: int = 10,
-        weakness: str = None,
-        resistance: str = None,
-        status: str = None,
-    ):
-        self.name = name
-        self.level = level
-        self.strength = strength
-        self.health = health
-        self.armor = armor
-        self.xp = xp
-        self.gold = gold
-        self.weakness = weakness
-        self.resistance = resistance
-        self.status = status
+@dataclass
+class Hero(Creature):
+    max_health: int = 100
+    mana: int = 10
 
     @property
-    def level(self):
-        return self._level
+    def max_health(self):
+        return self._max_health
 
     @property
-    def name(self):
-        return self._name
+    def mana(self):
+        return self._mana
 
-    @property
-    def strength(self):
-        return self._strength
+    @max_health.setter
+    def max_health(self, new_max_health):
+        self._max_health = new_max_health
 
-    @property
-    def health(self):
-        return self._health
+    @mana.setter
+    def mana(self, new_mana):
+        self._mana = new_mana
 
-    @property
-    def armor(self):
-        return self._armor
-
-    @property
-    def xp(self):
-        return self._xp
-
-    @property
-    def gold(self):
-        return self._gold
+@dataclass
+class Enemy(Creature):
+    weakness: str = None,
+    resistance: str = None,
 
     @property
     def weakness(self):
@@ -216,38 +151,6 @@ class Enemy:
     def resistance(self):
         return self._resistance
 
-    @property
-    def status(self):
-        return self._status
-
-    @name.setter
-    def name(self, new_name):
-        self._name = new_name
-
-    @level.setter
-    def level(self, new_level):
-        self._level = new_level
-
-    @strength.setter
-    def strength(self, new_strength):
-        self._strength = new_strength
-
-    @health.setter
-    def health(self, new_health):
-        self._health = new_health
-
-    @armor.setter
-    def armor(self, new_armor):
-        self._armor = new_armor
-
-    @xp.setter
-    def xp(self, new_xp):
-        self._xp = new_xp
-
-    @gold.setter
-    def gold(self, new_gold):
-        self._gold = new_gold
-
     @weakness.setter
     def weakness(self, new_weakness):
         self._weakness = new_weakness
@@ -255,10 +158,6 @@ class Enemy:
     @resistance.setter
     def resistance(self, new_resistance):
         self._resistance = new_resistance
-
-    @status.setter
-    def status(self, new_status):
-        self._status = new_status
 
 
 class Battle:
