@@ -1,5 +1,6 @@
 import random
 from dataclasses import dataclass
+import time
 
 @dataclass
 class Creature:
@@ -140,8 +141,8 @@ class Hero(Creature):
 
 @dataclass
 class Enemy(Creature):
-    weakness: str = None,
-    resistance: str = None,
+    weakness: str = None
+    resistance: str = None
 
     @property
     def weakness(self):
@@ -187,7 +188,8 @@ class Battle:
             self.end()
         else:
             print("Invalid choice!")
-            self.battle_menu()
+            time.sleep(2)
+            self.player_turn()
 
     def enemy_turn(self):
         print(f"\n{self.enemy.name} vs {self.player.name}\n")
@@ -203,13 +205,15 @@ class Battle:
         additional_attack = 0
         total_attack = base_attack + additional_attack
         damage = total_attack - defender.armor
+        if damage < 0:
+            damage = 0
         defender.health -= damage
         print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
         if defender.health <= 0:
             self.win()
 
     def defend(self, defender):
-        defender.armor *= 1.5
+        defender.armor = int(defender.armor * 1.5)
         print(f"\n{defender.name} is defending!\n")
 
     def use_item(self):
