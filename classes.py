@@ -118,10 +118,14 @@ class Creature:
         self.dexterity += 2
         self.mana += 2
 
-    def attack(self, target):
-        damage = self.strength
-        print(f"\n{self.name} attacks {target.name} for {damage} damage!\n")
-        target.health -= damage
+    def take_damage(self, damage):
+        if damage > 0:
+            self.health -= damage
+        if self.health < 0:
+            self.health = 0
+
+    def is_alive(self):
+        return self.health > 0
 
 
 @dataclass
@@ -290,10 +294,7 @@ class Item:
     name: str
     description: str
     value: int
-
-    def destroy(self):
-        print(f"\n{self.name} is destroyed!\n")
-        Hero.inventory.remove(self)
+    slot_size: int
 
 
 @dataclass
