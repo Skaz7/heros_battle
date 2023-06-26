@@ -1,10 +1,14 @@
 import random
 from dataclasses import dataclass
 import time
+from dataclasses import field
 
 
 @dataclass
 class Creature:
+    """Initializes a new instance of Creature class.
+    Player & Enemy classes are a subclasses of Creature class."""
+
     name: str = "Hero"
     level: int = 1
     experience: int = 0
@@ -276,68 +280,52 @@ class Inventory:
         self.slots += additional_slots
 
 
+@dataclass
 class Item:
-    def __init__(self, name: str, description: str, value: int):
-        """Initializes a new instance of item.
-        Item type can be weapon, armor or consumable.
-        """
-        self.name = name
-        self.description = description
-        self.value = value
+    """Initializes a Item.
+    Item can be used to increase player's statistics.
+    It can be Weapon, Armor or Consumable class.
+    """
+
+    name: str
+    description: str
+    value: int
 
     def destroy(self):
         print(f"\n{self.name} is destroyed!\n")
         Hero.inventory.remove(self)
 
 
+@dataclass
 class Weapon(Item):
-    def __init__(
-        self, name: str, description: str, damage_type: str, value: int, damage: int
-    ):
-        """Initializes a new instance of Weapon item.
-        In addition to Item attributes, there is 'damage' attribute.
-        """
-        super().__init__(name, description, value)
-        self.damage_type = damage_type
-        self.damage = damage
+    """Initializes a Weapon Item.
+    Weapon can be used to increase player's attack.
+    Weapon can be used to increase player's damage to a certain damage type."""
+
+    damage_type: str
+    damage: int
 
 
+@dataclass
 class Armor(Item):
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        additional_resistance: str,
-        value: int,
-        armor: int,
-    ):
-        """Initializes a new instance of Armor item.
-        In addition to Item attributes,, there is 'armor' attribute.
-        """
-        super().__init__(name, description, value)
-        self.additional_resistance = additional_resistance
-        self.armor = armor
+    """Initializes a Armor Item.
+    Armor can be used to increase player's defense.
+    Armor can be used to increase player's resistance to a certain damage type."""
+
+    resistance: str
+    armor: int
 
 
-class Consumable:
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        value: int,
-        heal: int,
-        mana: int,
-        strength: int,
-        dexterity: int,
-    ):
-        """Initializes a Consumable Item.
-        Consuming one of this items will upgrade player statistics.
-        Upgrade can be temporary or permanent, depending of the item."""
-        super().__init__(name, description, value)
-        self.heal = heal
-        self.mana = mana
-        self.strength = strength
-        self.dexterity = dexterity
+@dataclass
+class Consumable(Item):
+    """Initializes a Consumable Item.
+    Consuming one of this items will upgrade player statistics.
+    Upgrade can be temporary or permanent, depending of the item."""
+
+    heal: int
+    mana: int
+    strength: int
+    dexterity: int
 
 
 class Spell:
