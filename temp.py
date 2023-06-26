@@ -76,8 +76,9 @@ enemy = Enemy("Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", 
 
 battle = Battle(player, enemy)
 
-while player.health > 0 and enemy.health > 0:
-    print_player_stats(player)
-    print_enemy_stats(enemy)
-    battle.player_turn()
-    battle.enemy_turn()
+if __name__ == "__main__":
+    while player.health > 0 and enemy.health > 0:
+        print_player_stats(player)
+        print_enemy_stats(enemy)
+        battle.player_turn()
+        battle.enemy_turn()

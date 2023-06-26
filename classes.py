@@ -2,6 +2,7 @@ import random
 from dataclasses import dataclass
 import time
 
+
 @dataclass
 class Creature:
     name: str = "Hero"
@@ -14,8 +15,8 @@ class Creature:
     armor: int = 10
     gold: int = 10
     status: str = None
-    inventory: dict=None
-        
+    inventory: dict = None
+
     @property
     def name(self):
         return self._name
@@ -31,7 +32,7 @@ class Creature:
     @property
     def race(self):
         return self._race
-    
+
     @property
     def health(self):
         return self._health
@@ -47,7 +48,7 @@ class Creature:
     @property
     def armor(self):
         return self._armor
-    
+
     @property
     def gold(self):
         return self._gold
@@ -118,6 +119,7 @@ class Creature:
         print(f"\n{self.name} attacks {target.name} for {damage} damage!\n")
         target.health -= damage
 
+
 @dataclass
 class Hero(Creature):
     max_health: int = 100
@@ -138,6 +140,7 @@ class Hero(Creature):
     @mana.setter
     def mana(self, new_mana):
         self._mana = new_mana
+
 
 @dataclass
 class Enemy(Creature):
