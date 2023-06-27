@@ -72,7 +72,7 @@ print(player.inventory.inventory)
 
 player.take_damage(4)
 print_player_stats(player)
-print(player.is_alive())
+print(f"\nIs player alive? -> {player.is_alive()}\n")
 # battle = Battle(player, enemy)
 
 # if __name__ == "__main__":
@@ -81,3 +81,16 @@ print(player.is_alive())
 #         print_enemy_stats(enemy)
 #         battle.player_turn()
 #         battle.enemy_turn()
+
+
+# check if weapon named Excalibur is in inventory
+# if it is, print it's stats
+def check_if_weapon_in_inventory(weapon_name):
+    for weapon in player.inventory.inventory:
+        if weapon.name == weapon_name:
+            print(weapon)
+
+check_if_weapon_in_inventory("Destroyer")
+check_if_weapon_in_inventory("Ice Blizzard")
+check_if_weapon_in_inventory("Elvish Eyes")
+check_if_weapon_in_inventory("Long Spear")

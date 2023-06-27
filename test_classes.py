@@ -84,6 +84,10 @@ def test_add_weapon_to_inventory():
     inventory.add_item_to_inventory(excalibur)
     inventory.add_item_to_inventory(leather_armor)
     inventory.upgrade_inventory(5)
+    print(inventory.inventory)
     assert inventory.inventory == [excalibur, leather_armor]
     assert inventory.slots == 25
+    assert excalibur in inventory.inventory
+    assert leather_armor in inventory.inventory
+    assert "Hammer" not in inventory.inventory
     
