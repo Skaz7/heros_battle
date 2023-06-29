@@ -258,7 +258,7 @@ class Battle:
 
 
 class Inventory:
-    def __init__(self, inventory: list = [], slots: int = 5):
+    def __init__(self, inventory: list = [], slots: int = 10):
         """Initializes a new inventory with 5 item slots.
         It is possible to upgrade number of slots to carry more items
         """
@@ -338,3 +338,17 @@ class Status:
         self.name = name
         self.description = description
         self.duration = duration
+
+
+class HealthBar:
+    def __init__(self, max_health: int, health: int):
+        self.max_health = max_health
+        self.current_health = health
+
+    def show_health(self):
+        print(f"\n{self.current_health}/{self.max_health}\n")
+
+    def draw_health_bar(self):
+        print("Health: ", end="")
+        print(f"[{self.current_health * '█'}{(self.max_health - self.current_health) * '▁'}]")
+        print()

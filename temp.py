@@ -94,3 +94,9 @@ check_if_weapon_in_inventory("Destroyer")
 check_if_weapon_in_inventory("Ice Blizzard")
 check_if_weapon_in_inventory("Elvish Eyes")
 check_if_weapon_in_inventory("Long Spear")
+
+print(f"Player's actual health is {player.health}")
+
+healthbar = HealthBar(player.max_health, player.health)
+healthbar.show_health()
+healthbar.draw_health_bar()
