@@ -50,10 +50,11 @@ def test_inventory_creation():
 
 # test weapon creation
 def test_weapon_creation():
-    weapon = Weapon("Excalibur", "Long Sword, good for Goblins", 50, "Fire", 10)
+    weapon = Weapon("Excalibur", "Long Sword, good for Goblins", 50, 1, "Fire", 10)
     assert weapon.name == "Excalibur"
     assert weapon.description == "Long Sword, good for Goblins"
     assert weapon.value == 50
+    assert weapon.slot_size == 1
     assert weapon.damage_type == "Fire"
     assert weapon.damage == 10
 
@@ -63,10 +64,11 @@ def test_weapon_creation():
 
 # test armor creation
 def test_armor_creation():
-    armor = Armor("Leather", "Good for Humans", 30, "Cold", 5)
+    armor = Armor("Leather", "Good for Humans", 30, 1, "Cold", 5)
     assert armor.name == "Leather"
     assert armor.description == "Good for Humans"
     assert armor.value == 30
+    assert armor.slot_size == 1
     assert armor.resistance == "Cold"
     assert armor.armor == 5
 
@@ -77,8 +79,15 @@ def test_armor_creation():
 # test add weapon object to inventory
 def test_add_weapon_to_inventory():
     inventory = Inventory([], 20)
-    excalibur = Weapon("Excalibur", "Long Sword, good for Goblins", 50, "Fire", 10)
-    leather_armor = Armor("Leather", "Good for Humans", 30, "Cold", 5)
+    excalibur = Weapon("Excalibur", "Long Sword, good for Goblins", 50, 1, "Fire", 10)
+    leather_armor = Armor("Leather", "Good for Humans", 30, 1, "Cold", 5)
     inventory.add_item_to_inventory(excalibur)
     inventory.add_item_to_inventory(leather_armor)
+    inventory.upgrade_inventory(5)
+    print(inventory.inventory)
     assert inventory.inventory == [excalibur, leather_armor]
+    assert inventory.slots == 25
+    assert excalibur in inventory.inventory
+    assert leather_armor in inventory.inventory
+    assert "Hammer" not in inventory.inventory
+        

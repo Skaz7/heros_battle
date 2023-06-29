@@ -47,38 +47,61 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Resistance: {enemy.resistance}")
     slow_print(f"\n    Status:     {enemy.status}\n")
 
-
-# excalibur = Weapon("Excalibur", "Sword", "slash", 50, 15)
-# iceblizzard = Weapon("Ice Blizzard", "Staff", "ice", 40, 15)
-# thorshammer = Weapon("Destroyer", "Hammer", "blunt", 10, 20)
-# elvisheyes = Weapon("Elvish Eyes", "Bow", "stab", 20, 12)
-# longspear = Weapon("Long Spear", "Spear", "stab", 15, 15)
-
-# creature1 = Creature()
-# creature2 = Creature("creature", 5, 5, "monster", 5, 5, 5, 5, 5, "Alive", None)
-player = Hero("Jimi Hendrix", 1, 0, "Human", 27, 10, 8, 5, 129, "Sick", None, 150, 10)
+player = Hero("Jimi Hendrix", 1, 0, "Human", 94, 10, 8, 5, 129, "Sick", None, 110, 10)
 enemy = Enemy("Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire")
 
+excalibur = Weapon("Excalibur", "Great Sword", 50, 1, "Slash", 15)
+iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, "ice", 15)
+thorshammer = Weapon("Destroyer", "Hammer", 10, 1, "blunt", 20)
+elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, "stab", 12)
+longspear = Weapon("Long Spear", "Spear", 15, 2, "stab", 15)
 
-# player.inventory = Inventory()
+player.inventory = Inventory()
 
-# player.inventory.add_item_to_inventory(excalibur)
-# player.inventory.add_item_to_inventory(iceblizzard)
-# player.inventory.add_item_to_inventory(thorshammer)
-# player.inventory.add_item_to_inventory(elvisheyes)
-# player.inventory.add_item_to_inventory(longspear)
+player.inventory.add_item_to_inventory(excalibur)
+player.inventory.add_item_to_inventory(iceblizzard)
+player.inventory.add_item_to_inventory(thorshammer)
+player.inventory.add_item_to_inventory(elvisheyes)
+player.inventory.add_item_to_inventory(longspear)
 
-# player.inventory.show_inventory()
+player.inventory.show_inventory()
+player.inventory.remove_item_from_inventory(iceblizzard)
+player.inventory.show_inventory()
+print(player.inventory.inventory)
 
-# player.inventory.remove_item_from_inventory(iceblizzard)
 
-# player.inventory.show_inventory()
+player.take_damage(4)
+print_player_stats(player)
+print(f"\nIs player alive? -> {player.is_alive()}\n")
+# battle = Battle(player, enemy)
 
-battle = Battle(player, enemy)
+# if __name__ == "__main__":
+#     while player.health > 0 and enemy.health > 0:
+#         print_player_stats(player)
+#         print_enemy_stats(enemy)
+#         battle.player_turn()
+#         battle.enemy_turn()
 
-if __name__ == "__main__":
-    while player.health > 0 and enemy.health > 0:
-        print_player_stats(player)
-        print_enemy_stats(enemy)
-        battle.player_turn()
-        battle.enemy_turn()
+
+# check if weapon named Excalibur is in inventory
+# if it is, print it's stats
+def check_if_weapon_in_inventory(weapon_name):
+    for weapon in player.inventory.inventory:
+        if weapon.name == weapon_name:
+            print(weapon)
+
+check_if_weapon_in_inventory("Destroyer")
+check_if_weapon_in_inventory("Ice Blizzard")
+check_if_weapon_in_inventory("Elvish Eyes")
+check_if_weapon_in_inventory("Long Spear")
+
+print(f"Player's actual health is {player.health}")
+
+healthbar = HealthBar(player)
+print()
+healthbar.draw_health_bar()
+player.take_damage(41)
+healthbar.draw_health_bar()
+player.take_damage(33)
+healthbar.draw_health_bar()
+print()

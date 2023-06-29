@@ -118,10 +118,14 @@ class Creature:
         self.dexterity += 2
         self.mana += 2
 
-    def attack(self, target):
-        damage = self.strength
-        print(f"\n{self.name} attacks {target.name} for {damage} damage!\n")
-        target.health -= damage
+    def take_damage(self, damage):
+        if damage > 0:
+            self.health -= damage
+        if self.health < 0:
+            self.health = 0
+
+    def is_alive(self):
+        return self.health > 0
 
 
 @dataclass
@@ -254,7 +258,7 @@ class Battle:
 
 
 class Inventory:
-    def __init__(self, inventory: list = [], slots: int = 5):
+    def __init__(self, inventory: list = [], slots: int = 10):
         """Initializes a new inventory with 5 item slots.
         It is possible to upgrade number of slots to carry more items
         """
@@ -290,10 +294,7 @@ class Item:
     name: str
     description: str
     value: int
-
-    def destroy(self):
-        print(f"\n{self.name} is destroyed!\n")
-        Hero.inventory.remove(self)
+    slot_size: int
 
 
 @dataclass
@@ -337,3 +338,26 @@ class Status:
         self.name = name
         self.description = description
         self.duration = duration
+
+
+class HealthBar:
+    def __init__(self, player):
+        self.player = player
+        self.max_health = player.max_health
+        self.current_health = player.health
+
+    def draw_health_bar(self):
+        self.max_health = self.player.max_health
+        self.current_health = self.player.health
+
+        if self.current_health >= self.max_health * 0.7:
+            health_bar_color = "\033[0;32m"
+        elif 0.7 * self.max_health > self.current_health >= self.max_health * 0.3:
+            health_bar_color = "\033[0;33m"
+        elif self.current_health < self.max_health * 0.3:
+            health_bar_color = "\033[0;31m"
+
+        health_size = int((self.current_health / self.max_health) * 100)
+
+        print(f"Health: {health_bar_color}{self.current_health}/{self.max_health}  ", end="")
+        print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")
