@@ -47,7 +47,7 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Resistance: {enemy.resistance}")
     slow_print(f"\n    Status:     {enemy.status}\n")
 
-player = Hero("Jimi Hendrix", 1, 0, "Human", 27, 10, 8, 5, 129, "Sick", None, 150, 10)
+player = Hero("Jimi Hendrix", 1, 0, "Human", 94, 10, 8, 5, 129, "Sick", None, 110, 10)
 enemy = Enemy("Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire")
 
 excalibur = Weapon("Excalibur", "Great Sword", 50, 1, "Slash", 15)
@@ -97,6 +97,11 @@ check_if_weapon_in_inventory("Long Spear")
 
 print(f"Player's actual health is {player.health}")
 
-healthbar = HealthBar(player.max_health, player.health)
-healthbar.show_health()
+healthbar = HealthBar(player)
+print()
 healthbar.draw_health_bar()
+player.take_damage(41)
+healthbar.draw_health_bar()
+player.take_damage(33)
+healthbar.draw_health_bar()
+print()

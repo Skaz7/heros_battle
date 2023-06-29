@@ -341,14 +341,23 @@ class Status:
 
 
 class HealthBar:
-    def __init__(self, max_health: int, health: int):
-        self.max_health = max_health
-        self.current_health = health
-
-    def show_health(self):
-        print(f"\n{self.current_health}/{self.max_health}\n")
+    def __init__(self, player):
+        self.player = player
+        self.max_health = player.max_health
+        self.current_health = player.health
 
     def draw_health_bar(self):
-        print("Health: ", end="")
-        print(f"[{self.current_health * '█'}{(self.max_health - self.current_health) * '▁'}]")
-        print()
+        self.max_health = self.player.max_health
+        self.current_health = self.player.health
+
+        if self.current_health >= self.max_health * 0.7:
+            health_bar_color = "\033[0;32m"
+        elif 0.7 * self.max_health > self.current_health >= self.max_health * 0.3:
+            health_bar_color = "\033[0;33m"
+        elif self.current_health < self.max_health * 0.3:
+            health_bar_color = "\033[0;31m"
+
+        health_size = int((self.current_health / self.max_health) * 100)
+
+        print(f"Health: {health_bar_color}{self.current_health}/{self.max_health}  ", end="")
+        print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")
