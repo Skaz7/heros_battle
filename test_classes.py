@@ -1,6 +1,7 @@
 import pytest
 from classes import *
 from temp import *
+from battle import Battle
 
 
 # test for Hero class

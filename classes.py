@@ -3,6 +3,13 @@ from dataclasses import dataclass
 import time
 from dataclasses import field
 
+class Dice:
+    """Simulates a dice roll of n-sides."""
+    def __init__(self, sides: int=6):
+        self.sides = sides
+    
+    def roll(self):
+        return random.randint(1, self.sides)
 
 @dataclass
 class Creature:
@@ -19,7 +26,7 @@ class Creature:
     armor: int = 10
     gold: int = 10
     status: str = None
-    inventory: dict = None
+    inventory: list = field(default_factory=list)
 
     @property
     def name(self):
@@ -172,89 +179,6 @@ class Enemy(Creature):
         self._resistance = new_resistance
 
 
-class Battle:
-    turn = 0
-
-    def __init__(self, player, enemy):
-        self.player = player
-        self.enemy = enemy
-
-    def player_turn(self):
-        print(f"\n{self.player.name} vs {self.enemy.name}\n")
-        print("1. Attack")
-        print("2. Defend")
-        print("3. Use Item")
-        print("4. Flee")
-        print("0. End Game")
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            self.attack(self.player, self.enemy)
-        elif choice == "2":
-            self.defend(self.player)
-        elif choice == "3":
-            self.use_item()
-        elif choice == "4":
-            self.flee()
-        elif choice == "0":
-            self.end()
-        else:
-            print("Invalid choice!")
-            time.sleep(2)
-            self.player_turn()
-
-    def enemy_turn(self):
-        print(f"\n{self.enemy.name} vs {self.player.name}\n")
-        self.attack(self.enemy, self.player)
-
-    def attack(self, attacker, defender):
-        """Attack method for both players.
-        Damage dealt to defender is based on the attacker's strength and additional damage provided by equipped weapon.
-        If the defender is defending, the damage dealt is reduced by the defender's armor.
-        If the defender's health is reduced to 0 or below, the attacker wins.
-        """
-        base_attack = attacker.strength
-        additional_attack = 0
-        total_attack = base_attack + additional_attack
-        damage = total_attack - defender.armor
-        if damage < 0:
-            damage = 0
-        defender.health -= damage
-        print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
-        if defender.health <= 0:
-            self.win()
-
-    def defend(self, defender):
-        defender.armor = int(defender.armor * 1.5)
-        print(f"\n{defender.name} is defending!\n")
-
-    def use_item(self):
-        self.player.inventory.show_inventory()
-        choice = int(input("> "))
-        equipped_weapon = self.player.inventory[choice - 1]
-
-    def flee(self):
-        flee_chance = random.randint(1, 10)
-        if flee_chance <= 2:
-            print(
-                f"\n{self.player.name} get hurt while running from battle and failed to escape!\n"
-            )
-            self.player.health -= int(self.player.max_health / 20)
-            return
-        elif 2 < flee_chance <= 5:
-            print(f"\n{self.player.name} failed to escape from the battlefield!\n")
-            return
-        elif 5 < flee_chance <= 10:
-            print(f"\n{self.player.name} escaped from the battlefield!\n")
-            exit()
-
-    def win(self):
-        pass
-
-    def lose(self):
-        pass
-
-    def end(self):
-        exit()
 
 
 class Inventory:
@@ -264,6 +188,9 @@ class Inventory:
         """
         self.inventory = inventory
         self.slots = slots
+    
+    def __reppr__(self):
+        return f"Inventory: {self.inventory}"
 
     def show_inventory(self):
         """Prints all items from inventory."""
@@ -341,10 +268,10 @@ class Status:
 
 
 class HealthBar:
-    def __init__(self, player):
-        self.player = player
-        self.max_health = player.max_health
-        self.current_health = player.health
+    def __init__(self, creature):
+        self.player = creature
+        self.max_health = creature.max_health
+        self.current_health = creature.health
 
     def draw_health_bar(self):
         self.max_health = self.player.max_health

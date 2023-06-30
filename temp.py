@@ -1,5 +1,6 @@
 import time
 from classes import *
+from battle import Battle
 
 
 def slow_print(text):
@@ -97,11 +98,19 @@ check_if_weapon_in_inventory("Long Spear")
 
 print(f"Player's actual health is {player.health}")
 
-healthbar = HealthBar(player)
+player_healthbar = HealthBar(player)
 print()
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
 player.take_damage(41)
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
 player.take_damage(33)
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
+print()
+enemy_healthbar = HealthBar(enemy)
+print()
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(21)
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(33)
+enemy_healthbar.draw_health_bar()
 print()
