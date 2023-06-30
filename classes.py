@@ -224,6 +224,9 @@ class Item:
     description: str
     value: int
     slot_size: int
+    required_strength: int
+    required_dexterity: int
+    allowed_race: str
 
 
 @dataclass

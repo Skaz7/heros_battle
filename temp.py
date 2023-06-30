@@ -50,17 +50,20 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Status:     {enemy.status}\n")
 
 
+# Create Hero and Enemy
 player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 10, 8, 5, 129, "Sick", None, 10)
 enemy = Enemy(
     "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
 )
 
-excalibur = Weapon("Excalibur", "Great Sword", 50, 1, "Slash", 15)
-iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, "ice", 15)
-thorshammer = Weapon("Destroyer", "Hammer", 10, 1, "blunt", 20)
-elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, "stab", 12)
-longspear = Weapon("Long Spear", "Spear", 15, 2, "stab", 15)
+# Create weapons
+excalibur = Weapon("Excalibur", "Great Sword", 50, 1, 15, 15, "Human", "Slash", 15)
+iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, 10, 15, "Human", "ice", 15)
+thorshammer = Weapon("Destroyer", "Hammer", 10, 1, 20, 10, "Dwarf", "blunt", 20)
+elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, 15, 15, "Elf", "stab", 12)
+longspear = Weapon("Long Spear", "Spear", 15, 2, 10, 15, "Human", "stab", 15)
 
+# Create inventory and add some items
 player.inventory = Inventory()
 
 player.inventory.add_item_to_inventory(excalibur)
@@ -74,12 +77,14 @@ player.inventory.remove_item_from_inventory(iceblizzard)
 player.inventory.show_inventory()
 print(player.inventory.inventory)
 
-
+# Check taking damage
 player.take_damage(4)
 print_player_stats(player)
 print_enemy_stats(enemy)
 print(f"\nIs player alive? -> {player.is_alive()}\n")
-# battle = Battle(player, enemy)
+
+# Create Battle
+battle = Battle(player, enemy)
 
 # if __name__ == "__main__":
 #     while player.health > 0 and enemy.health > 0:
@@ -97,13 +102,13 @@ def check_if_weapon_in_inventory(weapon_name):
             print(weapon)
 
 
+# Checking if item is in inventory
 check_if_weapon_in_inventory("Destroyer")
 check_if_weapon_in_inventory("Ice Blizzard")
 check_if_weapon_in_inventory("Elvish Eyes")
 check_if_weapon_in_inventory("Long Spear")
 
-print(f"Player's actual health is {player.health}")
-
+# Health Bar creation and drawing
 player_healthbar = HealthBar(player)
 print()
 player_healthbar.draw_health_bar()
@@ -117,6 +122,6 @@ print()
 enemy_healthbar.draw_health_bar()
 enemy.take_damage(31)
 enemy_healthbar.draw_health_bar()
-enemy.take_damage(33)
+enemy.take_damage(27)
 enemy_healthbar.draw_health_bar()
 print()

@@ -20,3 +20,13 @@ resistances = [
     "poison",
     "electric",
 ]
+
+states = [
+    "frozen",
+    "burn",
+    "poisoned",
+    "shocked",
+    "scared",
+    "sleep",
+    "blind",
+]
