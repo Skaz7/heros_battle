@@ -1,12 +1,12 @@
 from classes import *
 
-class Battle:
 
+class Battle:
     def __init__(self, player, enemy):
         self.player = player
         self.enemy = enemy
         self.turn = 0
-    
+
     def next_turn(self):
         self.turn += 1
         if self.turn % 2 != 0:

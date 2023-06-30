@@ -3,13 +3,16 @@ from dataclasses import dataclass
 import time
 from dataclasses import field
 
+
 class Dice:
     """Simulates a dice roll of n-sides."""
-    def __init__(self, sides: int=6):
+
+    def __init__(self, sides: int = 6):
         self.sides = sides
-    
+
     def roll(self):
         return random.randint(1, self.sides)
+
 
 @dataclass
 class Creature:
@@ -20,6 +23,7 @@ class Creature:
     level: int = 1
     experience: int = 0
     race: str = None
+    max_health: int = 100
     health: int = 100
     strength: int = 10
     dexterity: int = 10
@@ -43,6 +47,10 @@ class Creature:
     @property
     def race(self):
         return self._race
+
+    @property
+    def max_health(self):
+        return self._max_health
 
     @property
     def health(self):
@@ -88,6 +96,10 @@ class Creature:
     def race(self, new_race):
         self._race = new_race
 
+    @max_health.setter
+    def max_health(self, new_max_health):
+        self._max_health = new_max_health
+
     @health.setter
     def health(self, new_health):
         self._health = new_health
@@ -116,15 +128,6 @@ class Creature:
     def inventory(self, new_inventory):
         self._inventory = new_inventory
 
-    def level_up(self):
-        print(f"\n{self.name} leveled up!\n")
-        self.level += 1
-        self.max_health += 10
-        self.health += 10
-        self.strength += 2
-        self.dexterity += 2
-        self.mana += 2
-
     def take_damage(self, damage):
         if damage > 0:
             self.health -= damage
@@ -141,20 +144,21 @@ class Hero(Creature):
     mana: int = 10
 
     @property
-    def max_health(self):
-        return self._max_health
-
-    @property
     def mana(self):
         return self._mana
-
-    @max_health.setter
-    def max_health(self, new_max_health):
-        self._max_health = new_max_health
 
     @mana.setter
     def mana(self, new_mana):
         self._mana = new_mana
+
+    def level_up(self):
+        print(f"\n{self.name} leveled up!\n")
+        self.level += 1
+        self.max_health += 10
+        self.health += 10
+        self.strength += 2
+        self.dexterity += 2
+        self.mana += 2
 
 
 @dataclass
@@ -179,8 +183,6 @@ class Enemy(Creature):
         self._resistance = new_resistance
 
 
-
-
 class Inventory:
     def __init__(self, inventory: list = [], slots: int = 10):
         """Initializes a new inventory with 5 item slots.
@@ -188,7 +190,7 @@ class Inventory:
         """
         self.inventory = inventory
         self.slots = slots
-    
+
     def __reppr__(self):
         return f"Inventory: {self.inventory}"
 
@@ -286,5 +288,8 @@ class HealthBar:
 
         health_size = int((self.current_health / self.max_health) * 100)
 
-        print(f"Health: {health_bar_color}{self.current_health}/{self.max_health}  ", end="")
+        print(
+            f"Health: {health_bar_color}{self.current_health}/{self.max_health}  ",
+            end="",
+        )
         print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")

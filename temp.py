@@ -39,6 +39,7 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Level:      {enemy.level}")
     slow_print(f"\n    Experience: {enemy.experience}")
     slow_print(f"\n    Race:       {enemy.race}")
+    slow_print(f"\n    Max Health: {enemy.max_health}")
     slow_print(f"\n    Health:     {enemy.health}")
     slow_print(f"\n    Attack:     {enemy.strength}")
     slow_print(f"\n    Dexterity:  {enemy.dexterity}")
@@ -48,8 +49,11 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Resistance: {enemy.resistance}")
     slow_print(f"\n    Status:     {enemy.status}\n")
 
-player = Hero("Jimi Hendrix", 1, 0, "Human", 94, 10, 8, 5, 129, "Sick", None, 110, 10)
-enemy = Enemy("Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire")
+
+player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 10, 8, 5, 129, "Sick", None, 10)
+enemy = Enemy(
+    "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
+)
 
 excalibur = Weapon("Excalibur", "Great Sword", 50, 1, "Slash", 15)
 iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, "ice", 15)
@@ -73,6 +77,7 @@ print(player.inventory.inventory)
 
 player.take_damage(4)
 print_player_stats(player)
+print_enemy_stats(enemy)
 print(f"\nIs player alive? -> {player.is_alive()}\n")
 # battle = Battle(player, enemy)
 
@@ -90,6 +95,7 @@ def check_if_weapon_in_inventory(weapon_name):
     for weapon in player.inventory.inventory:
         if weapon.name == weapon_name:
             print(weapon)
+
 
 check_if_weapon_in_inventory("Destroyer")
 check_if_weapon_in_inventory("Ice Blizzard")
@@ -109,7 +115,7 @@ print()
 enemy_healthbar = HealthBar(enemy)
 print()
 enemy_healthbar.draw_health_bar()
-enemy.take_damage(21)
+enemy.take_damage(31)
 enemy_healthbar.draw_health_bar()
 enemy.take_damage(33)
 enemy_healthbar.draw_health_bar()

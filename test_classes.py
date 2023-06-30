@@ -7,12 +7,13 @@ from battle import Battle
 # test for Hero class
 def test_hero_creation():
     player = Hero(
-        "Jimi Hendrix", 1, 0, "Human", 27, 10, 8, 5, 129, "Sick", None, 150, 10
+        "Jimi Hendrix", 1, 0, "Human", 150, 27, 10, 8, 5, 129, "Sick", None, 10
     )
     assert player.name == "Jimi Hendrix"
     assert player.level == 1
     assert player.experience == 0
     assert player.race == "Human"
+    assert player.max_health == 150
     assert player.health == 27
     assert player.strength == 10
     assert player.dexterity == 8
@@ -27,12 +28,13 @@ def test_hero_creation():
 # test for Enemy class
 def test_enemy_creation():
     enemy = Enemy(
-        "Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
+        "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
     )
     assert enemy.name == "Azog"
     assert enemy.level == 1
     assert enemy.experience == 0
     assert enemy.race == "Goblin"
+    assert enemy.max_health == 70
     assert enemy.health == 70
     assert enemy.strength == 10
     assert enemy.dexterity == 5
@@ -91,4 +93,3 @@ def test_add_weapon_to_inventory():
     assert excalibur in inventory.inventory
     assert leather_armor in inventory.inventory
     assert "Hammer" not in inventory.inventory
-        
