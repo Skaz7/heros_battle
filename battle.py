@@ -7,8 +7,13 @@ class Battle:
         self.enemy = enemy
         self.turn = 0
 
+    def start_battle(self):
+        while self.player.is_alive() and self.enemy.is_alive():
+            self.next_turn()
+
     def next_turn(self):
         self.turn += 1
+        print(f"Turn {self.turn}")
         if self.turn % 2 != 0:
             self.player_turn()
         else:
@@ -56,7 +61,7 @@ class Battle:
         defender.health -= damage
         print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
         if defender.health <= 0:
-            self.win()
+            self.win(attacker)
 
     def defend(self, defender):
         defender.armor = int(defender.armor * 1.5)
@@ -68,7 +73,8 @@ class Battle:
         equipped_weapon = self.player.inventory[choice - 1]
 
     def flee(self):
-        flee_chance = random.randint(1, 10)
+        dice = Dice()
+        flee_chance = dice.roll(10)
         if flee_chance <= 2:
             print(
                 f"\n{self.player.name} get hurt while running from battle and failed to escape!\n"
@@ -82,11 +88,8 @@ class Battle:
             print(f"\n{self.player.name} escaped from the battlefield!\n")
             exit()
 
-    def win(self):
-        pass
-
-    def lose(self):
-        pass
+    def win(self, attacker):
+        print(f"\n{attacker.name} wins the battle!\n")
 
     def end(self):
         exit()

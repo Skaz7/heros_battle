@@ -4,14 +4,12 @@ import time
 from dataclasses import field
 
 
+@dataclass
 class Dice:
     """Simulates a dice roll of n-sides."""
 
-    def __init__(self, sides: int = 6):
-        self.sides = sides
-
-    def roll(self):
-        return random.randint(1, self.sides)
+    def roll(self, sides):
+        return random.randint(1, sides)
 
 
 @dataclass
@@ -184,29 +182,29 @@ class Enemy(Creature):
 
 
 class Inventory:
-    def __init__(self, inventory: list = [], slots: int = 10):
+    def __init__(self, items: list = [], slots: int = 10):
         """Initializes a new inventory with 5 item slots.
         It is possible to upgrade number of slots to carry more items
         """
-        self.inventory = inventory
+        self.items = items
         self.slots = slots
 
     def __reppr__(self):
-        return f"Inventory: {self.inventory}"
+        return f"Inventory: {self.items}"
 
     def show_inventory(self):
         """Prints all items from inventory."""
         print(f"\nItems in your inventory:\n")
-        for i, item in enumerate(self.inventory, start=1):
+        for i, item in enumerate(self.items, start=1):
             print(f"{i}. {item.name}")
 
     def add_item_to_inventory(self, item):
         """Adds a new item to the inventory."""
-        self.inventory.append(item)
+        self.items.append(item)
 
     def remove_item_from_inventory(self, item):
         """Removes a item from the inventory."""
-        self.inventory.remove(item)
+        self.items.remove(item)
 
     def upgrade_inventory(self, additional_slots: int = 0):
         """Upgrades number of inventory slots."""
@@ -297,13 +295,14 @@ class HealthBar:
         )
         print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")
 
+
 @dataclass
 class Quest:
-    name: str=""
-    description: str=""
-    giver: str=""
-    reward: tuple=()
-    completed: bool=False
+    name: str = ""
+    description: str = ""
+    giver: str = ""
+    reward: tuple = ()
+    completed: bool = False
 
     def complete_quest(self):
         self.completed = True

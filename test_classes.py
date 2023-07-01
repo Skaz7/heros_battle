@@ -44,11 +44,6 @@ def test_enemy_creation():
     assert enemy.resistance == "Fire"
 
 
-# test for Inventory class
-def test_inventory_creation():
-    pass
-
-
 # test weapon creation
 def test_weapon_creation():
     weapon = Weapon(
@@ -102,9 +97,16 @@ def test_add_weapon_to_inventory():
     assert leather_armor in inventory.inventory
     assert "Hammer" not in inventory.inventory
 
+
 # test create and complete quest
 def test_quest_creation():
-    quest = Quest("Find Blueberries.", "Find 7 Blueberries in the Forest.", "Town Medic", (7, "Blueberry"), False)
+    quest = Quest(
+        "Find Blueberries.",
+        "Find 7 Blueberries in the Forest.",
+        "Town Medic",
+        (7, "Blueberry"),
+        False,
+    )
     assert quest.name == "Find Blueberries."
     assert quest.description == "Find 7 Blueberries in the Forest."
     assert quest.giver == "Town Medic"

@@ -1,18 +1,7 @@
 import time
 from classes import *
 from battle import Battle
-
-
-def slow_print(text):
-    for char in text:
-        print(char, end="", flush=True)
-        time.sleep(0.003)
-
-
-def print_one_line_in_frame(text):
-    print("+" + "-" * (len(text) + 4) + "+")
-    print("|  " + text + "  |")
-    print("+" + "-" * (len(text) + 4) + "+")
+from decorators import slow_print, print_one_line_in_frame
 
 
 def print_player_stats(player):
@@ -51,7 +40,7 @@ def print_enemy_stats(enemy):
 
 
 # Create Hero and Enemy
-player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 10, 8, 5, 129, "Sick", None, 10)
+player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 20, 8, 5, 129, "Sick", None, 10)
 enemy = Enemy(
     "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
 )
@@ -75,7 +64,7 @@ player.inventory.add_item_to_inventory(longspear)
 player.inventory.show_inventory()
 player.inventory.remove_item_from_inventory(iceblizzard)
 player.inventory.show_inventory()
-print(player.inventory.inventory)
+print(player.inventory.items)
 
 # Check taking damage
 player.take_damage(4)
@@ -83,21 +72,11 @@ print_player_stats(player)
 print_enemy_stats(enemy)
 print(f"\nIs player alive? -> {player.is_alive()}\n")
 
-# Create Battle
-battle = Battle(player, enemy)
-
-# if __name__ == "__main__":
-#     while player.health > 0 and enemy.health > 0:
-#         print_player_stats(player)
-#         print_enemy_stats(enemy)
-#         battle.player_turn()
-#         battle.enemy_turn()
-
 
 # check if weapon named Excalibur is in inventory
 # if it is, print it's stats
 def check_if_weapon_in_inventory(weapon_name):
-    for weapon in player.inventory.inventory:
+    for weapon in player.inventory.items:
         if weapon.name == weapon_name:
             print(weapon)
 
@@ -108,20 +87,26 @@ check_if_weapon_in_inventory("Ice Blizzard")
 check_if_weapon_in_inventory("Elvish Eyes")
 check_if_weapon_in_inventory("Long Spear")
 
+
 # Health Bar creation and drawing
-player_healthbar = HealthBar(player)
-print()
-player_healthbar.draw_health_bar()
-player.take_damage(41)
-player_healthbar.draw_health_bar()
-player.take_damage(33)
-player_healthbar.draw_health_bar()
-print()
-enemy_healthbar = HealthBar(enemy)
-print()
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(31)
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(27)
-enemy_healthbar.draw_health_bar()
-print()
+# player_healthbar = HealthBar(player)
+# print()
+# player_healthbar.draw_health_bar()
+# player.take_damage(41)
+# player_healthbar.draw_health_bar()
+# player.take_damage(33)
+# player_healthbar.draw_health_bar()
+# print()
+# enemy_healthbar = HealthBar(enemy)
+# print()
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(31)
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(27)
+# enemy_healthbar.draw_health_bar()
+# print()
+
+
+# Creating Battle with turns
+battle = Battle(player, enemy)
+battle.start_battle()
