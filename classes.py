@@ -296,3 +296,14 @@ class HealthBar:
             end="",
         )
         print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")
+
+@dataclass
+class Quest:
+    name: str=""
+    description: str=""
+    giver: str=""
+    reward: tuple=()
+    completed: bool=False
+
+    def complete_quest(self):
+        self.completed = True
