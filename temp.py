@@ -52,6 +52,9 @@ thorshammer = Weapon("Destroyer", "Hammer", 10, 1, 20, 10, "Dwarf", "blunt", 20)
 elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, 15, 15, "Elf", "stab", 12)
 longspear = Weapon("Long Spear", "Spear", 15, 2, 10, 15, "Human", "stab", 15)
 
+silver_plate = Armor(
+    "Silver Plate", "Great Armor made of silver.", 30, 2, 20, 0, "Human", "Blunt", 20
+)
 # Create inventory and add some items
 player.inventory = Inventory()
 
@@ -108,5 +111,16 @@ check_if_weapon_in_inventory("Long Spear")
 
 
 # Creating Battle with turns
-battle = Battle(player, enemy)
-battle.start_battle()
+# battle = Battle(player, enemy)
+# battle.start_battle()
+
+
+# Equipping weapon and armor to increase creature statistics
+player.equip_weapon(excalibur)
+player.equip_armor(silver_plate)
+print_player_stats(player)
+print(excalibur.is_equipped, silver_plate.is_equipped)
+player.unequip_weapon(excalibur)
+player.unequip_armor(silver_plate)
+print_player_stats(player)
+print(excalibur.is_equipped, silver_plate.is_equipped)

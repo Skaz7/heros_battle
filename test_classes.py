@@ -2,11 +2,70 @@ import pytest
 from classes import *
 
 
+player = Hero(
+    "Jimi Hendrix",
+    1,
+    0,
+    "Human",
+    150,
+    27,
+    10,
+    8,
+    5,
+    129,
+    "Sick",
+    None,
+    10,
+)
+enemy = Enemy(
+    "Azog",
+    1,
+    0,
+    "Goblin",
+    70,
+    70,
+    10,
+    5,
+    10,
+    21,
+    "Alive",
+    None,
+    "Cold",
+    "Fire",
+)
+excalibur = Weapon(
+    "Excalibur",
+    "Long Sword, good for Goblins",
+    50,
+    1,
+    15,
+    15,
+    "Human",
+    "Fire",
+    10,
+)
+leather_armor = Armor(
+    "Leather",
+    "Good for Humans",
+    30,
+    1,
+    5,
+    0,
+    "Human",
+    "Cold",
+    5,
+)
+quest = Quest(
+    "Find Blueberries.",
+    "Find 7 Blueberries in the Forest.",
+    "Town Medic",
+    (7, "Blueberry"),
+    False,
+)
+
+
 # test for Hero class
 def test_hero_creation():
-    player = Hero(
-        "Jimi Hendrix", 1, 0, "Human", 150, 27, 10, 8, 5, 129, "Sick", None, 10
-    )
     assert player.name == "Jimi Hendrix"
     assert player.level == 1
     assert player.experience == 0
@@ -25,9 +84,6 @@ def test_hero_creation():
 
 # test for Enemy class
 def test_enemy_creation():
-    enemy = Enemy(
-        "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
-    )
     assert enemy.name == "Azog"
     assert enemy.level == 1
     assert enemy.experience == 0
@@ -46,21 +102,17 @@ def test_enemy_creation():
 
 # test weapon creation
 def test_weapon_creation():
-    weapon = Weapon(
-        "Excalibur", "Long Sword, good for Goblins", 50, 1, 15, 15, "Human", "Fire", 10
-    )
-    assert weapon.name == "Excalibur"
-    assert weapon.description == "Long Sword, good for Goblins"
-    assert weapon.value == 50
-    assert weapon.slot_size == 1
-    assert weapon.required_strength == 15
-    assert weapon.required_dexterity == 15
-    assert weapon.allowed_race == "Human"
-    assert weapon.damage_type == "Fire"
-    assert weapon.damage == 10
-
-    weapon.value += 12
-    assert weapon.value == 62
+    assert excalibur.name == "Excalibur"
+    assert excalibur.description == "Long Sword, good for Goblins"
+    assert excalibur.value == 50
+    assert excalibur.slot_size == 1
+    assert excalibur.required_strength == 15
+    assert excalibur.required_dexterity == 15
+    assert excalibur.allowed_race == "Human"
+    assert excalibur.damage_type == "Fire"
+    assert excalibur.damage == 10
+    excalibur.value += 12
+    assert excalibur.value == 62
 
 
 # test armor creation
@@ -74,45 +126,48 @@ def test_armor_creation():
     assert armor.required_dexterity == 0
     assert armor.allowed_race == "Human"
     assert armor.resistance == "Cold"
-    assert armor.armor == 5
-
-    armor.armor += 10
-    assert armor.armor == 15
+    assert armor.protection == 5
+    armor.protection += 10
+    assert armor.protection == 15
 
 
 # test add weapon object to inventory
 def test_add_weapon_to_inventory():
     inventory = Inventory([], 20)
-    excalibur = Weapon(
-        "Excalibur", "Long Sword, good on Goblins", 50, 1, 15, 15, "Human", "Fire", 10
-    )
-    leather_armor = Armor("Leather", "Good for Humans", 30, 1, 5, 0, "Human", "Cold", 5)
     inventory.add_item_to_inventory(excalibur)
     inventory.add_item_to_inventory(leather_armor)
     inventory.upgrade_inventory(5)
-    print(inventory.inventory)
-    assert inventory.inventory == [excalibur, leather_armor]
+    assert inventory.items == [excalibur, leather_armor]
     assert inventory.slots == 25
-    assert excalibur in inventory.inventory
-    assert leather_armor in inventory.inventory
-    assert "Hammer" not in inventory.inventory
+    assert excalibur in inventory.items
+    assert leather_armor in inventory.items
+    assert "Hammer" not in inventory.items
 
 
 # test create and complete quest
 def test_quest_creation():
-    quest = Quest(
-        "Find Blueberries.",
-        "Find 7 Blueberries in the Forest.",
-        "Town Medic",
-        (7, "Blueberry"),
-        False,
-    )
     assert quest.name == "Find Blueberries."
     assert quest.description == "Find 7 Blueberries in the Forest."
     assert quest.giver == "Town Medic"
     assert quest.reward == (7, "Blueberry")
     assert quest.completed == False
-
     quest.complete_quest()
-
     assert quest.completed == True
+
+
+# test weapon equip
+def test_equip_weapon():
+    assert player.strength == 10
+    player.equip_weapon(excalibur)
+    assert player.strength == 20
+    player.unequip_weapon(excalibur)
+    assert player.strength == 10
+
+
+# test armor equip
+def test_equip_armor():
+    assert player.armor == 5
+    player.equip_armor(leather_armor)
+    assert player.armor == 10
+    player.unequip_armor(leather_armor)
+    assert player.armor == 5

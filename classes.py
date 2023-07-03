@@ -126,6 +126,9 @@ class Creature:
     def inventory(self, new_inventory):
         self._inventory = new_inventory
 
+    def heal(self, amount):
+        self.health += amount
+
     def take_damage(self, damage):
         if damage > 0:
             self.health -= damage
@@ -138,7 +141,6 @@ class Creature:
 
 @dataclass
 class Hero(Creature):
-    max_health: int = 100
     mana: int = 10
 
     @property
@@ -157,6 +159,26 @@ class Hero(Creature):
         self.strength += 2
         self.dexterity += 2
         self.mana += 2
+
+    def equip_weapon(self, weapon):
+        """Equips a weapon to the hero."""
+        self.strength += weapon.damage
+        weapon.is_equipped = True
+
+    def unequip_weapon(self, weapon):
+        """Unequips a weapon from the hero."""
+        self.strength -= weapon.damage
+        weapon.is_equipped = False
+
+    def equip_armor(self, armor):
+        """Equips an armor to the hero."""
+        self.armor += armor.protection
+        armor.is_equipped = True
+
+    def unequip_armor(self, armor):
+        """Unequips an armor from the hero."""
+        self.armor -= armor.protection
+        armor.is_equipped = False
 
 
 @dataclass
@@ -235,6 +257,7 @@ class Weapon(Item):
 
     damage_type: str
     damage: int
+    is_equipped: bool = False
 
 
 @dataclass
@@ -244,7 +267,8 @@ class Armor(Item):
     Armor can be used to increase player's resistance to a certain damage type."""
 
     resistance: str
-    armor: int
+    protection: int
+    is_equipped: bool = False
 
 
 @dataclass
