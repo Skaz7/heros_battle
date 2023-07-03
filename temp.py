@@ -18,7 +18,8 @@ def print_player_stats(player):
     slow_print(f"\n    Armor:      {player.armor}")
     slow_print(f"\n    Gold:       {player.gold}")
     slow_print(f"\n    Status:     {player.status}")
-    slow_print(f"\n    Inventory:  {player.inventory}\n")
+    slow_print(f"\n    Inventory:")
+    player.inventory.show_inventory()
 
 
 def print_enemy_stats(enemy):
@@ -46,14 +47,14 @@ enemy = Enemy(
 )
 
 # Create weapons
-excalibur = Weapon("Excalibur", "Great Sword", 50, 1, 15, 15, "Human", "Slash", 15)
-iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, 10, 15, "Human", "ice", 15)
-thorshammer = Weapon("Destroyer", "Hammer", 10, 1, 20, 10, "Dwarf", "blunt", 20)
-elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, 15, 15, "Elf", "stab", 12)
-longspear = Weapon("Long Spear", "Spear", 15, 2, 10, 15, "Human", "stab", 15)
+excalibur = Weapon("Excalibur", "Great Sword", 50, 1, 15, 15, "Human", 40, "Slash", 15)
+iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, 10, 15, "Human", 30, "ice", 15)
+thorshammer = Weapon("Destroyer", "Hammer", 10, 1, 20, 10, "Dwarf", 50, "blunt", 20)
+elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, 15, 15, "Elf", 30, "stab", 12)
+longspear = Weapon("Long Spear", "Spear", 15, 2, 10, 15, "Human", 35, "stab", 15)
 
 silver_plate = Armor(
-    "Silver Plate", "Great Armor made of silver.", 30, 2, 20, 0, "Human", "Blunt", 20
+    "Silver Plate", "Great Armor made of silver.", 30, 2, 20, 0, "Human", 15, "Blunt", 20
 )
 # Create inventory and add some items
 player.inventory = Inventory()
@@ -67,7 +68,6 @@ player.inventory.add_item_to_inventory(longspear)
 player.inventory.show_inventory()
 player.inventory.remove_item_from_inventory(iceblizzard)
 player.inventory.show_inventory()
-print(player.inventory.items)
 
 # Check taking damage
 player.take_damage(4)

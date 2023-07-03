@@ -12,6 +12,98 @@ class Dice:
         return random.randint(1, sides)
 
 
+class Inventory:
+    def __init__(self, items: list = [], slots: int = 10):
+        """Initializes a new inventory with 5 item slots.
+        It is possible to upgrade number of slots to carry more items
+        """
+        self.items = items
+        self.slots = slots
+
+    def __reppr__(self):
+        return f"Inventory: {self.items}"
+
+    def show_inventory(self):
+        """Prints all items from inventory."""
+        print(f"\n    Items in your inventory:\n")
+        for i, item in enumerate(self.items, start=1):
+            print(f"        {i}. {item.name} - {item.description}")
+
+    def add_item_to_inventory(self, item):
+        """Adds a new item to the inventory."""
+        self.items.append(item)
+
+    def remove_item_from_inventory(self, item):
+        """Removes a item from the inventory."""
+        self.items.remove(item)
+
+    def upgrade_inventory(self, additional_slots: int = 0):
+        """Upgrades number of inventory slots."""
+        self.slots += additional_slots
+
+
+@dataclass
+class Item:
+    """Initializes a Item.
+    Item can be used to increase player's statistics.
+    It can be Weapon, Armor or Consumable class.
+    """
+
+    name: str
+    description: str
+    value: int
+    slot_size: int
+    required_strength: int
+    required_dexterity: int
+    allowed_race: str
+    durability: int
+
+    def degradation(self):
+        """Reduces durability of item."""
+        self.durability -= 1
+        if self.durability <= 0:
+            self.destroy()
+
+    def destroy(self):
+        """Destroys item and returns it to the inventory."""
+        print(f"Item {self.name} destroyed!")
+        Inventory.remove_item_from_inventory(self)
+
+
+@dataclass
+class Weapon(Item):
+    """Initializes a Weapon Item.
+    Weapon can be used to increase player's attack.
+    Weapon can be used to increase player's damage to a certain damage type."""
+
+    damage_type: str
+    damage: int
+    is_equipped: bool = False
+
+
+@dataclass
+class Armor(Item):
+    """Initializes a Armor Item.
+    Armor can be used to increase player's defense.
+    Armor can be used to increase player's resistance to a certain damage type."""
+
+    resistance: str
+    protection: int
+    is_equipped: bool = False
+
+
+@dataclass
+class Consumable(Item):
+    """Initializes a Consumable Item.
+    Consuming one of this items will upgrade player statistics.
+    Upgrade can be temporary or permanent, depending of the item."""
+
+    heal: int
+    mana: int
+    strength: int
+    dexterity: int
+
+
 @dataclass
 class Creature:
     """Initializes a new instance of Creature class.
@@ -28,7 +120,7 @@ class Creature:
     armor: int = 10
     gold: int = 10
     status: str = None
-    inventory: list = field(default_factory=list)
+    inventory: Inventory = Inventory()
 
     @property
     def name(self):
@@ -201,86 +293,6 @@ class Enemy(Creature):
     @resistance.setter
     def resistance(self, new_resistance):
         self._resistance = new_resistance
-
-
-class Inventory:
-    def __init__(self, items: list = [], slots: int = 10):
-        """Initializes a new inventory with 5 item slots.
-        It is possible to upgrade number of slots to carry more items
-        """
-        self.items = items
-        self.slots = slots
-
-    def __reppr__(self):
-        return f"Inventory: {self.items}"
-
-    def show_inventory(self):
-        """Prints all items from inventory."""
-        print(f"\nItems in your inventory:\n")
-        for i, item in enumerate(self.items, start=1):
-            print(f"{i}. {item.name}")
-
-    def add_item_to_inventory(self, item):
-        """Adds a new item to the inventory."""
-        self.items.append(item)
-
-    def remove_item_from_inventory(self, item):
-        """Removes a item from the inventory."""
-        self.items.remove(item)
-
-    def upgrade_inventory(self, additional_slots: int = 0):
-        """Upgrades number of inventory slots."""
-        self.slots += additional_slots
-
-
-@dataclass
-class Item:
-    """Initializes a Item.
-    Item can be used to increase player's statistics.
-    It can be Weapon, Armor or Consumable class.
-    """
-
-    name: str
-    description: str
-    value: int
-    slot_size: int
-    required_strength: int
-    required_dexterity: int
-    allowed_race: str
-
-
-@dataclass
-class Weapon(Item):
-    """Initializes a Weapon Item.
-    Weapon can be used to increase player's attack.
-    Weapon can be used to increase player's damage to a certain damage type."""
-
-    damage_type: str
-    damage: int
-    is_equipped: bool = False
-
-
-@dataclass
-class Armor(Item):
-    """Initializes a Armor Item.
-    Armor can be used to increase player's defense.
-    Armor can be used to increase player's resistance to a certain damage type."""
-
-    resistance: str
-    protection: int
-    is_equipped: bool = False
-
-
-@dataclass
-class Consumable(Item):
-    """Initializes a Consumable Item.
-    Consuming one of this items will upgrade player statistics.
-    Upgrade can be temporary or permanent, depending of the item."""
-
-    heal: int
-    mana: int
-    strength: int
-    dexterity: int
 
 
 class Spell:

@@ -41,17 +41,19 @@ excalibur = Weapon(
     15,
     15,
     "Human",
+    40,
     "Fire",
     10,
 )
 leather_armor = Armor(
-    "Leather",
+    "Leather Jacket",
     "Good for Humans",
     30,
     1,
     5,
     0,
     "Human",
+    15,
     "Cold",
     5,
 )
@@ -117,18 +119,17 @@ def test_weapon_creation():
 
 # test armor creation
 def test_armor_creation():
-    armor = Armor("Leather", "Good for Humans", 30, 1, 15, 0, "Human", "Cold", 5)
-    assert armor.name == "Leather"
+    armor = leather_armor
+    assert armor.name == "Leather Jacket"
     assert armor.description == "Good for Humans"
     assert armor.value == 30
     assert armor.slot_size == 1
-    assert armor.required_strength == 15
+    assert armor.required_strength == 5
     assert armor.required_dexterity == 0
     assert armor.allowed_race == "Human"
     assert armor.resistance == "Cold"
     assert armor.protection == 5
-    armor.protection += 10
-    assert armor.protection == 15
+    assert armor.is_equipped == False
 
 
 # test add weapon object to inventory
