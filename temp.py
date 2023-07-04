@@ -16,8 +16,9 @@ def print_player_stats(player):
     slow_print(f"\n    Strength:   {player.strength}")
     slow_print(f"\n    Dexterity:  {player.dexterity}")
     slow_print(f"\n    Armor:      {player.armor}")
-    slow_print(f"\n    Gold:       {player.gold}")
+    slow_print(f"\n    Gold:       {player.inventory.gold}")
     slow_print(f"\n    Status:     {player.status}")
+    slow_print(f"\n    Gold:       {player.inventory.gold}")
     slow_print(f"\n    Inventory:")
     player.inventory.show_inventory()
 
@@ -34,20 +35,21 @@ def print_enemy_stats(enemy):
     slow_print(f"\n    Attack:     {enemy.strength}")
     slow_print(f"\n    Dexterity:  {enemy.dexterity}")
     slow_print(f"\n    Armor:      {enemy.armor}")
-    slow_print(f"\n    Gold:       {enemy.gold}")
     slow_print(f"\n    Weakness:   {enemy.weakness}")
     slow_print(f"\n    Resistance: {enemy.resistance}")
     slow_print(f"\n    Status:     {enemy.status}\n")
+    slow_print(f"\n    Gold:       {enemy.inventory.gold}")
+    slow_print(f"\n    Inventory:")
 
 
 # Create Hero and Enemy
-player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 20, 8, 5, 129, "Sick", None, 10)
+player = Hero("Jimi Hendrix", 1, 0, "Human", 110, 94, 20, 8, 15, "Sick", None, 10)
 enemy = Enemy(
-    "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire"
+    "Azog", 1, 0, "Goblin", 70, 70, 10, 5, 10, "Alive", None, "Cold", "Fire"
 )
 
 # Create weapons
-excalibur = Weapon("Excalibur", "Great Sword", 50, 1, 15, 15, "Human", 40, "Slash", 15)
+excalibur = Weapon("Excalibur", "Great Sword", 50, 1, 15, 15, "Human", 2, "Slash", 15)
 iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, 10, 15, "Human", 30, "ice", 15)
 thorshammer = Weapon("Destroyer", "Hammer", 10, 1, 20, 10, "Dwarf", 50, "blunt", 20)
 elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, 15, 15, "Elf", 30, "stab", 12)
@@ -58,6 +60,7 @@ silver_plate = Armor(
 )
 # Create inventory and add some items
 player.inventory = Inventory()
+enemy.inventory = Inventory()
 
 player.inventory.add_item_to_inventory(excalibur)
 player.inventory.add_item_to_inventory(iceblizzard)
@@ -124,3 +127,7 @@ player.unequip_weapon(excalibur)
 player.unequip_armor(silver_plate)
 print_player_stats(player)
 print(excalibur.is_equipped, silver_plate.is_equipped)
+excalibur.degrade()
+excalibur.degrade()
+print(excalibur.name)
+print(excalibur.damage)

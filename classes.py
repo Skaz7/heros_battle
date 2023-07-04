@@ -13,12 +13,11 @@ class Dice:
 
 
 class Inventory:
-    def __init__(self, items: list = [], slots: int = 10):
-        """Initializes a new inventory with 5 item slots.
-        It is possible to upgrade number of slots to carry more items
-        """
+    def __init__(self, items: list = [], slots: int = 10, gold: int=20):
+
         self.items = items
         self.slots = slots
+        self.gold = gold # gold is not an item and takes no slot space
 
     def __reppr__(self):
         return f"Inventory: {self.items}"
@@ -36,19 +35,14 @@ class Inventory:
     def remove_item_from_inventory(self, item):
         """Removes a item from the inventory."""
         self.items.remove(item)
-
-    def upgrade_inventory(self, additional_slots: int = 0):
-        """Upgrades number of inventory slots."""
-        self.slots += additional_slots
+    
+    def upgrade_inventory(self, slots):
+        """Upgrades inventory slots."""
+        self.slots += slots
 
 
 @dataclass
 class Item:
-    """Initializes a Item.
-    Item can be used to increase player's statistics.
-    It can be Weapon, Armor or Consumable class.
-    """
-
     name: str
     description: str
     value: int
@@ -58,16 +52,18 @@ class Item:
     allowed_race: str
     durability: int
 
-    def degradation(self):
-        """Reduces durability of item."""
+    def degrade(self):
         self.durability -= 1
-        if self.durability <= 0:
-            self.destroy()
-
-    def destroy(self):
-        """Destroys item and returns it to the inventory."""
-        print(f"Item {self.name} destroyed!")
-        Inventory.remove_item_from_inventory(self)
+        if self.durability == 0:
+            if isinstance(self, Weapon):
+                print(f"Your {self.name} is broken down.")
+                self.name = self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
+                self.damage = 0
+            elif isinstance(self, Armor):
+                print(f"Your {self.name} is broken down.")
+                self.protection = 0
+            elif isinstance(self, Consumable):
+                pass
 
 
 @dataclass
@@ -76,8 +72,8 @@ class Weapon(Item):
     Weapon can be used to increase player's attack.
     Weapon can be used to increase player's damage to a certain damage type."""
 
-    damage_type: str
-    damage: int
+    damage_type: str=""
+    damage: int=10
     is_equipped: bool = False
 
 
@@ -87,8 +83,8 @@ class Armor(Item):
     Armor can be used to increase player's defense.
     Armor can be used to increase player's resistance to a certain damage type."""
 
-    resistance: str
-    protection: int
+    resistance: str=""
+    protection: int=0
     is_equipped: bool = False
 
 
@@ -98,10 +94,10 @@ class Consumable(Item):
     Consuming one of this items will upgrade player statistics.
     Upgrade can be temporary or permanent, depending of the item."""
 
-    heal: int
-    mana: int
-    strength: int
-    dexterity: int
+    heal: int=0
+    mana: int=0
+    strength: int=0
+    dexterity: int=0
 
 
 @dataclass
@@ -118,7 +114,6 @@ class Creature:
     strength: int = 10
     dexterity: int = 10
     armor: int = 10
-    gold: int = 10
     status: str = None
     inventory: Inventory = Inventory()
 
@@ -157,10 +152,6 @@ class Creature:
     @property
     def armor(self):
         return self._armor
-
-    @property
-    def gold(self):
-        return self._gold
 
     @property
     def status(self):
@@ -205,10 +196,6 @@ class Creature:
     @armor.setter
     def armor(self, new_armor):
         self._armor = new_armor
-
-    @gold.setter
-    def gold(self, new_gold):
-        self._gold = new_gold
 
     @status.setter
     def status(self, new_status):

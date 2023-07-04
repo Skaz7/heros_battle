@@ -12,7 +12,6 @@ player = Hero(
     10,
     8,
     5,
-    129,
     "Sick",
     None,
     10,
@@ -27,7 +26,6 @@ enemy = Enemy(
     10,
     5,
     10,
-    21,
     "Alive",
     None,
     "Cold",
@@ -41,7 +39,7 @@ excalibur = Weapon(
     15,
     15,
     "Human",
-    40,
+    2,
     "Fire",
     10,
 )
@@ -77,7 +75,6 @@ def test_hero_creation():
     assert player.strength == 10
     assert player.dexterity == 8
     assert player.armor == 5
-    assert player.gold == 129
     assert player.status == "Sick"
     assert player.inventory == None
     assert player.max_health == 150
@@ -95,7 +92,6 @@ def test_enemy_creation():
     assert enemy.strength == 10
     assert enemy.dexterity == 5
     assert enemy.armor == 10
-    assert enemy.gold == 21
     assert enemy.status == "Alive"
     assert enemy.inventory == None
     assert enemy.weakness == "Cold"
@@ -113,8 +109,6 @@ def test_weapon_creation():
     assert excalibur.allowed_race == "Human"
     assert excalibur.damage_type == "Fire"
     assert excalibur.damage == 10
-    excalibur.value += 12
-    assert excalibur.value == 62
 
 
 # test armor creation
@@ -172,3 +166,19 @@ def test_equip_armor():
     assert player.armor == 10
     player.unequip_armor(leather_armor)
     assert player.armor == 5
+
+# test add to inventory, degrade, destroy, remove from inventory
+def test_inventory_add_degrade_destroy():
+    inventory = Inventory(slots=20)
+    inventory.add_item_to_inventory(excalibur)
+    inventory.add_item_to_inventory(leather_armor)
+    inventory.upgrade_inventory(5)
+    assert inventory.items == [excalibur, leather_armor]
+    assert inventory.slots == 25
+    assert excalibur in inventory.items
+    assert leather_armor in inventory.items
+    assert "Hammer" not in inventory.items
+    excalibur.degrade()
+    assert excalibur.durability == 1
+    excalibur.destroy()
+    print(excalibur.name)
