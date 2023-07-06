@@ -13,31 +13,43 @@ class Dice:
 
 
 class Inventory:
-    def __init__(self, items: list = [], slots: int = 10, gold: int=20):
-
+    def __init__(self, items: list = [], slots: int = 10, gold: int = 20):
         self.items = items
         self.slots = slots
-        self.gold = gold # gold is not an item and takes no slot space
+        self.gold = gold  # gold is not an item and takes no slot space
 
     def __reppr__(self):
         return f"Inventory: {self.items}"
 
-    def show_inventory(self):
+    def show(self):
         """Prints all items from inventory."""
-        print(f"\n    Items in your inventory:\n")
+        print(f"\n    Items in your inventory:")
         for i, item in enumerate(self.items, start=1):
-            print(f"        {i}. {item.name} - {item.description}")
+            print(f"\t\t\t    {i}. {item.name} - {item.description}")
 
-    def add_item_to_inventory(self, item):
-        """Adds a new item to the inventory."""
+    def add_item(self, item):
+        """Adds a new item to the inventory.
+        If the inventory is full, which means that remain inventory slots is lower than item slot size, the item is not added.
+        If the inventory is not full, the item is added to the inventory and the inventory slots are reduced by item slot size.
+        """
+        if self.slots < item.slot_size:
+            print("You don't have enough space in your inventory inventory.")
+            time.sleep(1)
+            return
+        self.slots -= item.slot_size
+        item.set_inventory(self)
         self.items.append(item)
 
-    def remove_item_from_inventory(self, item):
-        """Removes a item from the inventory."""
+    def remove_item(self, item):
+        """Removes an item from the inventory.
+        Number of free slots in inventory is increased by item slot size.
+        Item is removed from the inventory.
+        """
+        self.slots += item.slot_size
         self.items.remove(item)
-    
-    def upgrade_inventory(self, slots):
-        """Upgrades inventory slots."""
+
+    def upgrade(self, slots):
+        """Upgrades number of inventory slots."""
         self.slots += slots
 
 
@@ -50,21 +62,37 @@ class Item:
     required_strength: int
     required_dexterity: int
     allowed_race: str
+    max_durability: int
     durability: int
+    inventory: Inventory = None
+
+    def set_inventory(self, inventory):
+        self.inventory = inventory
 
     def degrade(self):
         self.durability -= 1
         if self.durability == 0:
             if isinstance(self, Weapon):
                 print(f"Your {self.name} is broken down.")
-                self.name = self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
+                self.name = (
+                    self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
+                )
                 self.damage = 0
             elif isinstance(self, Armor):
                 print(f"Your {self.name} is broken down.")
                 self.protection = 0
             elif isinstance(self, Consumable):
-                pass
+                self.destroy()
 
+    def destroy(self) -> None:
+        self.inventory.remove_item(self)
+        print(f"Your {self.name} has been destroyed.")
+        return
+
+    def repair(self) -> None:
+        self.durability = self.max_durability
+        print(f"Your {self.name} has been repaired.")
+        return
 
 @dataclass
 class Weapon(Item):
@@ -72,8 +100,8 @@ class Weapon(Item):
     Weapon can be used to increase player's attack.
     Weapon can be used to increase player's damage to a certain damage type."""
 
-    damage_type: str=""
-    damage: int=10
+    damage_type: str = ""
+    damage: int = 10
     is_equipped: bool = False
 
 
@@ -83,8 +111,8 @@ class Armor(Item):
     Armor can be used to increase player's defense.
     Armor can be used to increase player's resistance to a certain damage type."""
 
-    resistance: str=""
-    protection: int=0
+    resistance: str = ""
+    protection: int = 0
     is_equipped: bool = False
 
 
@@ -94,10 +122,10 @@ class Consumable(Item):
     Consuming one of this items will upgrade player statistics.
     Upgrade can be temporary or permanent, depending of the item."""
 
-    heal: int=0
-    mana: int=0
-    strength: int=0
-    dexterity: int=0
+    heal: int = 0
+    mana: int = 0
+    strength: int = 0
+    dexterity: int = 0
 
 
 @dataclass
@@ -116,6 +144,7 @@ class Creature:
     armor: int = 10
     status: str = None
     inventory: Inventory = Inventory()
+    is_alive: bool = True
 
     @property
     def name(self):
@@ -160,6 +189,10 @@ class Creature:
     @property
     def inventory(self):
         return self._inventory
+    
+    @property
+    def is_alive(self):
+        return self._is_alive
 
     @name.setter
     def name(self, new_name):
@@ -204,18 +237,20 @@ class Creature:
     @inventory.setter
     def inventory(self, new_inventory):
         self._inventory = new_inventory
+    
+    @is_alive.setter
+    def is_alive(self, new_is_alive):
+        self._is_alive = new_is_alive
 
-    def heal(self, amount):
-        self.health += amount
+    def heal(self, additional_health):
+        self.health += additional_health
 
     def take_damage(self, damage):
         if damage > 0:
             self.health -= damage
         if self.health < 0:
             self.health = 0
-
-    def is_alive(self):
-        return self.health > 0
+            self.is_alive = False
 
 
 @dataclass

@@ -14,6 +14,7 @@ player = Hero(
     5,
     "Sick",
     None,
+    True,
     10,
 )
 enemy = Enemy(
@@ -26,8 +27,9 @@ enemy = Enemy(
     10,
     5,
     10,
-    "Alive",
+    "Stunned",
     None,
+    True,
     "Cold",
     "Fire",
 )
@@ -39,7 +41,9 @@ excalibur = Weapon(
     15,
     15,
     "Human",
+    10,
     2,
+    Inventory,
     "Fire",
     10,
 )
@@ -51,7 +55,9 @@ leather_armor = Armor(
     5,
     0,
     "Human",
+    10,
     15,
+    Inventory,
     "Cold",
     5,
 )
@@ -92,7 +98,7 @@ def test_enemy_creation():
     assert enemy.strength == 10
     assert enemy.dexterity == 5
     assert enemy.armor == 10
-    assert enemy.status == "Alive"
+    assert enemy.status == "Stunned"
     assert enemy.inventory == None
     assert enemy.weakness == "Cold"
     assert enemy.resistance == "Fire"
@@ -126,19 +132,6 @@ def test_armor_creation():
     assert armor.is_equipped == False
 
 
-# test add weapon object to inventory
-def test_add_weapon_to_inventory():
-    inventory = Inventory([], 20)
-    inventory.add_item_to_inventory(excalibur)
-    inventory.add_item_to_inventory(leather_armor)
-    inventory.upgrade_inventory(5)
-    assert inventory.items == [excalibur, leather_armor]
-    assert inventory.slots == 25
-    assert excalibur in inventory.items
-    assert leather_armor in inventory.items
-    assert "Hammer" not in inventory.items
-
-
 # test create and complete quest
 def test_quest_creation():
     assert quest.name == "Find Blueberries."
@@ -167,18 +160,31 @@ def test_equip_armor():
     player.unequip_armor(leather_armor)
     assert player.armor == 5
 
+
 # test add to inventory, degrade, destroy, remove from inventory
 def test_inventory_add_degrade_destroy():
     inventory = Inventory(slots=20)
-    inventory.add_item_to_inventory(excalibur)
-    inventory.add_item_to_inventory(leather_armor)
-    inventory.upgrade_inventory(5)
+    inventory.add_item(excalibur)  # takes up 1 slot
+    inventory.add_item(leather_armor)  # takes up 1 slot
+    inventory.upgrade(5)  # add 5 slots
     assert inventory.items == [excalibur, leather_armor]
-    assert inventory.slots == 25
+    assert inventory.slots == 23
     assert excalibur in inventory.items
     assert leather_armor in inventory.items
     assert "Hammer" not in inventory.items
     excalibur.degrade()
     assert excalibur.durability == 1
     excalibur.destroy()
-    print(excalibur.name)
+    assert inventory.items == [leather_armor]
+
+
+# test taking damage by player and enemy
+def test_take_damage():
+    player.take_damage(enemy.strength)
+    assert player.health == 17
+    assert player.is_alive == True
+    player.take_damage(enemy.strength)
+    assert player.is_alive == True
+    player.take_damage(enemy.strength)
+    assert player.is_alive == False
+    

@@ -8,7 +8,7 @@ class Battle:
         self.turn = 0
 
     def start_battle(self):
-        while self.player.is_alive() and self.enemy.is_alive():
+        while self.player.is_alive and self.enemy.is_alive:
             self.next_turn()
 
     def next_turn(self):
@@ -68,7 +68,7 @@ class Battle:
         print(f"\n{defender.name} is defending!\n")
 
     def use_item(self):
-        self.player.inventory.show_inventory()
+        self.player.inventory.show()
         choice = int(input("> "))
         equipped_weapon = self.player.inventory[choice - 1]
 
