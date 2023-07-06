@@ -70,7 +70,8 @@ class Battle:
     def use_item(self):
         self.player.inventory.show()
         choice = int(input("> "))
-        equipped_weapon = self.player.inventory[choice - 1]
+        selected_item = self.player.inventory.items[choice - 1]
+        self.player.equip_weapon(selected_item)
 
     def flee(self):
         dice = Dice()

@@ -1,65 +1,68 @@
 import pytest
 from classes import *
+from battle import Battle
 
 
 player = Hero(
-    "Jimi Hendrix",
-    1,
-    0,
-    "Human",
-    150,
-    27,
-    10,
-    8,
-    5,
-    "Sick",
-    None,
-    True,
-    10,
+    name = "Jimi Hendrix",
+    level = 1,
+    experience = 0,
+    race = "Human",
+    max_health = 150,
+    health = 100,
+    strength = 15,
+    dexterity = 8,
+    armor = 5,
+    status = "Sick",
+    inventory = None,
+    is_alive = True,
+    mana = 10,
 )
 enemy = Enemy(
-    "Azog",
-    1,
-    0,
-    "Goblin",
-    70,
-    70,
-    10,
-    5,
-    10,
-    "Stunned",
-    None,
-    True,
-    "Cold",
-    "Fire",
+    name = "Azog The Defiler",
+    level = 1,
+    experience = 0,
+    race = "Orc",
+    max_health = 70,
+    health = 70,
+    strength = 10,
+    dexterity = 5,
+    armor = 10,
+    status = "Stunned",
+    inventory = None,
+    is_alive = True,
+    weakness = "Cold",
+    resistance = "Fire",
 )
 excalibur = Weapon(
-    "Excalibur",
-    "Long Sword, good for Goblins",
-    50,
-    1,
-    15,
-    15,
-    "Human",
-    10,
-    2,
-    Inventory,
-    "Fire",
-    10,
+    name = "Excalibur",
+    description = "Long Sword, good for Goblins",
+    value = 50,
+    slot_size = 1,
+    required_strength = 15,
+    required_dexterity = 15,
+    allowed_race = "Human",
+    max_durability = 10,
+    durability = 2,
+    inventory = Inventory,
+    damage_type = "Fire",
+    damage = 10,
+    is_equipped = False,
 )
 leather_armor = Armor(
-    "Leather Jacket",
-    "Good for Humans",
-    30,
-    1,
-    5,
-    0,
-    "Human",
-    10,
-    15,
-    Inventory,
-    "Cold",
-    5,
+    name = "Leather Jacket",
+    description = "Good for Humans",
+    value = 30,
+    slot_size = 1,
+    required_strength = 5,
+    required_dexterity = 0,
+    allowed_race = "Human",
+    max_durability = 15,
+    durability = 10,
+    inventory = Inventory,
+    resistance = "Cold",
+    protection = 5,
+    is_equipped = False,
 )
 quest = Quest(
     "Find Blueberries.",
@@ -77,8 +80,8 @@ def test_hero_creation():
     assert player.experience == 0
     assert player.race == "Human"
     assert player.max_health == 150
-    assert player.health == 27
-    assert player.strength == 10
+    assert player.health == 100
+    assert player.strength == 15
     assert player.dexterity == 8
     assert player.armor == 5
     assert player.status == "Sick"
@@ -89,10 +92,10 @@ def test_hero_creation():
 
 # test for Enemy class
 def test_enemy_creation():
-    assert enemy.name == "Azog"
+    assert enemy.name == "Azog The Defiler"
     assert enemy.level == 1
     assert enemy.experience == 0
-    assert enemy.race == "Goblin"
+    assert enemy.race == "Orc"
     assert enemy.max_health == 70
     assert enemy.health == 70
     assert enemy.strength == 10
@@ -145,11 +148,11 @@ def test_quest_creation():
 
 # test weapon equip
 def test_equip_weapon():
-    assert player.strength == 10
+    assert player.strength == 15
     player.equip_weapon(excalibur)
-    assert player.strength == 20
+    assert player.strength == 25
     player.unequip_weapon(excalibur)
-    assert player.strength == 10
+    assert player.strength == 15
 
 
 # test armor equip
@@ -181,10 +184,38 @@ def test_inventory_add_degrade_destroy():
 # test taking damage by player and enemy
 def test_take_damage():
     player.take_damage(enemy.strength)
-    assert player.health == 17
+    assert player.health == 90
     assert player.is_alive == True
     player.take_damage(enemy.strength)
     assert player.is_alive == True
-    player.take_damage(enemy.strength)
+    player.take_damage(enemy.strength + 80)
     assert player.is_alive == False
+    
+# test for battle system
+def test_battle():
+    player.health = 100
+    enemy.health = 70
+    battle = Battle(player, enemy)
+    assert battle.turn == 0
+    battle.attack(player, enemy)
+    assert enemy.health == 65
+    battle.attack(enemy, player)
+    assert player.health == 95
+    player.equip_weapon(excalibur)
+    battle.attack(player, enemy)
+    assert enemy.health == 50
+    battle.attack(enemy, player)
+    assert player.health == 90
+    player.equip_armor(leather_armor)
+    assert player.armor == 10
+    battle.attack(enemy, player)
+    assert player.health == 90
+    player.unequip_armor(leather_armor)
+    assert player.armor == 5
+    battle.attack(enemy, player)
+    assert player.health == 85
+    player.unequip_weapon(excalibur)
+    assert player.strength == 15
+    battle.attack(enemy, player)
+    assert player.health == 80
     

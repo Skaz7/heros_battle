@@ -37,10 +37,10 @@ player = Hero(
     10,
 )
 enemy = Enemy(
-    "Azog",
+    "Azog The Defiler",
     1,
     0,
-    "Goblin",
+    "Orc",
     70,
     70,
     10,
@@ -156,7 +156,7 @@ enemy.inventory.add_item(silver_plate)
 # print()
 
 
-## Creating Battle with turns
+# Creating Battle with turns
 # battle = Battle(player, enemy)
 # battle.start_battle()
 
@@ -166,4 +166,4 @@ enemy.inventory.add_item(silver_plate)
 # print_battle_stats(player)
 # print_battle_stats(enemy)
 
-player.inventory.show()
+# player.inventory.show()
