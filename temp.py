@@ -66,9 +66,12 @@ excalibur = Weapon(
     15,
     15,
     "Human",
+    5,
     2,
+    Inventory,
     "Slash",
     15,
+    False,
 )
 
 iceblizzard = Weapon(
@@ -79,9 +82,12 @@ iceblizzard = Weapon(
     10,
     15,
     "Human",
-    30,
+    10,
+    10,
+    Inventory,
     "ice",
-    15,
+    10,
+    False,
 )
 
 thorshammer = Weapon(
@@ -92,9 +98,12 @@ thorshammer = Weapon(
     20,
     10,
     "Dwarf",
-    50,
+    20,
+    20,
+    Inventory,
     "blunt",
-    80,
+    20,
+    False,
 )
 
 elvisheyes = Weapon(
@@ -105,9 +114,12 @@ elvisheyes = Weapon(
     15,
     15,
     "Elf",
-    30,
+    25,
+    25,
+    Inventory,
     "stab",
     12,
+    False,
 )
 
 longspear = Weapon(
@@ -118,9 +130,12 @@ longspear = Weapon(
     10,
     15,
     "Human",
-    35,
+    10,
+    10,
+    Inventory,
     "stab",
     15,
+    False,
 )
 
 silver_plate = Armor(
@@ -131,9 +146,12 @@ silver_plate = Armor(
     20,
     0,
     "Human",
-    15,
+    40,
+    40,
+    Inventory,
+    "Cold",
     "Blunt",
-    20,
+    False,
 )
 
 leather_armor = Armor(

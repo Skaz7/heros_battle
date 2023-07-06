@@ -77,6 +77,9 @@ class Battle:
         choice = int(input("> "))
         if choice == 1:
             if isinstance(selected_item, Weapon):
+                for weapon in self.player.inventory.items:
+                    if isinstance(weapon, Weapon) and weapon.is_equipped:
+                        self.player.unequip_weapon(weapon)
                 self.player.equip_weapon(selected_item)
             elif isinstance(selected_item, Armor):
                 self.player.equip_armor(selected_item)
