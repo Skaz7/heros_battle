@@ -72,6 +72,9 @@ quest = Quest(
     False,
 )
 
+life_potion = Consumable("Life Potion", "Restores 20 health.", 20, 1, 0, 0, "Human", 1, 1, Inventory, 20, 0, 0, 0)
+boost_potion = Consumable("Boost Potion", "Restores 10 health and 10 mana.", 20, 1, 0, 0, "Human", 1, 1, Inventory, 10, 10, 0, 0)
+
 
 # test for Hero class
 def test_hero_creation():
@@ -218,4 +221,18 @@ def test_battle():
     assert player.strength == 15
     battle.attack(enemy, player)
     assert player.health == 80
-    
+
+# test consumables
+def test_consumables():
+    inventory = Inventory([], 5, 20)
+    inventory.add_item(life_potion)
+    inventory.add_item(boost_potion)
+    assert player.health == 80
+    assert player.mana == 10
+    assert life_potion in inventory.items
+    player.use_consumable(life_potion)
+    assert player.health == 100
+    assert inventory.items == [boost_potion]
+    player.use_consumable(boost_potion)
+    assert player.health == 110
+    assert player.mana == 20

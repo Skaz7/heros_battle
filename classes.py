@@ -53,6 +53,7 @@ class Inventory:
         self.slots += slots
 
 
+
 @dataclass
 class Item:
     name: str
@@ -93,6 +94,14 @@ class Item:
         self.durability = self.max_durability
         print(f"Your {self.name} has been repaired.")
         return
+
+    def use(self):
+        if isinstance(self, Weapon):
+            self.player.equip_weapon(self)
+        elif isinstance(self, Armor):
+            self.player.equip_armor(self)
+        elif isinstance(self, Consumable):
+            self.player.use_consumable(self)
 
 @dataclass
 class Weapon(Item):
@@ -293,6 +302,18 @@ class Hero(Creature):
         """Unequips an armor from the hero."""
         self.armor -= armor.protection
         armor.is_equipped = False
+
+    def use_consumable(self, consumable):
+        """Boosts player statistics based on item description."""
+        if consumable.heal > 0:
+            self.heal(consumable.heal)
+        if consumable.mana > 0:
+            self.mana += consumable.mana
+        if consumable.strength > 0:
+            self.strength += consumable.strength
+        if consumable.dexterity > 0:
+            self.dexterity += consumable.dexterity
+        consumable.destroy()
 
 
 @dataclass
