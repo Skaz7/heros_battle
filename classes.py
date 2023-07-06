@@ -53,7 +53,6 @@ class Inventory:
         self.slots += slots
 
 
-
 @dataclass
 class Item:
     name: str
@@ -102,6 +101,14 @@ class Item:
             self.player.equip_armor(self)
         elif isinstance(self, Consumable):
             self.player.use_consumable(self)
+
+    def info(self):
+        print()
+        for key, value in self.__dict__.items():
+            if not "inventory" in key and not "is_equipped" in key:
+                print(f"{key:19}: {value}".title().replace("_", " "))
+        print()
+
 
 @dataclass
 class Weapon(Item):
@@ -198,7 +205,7 @@ class Creature:
     @property
     def inventory(self):
         return self._inventory
-    
+
     @property
     def is_alive(self):
         return self._is_alive
@@ -246,7 +253,7 @@ class Creature:
     @inventory.setter
     def inventory(self, new_inventory):
         self._inventory = new_inventory
-    
+
     @is_alive.setter
     def is_alive(self, new_is_alive):
         self._is_alive = new_is_alive
@@ -264,11 +271,20 @@ class Creature:
 
 @dataclass
 class Hero(Creature):
+    max_mana: int = 20
     mana: int = 10
+
+    @property
+    def max_mana(self):
+        return self._max_mana
 
     @property
     def mana(self):
         return self._mana
+
+    @max_mana.setter
+    def max_mana(self, new_max_mana):
+        self._max_mana = new_max_mana
 
     @mana.setter
     def mana(self, new_mana):
@@ -305,14 +321,20 @@ class Hero(Creature):
 
     def use_consumable(self, consumable):
         """Boosts player statistics based on item description."""
-        if consumable.heal > 0:
+        if self.health + consumable.heal > self.max_health:
+            self.health = self.max_health
+        else:
             self.heal(consumable.heal)
-        if consumable.mana > 0:
+
+        if self.mana + consumable.mana > self.max_mana:
+            self.mana = self.max_mana
+        else:
             self.mana += consumable.mana
-        if consumable.strength > 0:
-            self.strength += consumable.strength
-        if consumable.dexterity > 0:
-            self.dexterity += consumable.dexterity
+
+        self.strength += consumable.strength
+
+        self.dexterity += consumable.dexterity
+
         consumable.destroy()
 
 

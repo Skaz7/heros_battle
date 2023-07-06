@@ -71,7 +71,22 @@ class Battle:
         self.player.inventory.show()
         choice = int(input("> "))
         selected_item = self.player.inventory.items[choice - 1]
-        self.player.equip_weapon(selected_item)
+        selected_item.info()
+        print(f"1 - Use {selected_item.name}?")
+        print("0 - Go Back.\n")
+        choice = int(input("> "))
+        if choice == 1:
+            if isinstance(selected_item, Weapon):
+                self.player.equip_weapon(selected_item)
+            elif isinstance(selected_item, Armor):
+                self.player.equip_armor(selected_item)
+            elif isinstance(selected_item, Consumable):
+                self.player.use_consumable(selected_item)
+        elif choice == 0:
+            return
+        else:
+            print("Wrong choice! Please repeat.")
+            self.use_item()
 
     def flee(self):
         dice = Dice()

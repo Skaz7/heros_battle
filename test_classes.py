@@ -4,65 +4,66 @@ from battle import Battle
 
 
 player = Hero(
-    name = "Jimi Hendrix",
-    level = 1,
-    experience = 0,
-    race = "Human",
-    max_health = 150,
-    health = 100,
-    strength = 15,
-    dexterity = 8,
-    armor = 5,
-    status = "Sick",
-    inventory = None,
-    is_alive = True,
-    mana = 10,
+    name="Jimi Hendrix",
+    level=1,
+    experience=0,
+    race="Human",
+    max_health=150,
+    health=100,
+    strength=15,
+    dexterity=8,
+    armor=5,
+    status="Sick",
+    inventory=None,
+    is_alive=True,
+    max_mana=20,
+    mana=10,
 )
 enemy = Enemy(
-    name = "Azog The Defiler",
-    level = 1,
-    experience = 0,
-    race = "Orc",
-    max_health = 70,
-    health = 70,
-    strength = 10,
-    dexterity = 5,
-    armor = 10,
-    status = "Stunned",
-    inventory = None,
-    is_alive = True,
-    weakness = "Cold",
-    resistance = "Fire",
+    name="Azog The Defiler",
+    level=1,
+    experience=0,
+    race="Orc",
+    max_health=70,
+    health=70,
+    strength=10,
+    dexterity=5,
+    armor=10,
+    status="Stunned",
+    inventory=None,
+    is_alive=True,
+    weakness="Cold",
+    resistance="Fire",
 )
 excalibur = Weapon(
-    name = "Excalibur",
-    description = "Long Sword, good for Goblins",
-    value = 50,
-    slot_size = 1,
-    required_strength = 15,
-    required_dexterity = 15,
-    allowed_race = "Human",
-    max_durability = 10,
-    durability = 2,
-    inventory = Inventory,
-    damage_type = "Fire",
-    damage = 10,
-    is_equipped = False,
+    name="Excalibur",
+    description="Long Sword, good for Goblins",
+    value=50,
+    slot_size=1,
+    required_strength=15,
+    required_dexterity=15,
+    allowed_race="Human",
+    max_durability=10,
+    durability=2,
+    inventory=Inventory,
+    damage_type="Fire",
+    damage=10,
+    is_equipped=False,
 )
 leather_armor = Armor(
-    name = "Leather Jacket",
-    description = "Good for Humans",
-    value = 30,
-    slot_size = 1,
-    required_strength = 5,
-    required_dexterity = 0,
-    allowed_race = "Human",
-    max_durability = 15,
-    durability = 10,
-    inventory = Inventory,
-    resistance = "Cold",
-    protection = 5,
-    is_equipped = False,
+    name="Leather Jacket",
+    description="Good for Humans",
+    value=30,
+    slot_size=1,
+    required_strength=5,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=15,
+    durability=10,
+    inventory=Inventory,
+    resistance="Cold",
+    protection=5,
+    is_equipped=False,
 )
 quest = Quest(
     "Find Blueberries.",
@@ -72,8 +73,54 @@ quest = Quest(
     False,
 )
 
-life_potion = Consumable("Life Potion", "Restores 20 health.", 20, 1, 0, 0, "Human", 1, 1, Inventory, 20, 0, 0, 0)
-boost_potion = Consumable("Boost Potion", "Restores 10 health and 10 mana.", 20, 1, 0, 0, "Human", 1, 1, Inventory, 10, 10, 0, 0)
+life_potion = Consumable(
+    name="Life Potion",
+    description="Restores 20 health.",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=20,
+    mana=0,
+    strength=0,
+    dexterity=0,
+)
+boost_potion = Consumable(
+    name="Boost Potion",
+    description="Restores 10 health and 10 mana.",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=90,
+    mana=10,
+    strength=0,
+    dexterity=0,
+)
+strength_potion = Consumable(
+    name="Strenght Potion",
+    description="Increases Strength by 20",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=0,
+    mana=0,
+    strength=15,
+    dexterity=0,
+)
 
 
 # test for Hero class
@@ -89,7 +136,7 @@ def test_hero_creation():
     assert player.armor == 5
     assert player.status == "Sick"
     assert player.inventory == None
-    assert player.max_health == 150
+    assert player.max_mana == 20
     assert player.mana == 10
 
 
@@ -193,7 +240,8 @@ def test_take_damage():
     assert player.is_alive == True
     player.take_damage(enemy.strength + 80)
     assert player.is_alive == False
-    
+
+
 # test for battle system
 def test_battle():
     player.health = 100
@@ -222,17 +270,24 @@ def test_battle():
     battle.attack(enemy, player)
     assert player.health == 80
 
+
 # test consumables
 def test_consumables():
     inventory = Inventory([], 5, 20)
     inventory.add_item(life_potion)
     inventory.add_item(boost_potion)
+    inventory.add_item(strength_potion)
     assert player.health == 80
     assert player.mana == 10
+    assert player.strength == 15
     assert life_potion in inventory.items
     player.use_consumable(life_potion)
     assert player.health == 100
-    assert inventory.items == [boost_potion]
+    assert inventory.items == [boost_potion, strength_potion]
     player.use_consumable(boost_potion)
-    assert player.health == 110
+    assert player.health == 150
     assert player.mana == 20
+    assert inventory.items == [strength_potion]
+    player.use_consumable(strength_potion)
+    assert player.strength == 30
+    assert inventory.items == []

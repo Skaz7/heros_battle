@@ -12,6 +12,7 @@ def print_all_stats(creature):
         slow_print(f"    {key[1:].title():10} : {value}\n")
     creature.inventory.show()
 
+
 def print_battle_stats(creature):
     print()
     print_one_line_in_frame(f"{creature.name} Stats:")
@@ -19,6 +20,7 @@ def print_battle_stats(creature):
     slow_print(f"    Health : {creature.health}\n")
     slow_print(f"    Experience : {creature.experience}\n")
     slow_print(f"    Level : {creature.level}\n")
+
 
 # Create Hero and Enemy
 player = Hero(
@@ -34,8 +36,10 @@ player = Hero(
     "Sick",
     None,
     True,
+    20,
     10,
 )
+
 enemy = Enemy(
     "Azog The Defiler",
     1,
@@ -66,6 +70,7 @@ excalibur = Weapon(
     "Slash",
     15,
 )
+
 iceblizzard = Weapon(
     "Ice Blizzard",
     "Staff",
@@ -78,6 +83,7 @@ iceblizzard = Weapon(
     "ice",
     15,
 )
+
 thorshammer = Weapon(
     "Destroyer",
     "Hammer",
@@ -88,8 +94,9 @@ thorshammer = Weapon(
     "Dwarf",
     50,
     "blunt",
-    20,
+    80,
 )
+
 elvisheyes = Weapon(
     "Elvish Eyes",
     "Bow",
@@ -102,6 +109,7 @@ elvisheyes = Weapon(
     "stab",
     12,
 )
+
 longspear = Weapon(
     "Long Spear",
     "Spear",
@@ -114,6 +122,7 @@ longspear = Weapon(
     "stab",
     15,
 )
+
 silver_plate = Armor(
     "Silver Plate",
     "Great Armor made of silver.",
@@ -127,6 +136,73 @@ silver_plate = Armor(
     20,
 )
 
+leather_armor = Armor(
+    name="Leather Jacket",
+    description="Good for Humans",
+    value=30,
+    slot_size=1,
+    required_strength=5,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=15,
+    durability=10,
+    inventory=Inventory,
+    resistance="Cold",
+    protection=5,
+    is_equipped=False,
+)
+
+life_potion = Consumable(
+    name="Life Potion",
+    description="Restores 20 health.",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=20,
+    mana=0,
+    strength=0,
+    dexterity=0,
+)
+
+boost_potion = Consumable(
+    name="Boost Potion",
+    description="Restores 10 health and 10 mana.",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=90,
+    mana=10,
+    strength=0,
+    dexterity=0,
+)
+
+strength_potion = Consumable(
+    name="Strenght Potion",
+    description="Increases Strength by 20",
+    value=20,
+    slot_size=1,
+    required_strength=0,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=1,
+    durability=1,
+    inventory=Inventory,
+    heal=0,
+    mana=0,
+    strength=15,
+    dexterity=0,
+)
+
 # Create inventory and add some items
 player.inventory = Inventory([], 20, 20)
 enemy.inventory = Inventory([], 5, 5)
@@ -136,6 +212,10 @@ player.inventory.add_item(thorshammer)
 player.inventory.add_item(elvisheyes)
 player.inventory.add_item(longspear)
 enemy.inventory.add_item(silver_plate)
+player.inventory.add_item(life_potion)
+player.inventory.add_item(boost_potion)
+player.inventory.add_item(strength_potion)
+player.inventory.add_item(leather_armor)
 
 ### Health Bar creation and drawing
 # player_healthbar = HealthBar(player)
@@ -157,8 +237,8 @@ enemy.inventory.add_item(silver_plate)
 
 
 # Creating Battle with turns
-# battle = Battle(player, enemy)
-# battle.start_battle()
+battle = Battle(player, enemy)
+battle.start_battle()
 
 
 # print_all_stats(player)
