@@ -4,10 +4,10 @@ from battle import Battle
 
 
 player = Hero(
-    name="Jimi Hendrix",
+    name="Thorin Oakenshield",
     level=1,
     experience=0,
-    race="Human",
+    race="Dwarf",
     max_health=150,
     health=100,
     strength=15,
@@ -125,10 +125,10 @@ strength_potion = Consumable(
 
 # test for Hero class
 def test_hero_creation():
-    assert player.name == "Jimi Hendrix"
+    assert player.name == "Thorin Oakenshield"
     assert player.level == 1
     assert player.experience == 0
-    assert player.race == "Human"
+    assert player.race == "Dwarf"
     assert player.max_health == 150
     assert player.health == 100
     assert player.strength == 15
@@ -242,7 +242,7 @@ def test_take_damage():
     assert player.is_alive == False
 
 
-# test for battle system
+# test for battle system and die if health =< 0
 def test_battle():
     player.health = 100
     enemy.health = 70

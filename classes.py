@@ -1,6 +1,6 @@
 import random
-from dataclasses import dataclass
 import time
+from dataclasses import dataclass
 
 
 @dataclass

@@ -1,33 +1,17 @@
-import time
+from infos import *
 from classes import *
 from battle import Battle
 from decorators import slow_print, print_one_line_in_frame
 from dataclasses import fields
 
 
-def print_all_stats(creature):
-    print()
-    print_one_line_in_frame(f"{creature.name} Stats:")
-    for key, value in creature.__dict__.items():
-        slow_print(f"    {key[1:].title():10} : {value}\n")
-    creature.inventory.show()
-
-
-def print_battle_stats(creature):
-    print()
-    print_one_line_in_frame(f"{creature.name} Stats:")
-    creature.inventory.show()
-    slow_print(f"    Health : {creature.health}\n")
-    slow_print(f"    Experience : {creature.experience}\n")
-    slow_print(f"    Level : {creature.level}\n")
-
 
 # Create Hero and Enemy
 player = Hero(
-    "Jimi Hendrix",
+    "Thorin Oakenshield",
     1,
     0,
-    "Human",
+    "Dwarf",
     110,
     94,
     20,
@@ -43,7 +27,7 @@ player = Hero(
 enemy = Enemy(
     "Azog The Defiler",
     1,
-    0,
+    25,
     "Orc",
     70,
     70,
@@ -257,7 +241,6 @@ player.inventory.add_item(leather_armor)
 # Creating Battle with turns
 battle = Battle(player, enemy)
 battle.start_battle()
-
 
 # print_all_stats(player)
 # print_all_stats(enemy)

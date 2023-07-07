@@ -1,4 +1,6 @@
 from classes import *
+from infos import *
+from decorators import *
 
 
 class Battle:
@@ -10,6 +12,7 @@ class Battle:
     def start_battle(self):
         while self.player.is_alive and self.enemy.is_alive:
             self.next_turn()
+        return
 
     def next_turn(self):
         self.turn += 1
@@ -21,6 +24,7 @@ class Battle:
 
     def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
+        print_battle_stats(self.player)
         print("1. Attack")
         print("2. Defend")
         print("3. Use Item")
@@ -61,6 +65,9 @@ class Battle:
         defender.health -= damage
         print(f"\n{attacker.name} attacks {defender.name} for {damage} damage!\n")
         if defender.health <= 0:
+            defender.health = 0
+            defender.status = "dead"
+            defender.is_alive = False
             self.win(attacker)
 
     def defend(self, defender):
@@ -108,7 +115,9 @@ class Battle:
             exit()
 
     def win(self, attacker):
-        print(f"\n{attacker.name} wins the battle!\n")
+        print_one_line_in_frame(f"{attacker.name} wins the battle!")
+        attacker.experience += self.enemy.experience
+        attacker.health = attacker.max_health
 
     def end(self):
         exit()
