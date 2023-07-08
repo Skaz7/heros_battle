@@ -15,4 +15,3 @@ def print_battle_stats(creature):
     slow_print(f"    Health : {creature.health}/{creature.max_health}\n")
     slow_print(f"    Experience : {creature.experience}\n")
     slow_print(f"    Level : {creature.level}\n\n")
-    

@@ -1,9 +1,7 @@
 from infos import *
 from classes import *
 from battle import Battle
-from decorators import slow_print, print_one_line_in_frame
-from dataclasses import fields
-
+from world import *
 
 
 # Create Hero and Enemy
@@ -239,8 +237,8 @@ player.inventory.add_item(leather_armor)
 
 
 # Creating Battle with turns
-battle = Battle(player, enemy)
-battle.start_battle()
+# battle = Battle(player, enemy)
+# battle.start_battle()
 
 # print_all_stats(player)
 # print_all_stats(enemy)
@@ -248,3 +246,65 @@ battle.start_battle()
 # print_battle_stats(enemy)
 
 # player.inventory.show()
+
+forest = Area(
+    name="Forest",
+    description="A dark old forest.",
+    available_directions=["Town", "Plains", "Ruins"],
+    enemies=["Goblin", "Orc"],
+    treasures=["Small chest"],
+    npcs=["Old Man"],
+    visited=False,
+)
+town = Area(
+    name="Town",
+    description="A Town with many people.",
+    available_directions=["Forest", "Plains", "Ruins"],
+    enemies=None,
+    treasures=None,
+    npcs=["Merchant"],
+    visited=False,
+)
+
+areas = {
+    "Forest": forest,
+    "Town": town,
+    "Plains": None,
+    "Ruins": None
+}
+
+def explore_area(area):
+    print_one_line_in_frame(f"You are in {area.name}")
+    area.visited = True
+    print("\nYou can go to the following areas: ")
+    for direction in area.available_directions:
+        print(direction)
+    print("\nYou can see the following enemies: ")
+    if area.enemies is not None:
+        for enemy in area.enemies:
+            print(enemy)
+    print("\nYou can see the following treasures: ")
+    if area.treasures is not None:
+        for treasure in area.treasures:
+            print(treasure)
+    print("\nYou can see the following npcs: ")
+    if area.npcs is not None:
+        for npc in area.npcs:
+            print(npc)
+    print()
+    for i, next_area  in enumerate(area.available_directions, start=1):
+        print(f"{i}. Go to {next_area} and explore.")
+    try:
+        choice = int(input("\n > "))
+        next_area = areas.get(area.available_directions[choice - 1])
+        if next_area is not None:
+            explore_area(next_area)
+        else:
+            print("Invalid choice")
+            explore_area(area)
+    except (ValueError, IndexError):
+        print("Invalid choice")
+        explore_area(area)
+
+explore_area(town)
+
