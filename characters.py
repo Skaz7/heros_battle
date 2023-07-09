@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from items import Inventory
+from decorators import print_one_line_in_frame, slow_print
 
 
 @dataclass
@@ -125,6 +126,13 @@ class Creature:
         if self.health < 0:
             self.health = 0
             self.is_alive = False
+
+    def print_battle_stats(self):
+        print()
+        print_one_line_in_frame(f"{self.name} Stats:")
+        slow_print(f"    Health : {self.health}/{self.max_health}\n")
+        slow_print(f"    Experience : {self.experience}\n")
+        slow_print(f"    Level : {self.level}\n\n")
 
 
 @dataclass

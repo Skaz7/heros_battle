@@ -24,13 +24,23 @@ class Battle:
 
     def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
-        print_battle_stats(self.player)
+        self.player.print_battle_stats()
         print("1. Attack")
         print("2. Defend")
         print("3. Use Item")
         print("4. Flee")
-        print("0. End Game")
-        choice = input("Enter your choice: ")
+        print("5. End Game")
+
+        choice = self.get_player_choice()
+        self.handle_player_choice(choice)
+
+    def get_player_choice(self):
+        """Get player choice and return it."""
+        choice = input("Enter your choice -> ")
+        return choice
+
+    def handle_player_choice(self, choice):
+        """Handle player choice."""
         if choice == "1":
             self.attack(self.player, self.enemy)
         elif choice == "2":
