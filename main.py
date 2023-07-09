@@ -1,11 +1,35 @@
-from classes import *
-from world import *
-from infos import *
+from classes import Dice, Spell, Status, HealthBar, Quest
+from characters import *
+from creatureclass import Hero, Enemy
+from items import Inventory, Item, Weapon, Armor, Consumable
+from world import Area
+from infos import print_all_stats, print_battle_stats
 from battle import Battle
+from objects import *
+from data import areas, forest, town
 from decorators import slow_print, print_one_line_in_frame
 from collections import OrderedDict
 import os
 import time
+
+# forest = Area(
+#     name="Forest",
+#     description="A dark old forest.",
+#     available_directions=["Town", "Plains", "Ruins"],
+#     enemies=["Goblin", "Orc"],
+#     treasures=["Small chest"],
+#     npcs=["Old Man"],
+#     visited=False,
+# )
+# town = Area(
+#     name="Town",
+#     description="A Town with many people.",
+#     available_directions=["Forest", "Plains", "Ruins"],
+#     enemies=None,
+#     treasures=None,
+#     npcs=["Merchant"],
+#     visited=False,
+# )
 
 
 def area_activity(area):
@@ -15,6 +39,7 @@ def area_activity(area):
     activities["Exit game"] = exit
 
     if area.enemies is not None:
+        battle = Battle(player, enemy)
         activities["Fight"] = battle.start_battle
     if area.treasures is not None:
         activities["Open chest"] = None
@@ -75,6 +100,24 @@ def explore_area(area):
         explore_area(area)
 
 
+def main():
+    # Create inventories and add some items
+    player.inventory = Inventory([], 20, 20)
+    enemy.inventory = Inventory([], 5, 5)
+    player.inventory.add_item(excalibur)
+    player.inventory.add_item(iceblizzard)
+    player.inventory.add_item(thorshammer)
+    player.inventory.add_item(elvisheyes)
+    player.inventory.add_item(longspear)
+    enemy.inventory.add_item(silver_plate)
+    player.inventory.add_item(life_potion)
+    player.inventory.add_item(boost_potion)
+    player.inventory.add_item(strength_potion)
+    player.inventory.add_item(leather_armor)
+
+
 if __name__ == "__main__":
-    os.system("cls")
-    pass
+    os.system("clear")
+    main()
+    # explore_area(town)
+    area_activity(forest)

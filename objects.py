@@ -1,4 +1,6 @@
 from classes import *
+from items import Inventory, Item, Weapon, Armor, Consumable
+
 
 # Create weapons
 excalibur = Weapon(
