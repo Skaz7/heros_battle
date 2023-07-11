@@ -52,10 +52,29 @@ town = Area(
     npcs=["Merchant"],
     visited=False,
 )
+ruins = Area(
+    name="Ruins",
+    description="A ruined castle.",
+    available_directions=["Town", "Forest", "Plains"],
+    enemies=["Dragon"],
+    treasures=["Small chest"],
+    npcs=None,
+    visited=False,
+)
+plains = Area(
+    name="Plains",
+    description="A plains.",
+    available_directions=["Forest", "Town", "Ruins"],
+    enemies=["Thief"],
+    treasures=None,
+    npcs=None,
+    visited=False,
+)
+
 
 areas = {
     "Forest": forest,
     "Town": town,
-    "Plains": None,
-    "Ruins": None,
+    "Plains": plains,
+    "Ruins": ruins,
 }

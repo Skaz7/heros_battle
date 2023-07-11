@@ -1,6 +1,8 @@
 import pytest
-from classes import *
 from battle import Battle
+from classes import Quest
+from creatureclass import Hero, Enemy
+from items import *
 
 
 player = Hero(

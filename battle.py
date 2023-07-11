@@ -27,14 +27,16 @@ class Battle:
     def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
         self.player.print_battle_stats()
+        self.print_options()
+        choice = self.get_player_choice()
+        self.handle_player_choice(choice)
+
+    def print_options(self):
         print("1. Attack")
         print("2. Defend")
         print("3. Use Item")
         print("4. Flee")
         print("5. End Game")
-
-        choice = self.get_player_choice()
-        self.handle_player_choice(choice)
 
     def get_player_choice(self):
         """Get player choice and return it."""
@@ -51,11 +53,11 @@ class Battle:
             self.use_item()
         elif choice == "4":
             self.flee()
-        elif choice == "0":
+        elif choice == "5":
             self.end()
         else:
             print("Invalid choice!")
-            time.sleep(2)
+            time.sleep(1)
             self.player_turn()
 
     def enemy_turn(self):
@@ -95,6 +97,7 @@ class Battle:
         print("0 - Go Back.\n")
         choice = int(input("> "))
         if choice == 1:
+            # need to check if any other weapon is equipped, if so, unequip it and equip new one
             if isinstance(selected_item, Weapon):
                 for weapon in self.player.inventory.items:
                     if isinstance(weapon, Weapon) and weapon.is_equipped:

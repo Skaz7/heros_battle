@@ -8,23 +8,23 @@ import os
 import time
 
 
-### Health Bar creation and drawing
-# player_healthbar = HealthBar(player)
-# print()
-# player_healthbar.draw_health_bar()
-# player.take_damage(41)
-# player_healthbar.draw_health_bar()
-# player.take_damage(33)
-# player_healthbar.draw_health_bar()
-# print()
-# enemy_healthbar = HealthBar(enemy)
-# print()
-# enemy_healthbar.draw_health_bar()
-# enemy.take_damage(31)
-# enemy_healthbar.draw_health_bar()
-# enemy.take_damage(27)
-# enemy_healthbar.draw_health_bar()
-# print()
+## Health Bar creation and drawing
+player_healthbar = HealthBar(player)
+print()
+player_healthbar.draw_health_bar()
+player.take_damage(41)
+player_healthbar.draw_health_bar()
+player.take_damage(33)
+player_healthbar.draw_health_bar()
+print()
+enemy_healthbar = HealthBar(enemy)
+print()
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(31)
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(27)
+enemy_healthbar.draw_health_bar()
+print()
 
 
 # Creating Battle with turns

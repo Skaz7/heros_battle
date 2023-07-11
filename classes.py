@@ -12,28 +12,26 @@ class Dice:
 
 class HealthBar:
     def __init__(self, creature):
-        self.player = creature
-        self.max_health = creature.max_health
-        self.current_health = creature.health
+        self.creature = creature
 
     def draw_health_bar(self):
-        self.max_health = self.player.max_health
-        self.current_health = self.player.health
+        max_health = self.creature.max_health
+        current_health = self.creature.health
 
-        if self.current_health >= self.max_health * 0.7:
-            health_bar_color = "\033[0;32m"
-        elif 0.7 * self.max_health > self.current_health >= self.max_health * 0.3:
-            health_bar_color = "\033[0;33m"
-        elif self.current_health < self.max_health * 0.3:
-            health_bar_color = "\033[0;31m"
+        health_bar_color = self.get_health_bar_color(current_health, max_health)
+        health_size = int((current_health / max_health) * 100)
 
-        health_size = int((self.current_health / self.max_health) * 100)
+        print(f"Health: {health_bar_color}{current_health}/{max_health}  ", end="")
+        print(f"[{health_size * '█'}{(100 - health_size) * '-'}] \033[0m")
 
-        print(
-            f"Health: {health_bar_color}{self.current_health}/{self.max_health}  ",
-            end="",
-        )
-        print(f"[{health_size * '█'}{(100- health_size) * '-'}] \033[0m")
+    @staticmethod
+    def get_health_bar_color(current_health, max_health):
+        if current_health >= max_health * 0.7:
+            return "\033[0;32m"
+        elif max_health * 0.7 > current_health >= max_health * 0.3:
+            return "\033[0;33m"
+        elif current_health < max_health * 0.3:
+            return "\033[0;31m"
 
 
 @dataclass

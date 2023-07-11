@@ -6,30 +6,11 @@ from world import Area
 from infos import print_all_stats, print_battle_stats
 from battle import Battle
 from objects import *
-from data import areas, forest, town
+from data import areas, forest, town, plains, ruins
 from decorators import slow_print, print_one_line_in_frame
 from collections import OrderedDict
 import os
 import time
-
-# forest = Area(
-#     name="Forest",
-#     description="A dark old forest.",
-#     available_directions=["Town", "Plains", "Ruins"],
-#     enemies=["Goblin", "Orc"],
-#     treasures=["Small chest"],
-#     npcs=["Old Man"],
-#     visited=False,
-# )
-# town = Area(
-#     name="Town",
-#     description="A Town with many people.",
-#     available_directions=["Forest", "Plains", "Ruins"],
-#     enemies=None,
-#     treasures=None,
-#     npcs=["Merchant"],
-#     visited=False,
-# )
 
 
 def area_activity(area):
@@ -73,6 +54,7 @@ def explore_area(area):
     if area.enemies is not None:
         for enemy in area.enemies:
             print(enemy)
+
     print("\nYou can see the following treasures: ")
     if area.treasures is not None:
         for treasure in area.treasures:
@@ -119,5 +101,5 @@ def main():
 if __name__ == "__main__":
     os.system("clear")
     main()
-    # explore_area(town)
-    area_activity(forest)
+    explore_area(town)
+    # area_activity(forest)
