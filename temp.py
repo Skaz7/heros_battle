@@ -1,9 +1,11 @@
 from characters import *
 from world import Area
 from battle import Battle
+from classes import Dice
 from objects import *
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
+from data import *
 import os
 import time
 
@@ -31,38 +33,20 @@ print()
 battle = Battle(player, enemy)
 # battle.start_battle()
 
+# Creating Player inventory
+player.inventory = Inventory()
+
+# Creating Dice
+dice = Dice()
+
+# Creating Player
+
 # print_all_stats(player)
 # print_all_stats(enemy)
 # print_battle_stats(player)
 # print_battle_stats(enemy)
 
 # player.inventory.show()
-
-forest = Area(
-    name="Forest",
-    description="A dark old forest.",
-    available_directions=["Town", "Plains", "Ruins"],
-    enemies=["Goblin", "Orc"],
-    treasures=["Small chest"],
-    npcs=["Old Man"],
-    visited=False,
-)
-town = Area(
-    name="Town",
-    description="A Town with many people.",
-    available_directions=["Forest", "Plains", "Ruins"],
-    enemies=None,
-    treasures=None,
-    npcs=["Merchant"],
-    visited=False,
-)
-
-# areas = {
-#     "Forest": forest,
-#     "Town": town,
-#     "Plains": None,
-#     "Ruins": None,
-# }
 
 
 def explore_area(area):
@@ -161,4 +145,6 @@ def area_activity(area):
         area_activity(area)
 
 
-area_activity(forest)
+# area_activity(forest)
+
+print(dice.roll("2d12+1"))
