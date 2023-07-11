@@ -1,107 +1,164 @@
+from characters import *
+from world import Area
+from battle import Battle
+from objects import *
+from decorators import print_one_line_in_frame
+from collections import OrderedDict
+import os
 import time
-from classes import *
 
 
-def slow_print(text):
-    for char in text:
-        print(char, end="", flush=True)
-        time.sleep(0.003)
-
-
-def print_one_line_in_frame(text):
-    print("+" + "-" * (len(text) + 4) + "+")
-    print("|  " + text + "  |")
-    print("+" + "-" * (len(text) + 4) + "+")
-
-
-def print_player_stats(player):
-    print()
-    print_one_line_in_frame("Hero Stats:")
-    slow_print(f"    Name:       {player.name}")
-    slow_print(f"\n    Level:      {player.level}")
-    slow_print(f"\n    Experience: {player.experience}")
-    slow_print(f"\n    Race:       {player.race}")
-    slow_print(f"\n    Max Health: {player.max_health}")
-    slow_print(f"\n    Health:     {player.health}")
-    slow_print(f"\n    Strength:   {player.strength}")
-    slow_print(f"\n    Dexterity:  {player.dexterity}")
-    slow_print(f"\n    Armor:      {player.armor}")
-    slow_print(f"\n    Gold:       {player.gold}")
-    slow_print(f"\n    Status:     {player.status}")
-    slow_print(f"\n    Inventory:  {player.inventory}\n")
-
-
-def print_enemy_stats(enemy):
-    print()
-    print_one_line_in_frame("Enemy Stats:")
-    slow_print(f"\n    Name:       {enemy.name}")
-    slow_print(f"\n    Level:      {enemy.level}")
-    slow_print(f"\n    Experience: {enemy.experience}")
-    slow_print(f"\n    Race:       {enemy.race}")
-    slow_print(f"\n    Health:     {enemy.health}")
-    slow_print(f"\n    Attack:     {enemy.strength}")
-    slow_print(f"\n    Dexterity:  {enemy.dexterity}")
-    slow_print(f"\n    Armor:      {enemy.armor}")
-    slow_print(f"\n    Gold:       {enemy.gold}")
-    slow_print(f"\n    Weakness:   {enemy.weakness}")
-    slow_print(f"\n    Resistance: {enemy.resistance}")
-    slow_print(f"\n    Status:     {enemy.status}\n")
-
-player = Hero("Jimi Hendrix", 1, 0, "Human", 94, 10, 8, 5, 129, "Sick", None, 110, 10)
-enemy = Enemy("Azog", 1, 0, "Goblin", 70, 10, 5, 10, 21, "Alive", None, "Cold", "Fire")
-
-excalibur = Weapon("Excalibur", "Great Sword", 50, 1, "Slash", 15)
-iceblizzard = Weapon("Ice Blizzard", "Staff", 40, 1, "ice", 15)
-thorshammer = Weapon("Destroyer", "Hammer", 10, 1, "blunt", 20)
-elvisheyes = Weapon("Elvish Eyes", "Bow", 20, 1, "stab", 12)
-longspear = Weapon("Long Spear", "Spear", 15, 2, "stab", 15)
-
-player.inventory = Inventory()
-
-player.inventory.add_item_to_inventory(excalibur)
-player.inventory.add_item_to_inventory(iceblizzard)
-player.inventory.add_item_to_inventory(thorshammer)
-player.inventory.add_item_to_inventory(elvisheyes)
-player.inventory.add_item_to_inventory(longspear)
-
-player.inventory.show_inventory()
-player.inventory.remove_item_from_inventory(iceblizzard)
-player.inventory.show_inventory()
-print(player.inventory.inventory)
-
-
-player.take_damage(4)
-print_player_stats(player)
-print(f"\nIs player alive? -> {player.is_alive()}\n")
-# battle = Battle(player, enemy)
-
-# if __name__ == "__main__":
-#     while player.health > 0 and enemy.health > 0:
-#         print_player_stats(player)
-#         print_enemy_stats(enemy)
-#         battle.player_turn()
-#         battle.enemy_turn()
-
-
-# check if weapon named Excalibur is in inventory
-# if it is, print it's stats
-def check_if_weapon_in_inventory(weapon_name):
-    for weapon in player.inventory.inventory:
-        if weapon.name == weapon_name:
-            print(weapon)
-
-check_if_weapon_in_inventory("Destroyer")
-check_if_weapon_in_inventory("Ice Blizzard")
-check_if_weapon_in_inventory("Elvish Eyes")
-check_if_weapon_in_inventory("Long Spear")
-
-print(f"Player's actual health is {player.health}")
-
-healthbar = HealthBar(player)
+## Health Bar creation and drawing
+player_healthbar = HealthBar(player)
 print()
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
 player.take_damage(41)
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
 player.take_damage(33)
-healthbar.draw_health_bar()
+player_healthbar.draw_health_bar()
 print()
+enemy_healthbar = HealthBar(enemy)
+print()
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(31)
+enemy_healthbar.draw_health_bar()
+enemy.take_damage(27)
+enemy_healthbar.draw_health_bar()
+print()
+
+
+# Creating Battle with turns
+battle = Battle(player, enemy)
+# battle.start_battle()
+
+# print_all_stats(player)
+# print_all_stats(enemy)
+# print_battle_stats(player)
+# print_battle_stats(enemy)
+
+# player.inventory.show()
+
+forest = Area(
+    name="Forest",
+    description="A dark old forest.",
+    available_directions=["Town", "Plains", "Ruins"],
+    enemies=["Goblin", "Orc"],
+    treasures=["Small chest"],
+    npcs=["Old Man"],
+    visited=False,
+)
+town = Area(
+    name="Town",
+    description="A Town with many people.",
+    available_directions=["Forest", "Plains", "Ruins"],
+    enemies=None,
+    treasures=None,
+    npcs=["Merchant"],
+    visited=False,
+)
+
+# areas = {
+#     "Forest": forest,
+#     "Town": town,
+#     "Plains": None,
+#     "Ruins": None,
+# }
+
+
+def explore_area(area):
+    print_one_line_in_frame(f"You are in {area.name}")
+    area.visited = True
+
+    print("\nYou can go to the following areas: ")
+    for direction in area.available_directions:
+        print(direction)
+
+    print("\nYou can see the following enemies: ")
+    if area.enemies is not None:
+        for enemy in area.enemies:
+            print(enemy)
+    print("\nYou can see the following treasures: ")
+    if area.treasures is not None:
+        for treasure in area.treasures:
+            print(treasure)
+
+    print("\nYou can see the following npcs: ")
+    if area.npcs is not None:
+        for npc in area.npcs:
+            print(npc)
+    print()
+
+    for i, next_area in enumerate(area.available_directions, start=1):
+        print(f"{i}. Go to {next_area} and explore.")
+
+    try:
+        choice = int(input("\n > "))
+        next_area = areas.get(area.available_directions[choice - 1])
+        if next_area is not None:
+            explore_area(next_area)
+        else:
+            print("Invalid choice")
+            explore_area(area)
+    except (ValueError, IndexError):
+        print("Invalid choice")
+        explore_area(area)
+
+
+# explore_area(town)
+
+
+# def area_activity(area):
+#     activities = [
+#         "Show inventory",
+#         "Leave area",
+#         "Exit game",
+#     ]
+#     if area.enemies is not None:
+#         activities.insert(0, "Fight")
+#     if area.treasures is not None:
+#         activities.insert(0, "Open chest")
+#     if area.npcs is not None:
+#         activities.insert(0, "Talk to NPC")
+
+#     print("\nWhat do you want to do?\n")
+#     for i, activity in enumerate(activities, start=1):
+#         print(f"{i}. {activity}")
+#     try:
+#         choice = input(" > ")
+#         if choice == "1":
+#             area.inventory.show()
+#     except (ValueError, IndexError):
+#         print("Invalid choice!")
+#         time.sleep(1)
+#         area_activity(area)
+
+
+def area_activity(area):
+    activities = OrderedDict()
+    activities["Show inventory"] = player.inventory.show
+    activities["Leave area"] = None
+    activities["Exit game"] = exit
+
+    if area.enemies is not None:
+        activities["Fight"] = battle.start_battle
+    if area.treasures is not None:
+        activities["Open chest"] = None
+    if area.npcs is not None:
+        activities["Talk to NPC"] = None
+
+    print("\nWhat do you want to do?\n")
+    for i, activity in enumerate(activities.keys(), start=1):
+        print(f"{i}. {activity}")
+    try:
+        choice = input(" > ")
+        if choice == "1":
+            activities["Show inventory"]()
+        elif choice == "4":
+            activities["Fight"]()
+    except (ValueError, IndexError):
+        print("Invalid choice!")
+        time.sleep(1)
+        area_activity(area)
+
+
+area_activity(forest)
