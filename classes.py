@@ -81,10 +81,6 @@ class Quest:
         self.completed = True
 
 
-class Spell:
-    pass
-
-
 class Status:
     def __init__(self, name: str, description: str, duration: int):
         self.name = name

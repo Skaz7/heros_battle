@@ -34,9 +34,10 @@ class Battle:
     def print_options(self):
         print("1. Attack")
         print("2. Defend")
-        print("3. Use Item")
-        print("4. Flee")
-        print("5. End Game")
+        print("3. Use Magic")
+        print("4. Use Item")
+        print("5. Flee")
+        print("6. End Game")
 
     def get_player_choice(self):
         """Get player choice and return it."""
@@ -50,10 +51,12 @@ class Battle:
         elif choice == "2":
             self.defend(self.player)
         elif choice == "3":
-            self.use_item()
+            self.use_magic(self.player, self.enemy)
         elif choice == "4":
-            self.flee()
+            self.use_item()
         elif choice == "5":
+            self.flee()
+        elif choice == "6":
             self.end()
         else:
             print("Invalid choice!")
@@ -87,6 +90,13 @@ class Battle:
     def defend(self, defender):
         defender.armor = int(defender.armor * 1.5)
         print(f"\n{defender.name} is defending!\n")
+
+    def use_magic(self, attacker, defender):
+        """Use magic method for both players."""
+        print(f"Spells in your spellbook: ")
+        for spell in attacker.spellbook.spells:
+            print(f"{spell.name}")
+        input("ENTER -> Go Back.\n")
 
     def use_item(self):
         self.player.inventory.show()

@@ -3,6 +3,7 @@ from world import Area
 from battle import Battle
 from classes import Dice
 from objects import *
+from spellbook import SpellBook, fireball
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from data import *
@@ -11,33 +12,38 @@ import time
 
 
 ## Health Bar creation and drawing
-player_healthbar = HealthBar(player)
-print()
-player_healthbar.draw_health_bar()
-player.take_damage(41)
-player_healthbar.draw_health_bar()
-player.take_damage(33)
-player_healthbar.draw_health_bar()
-print()
-enemy_healthbar = HealthBar(enemy)
-print()
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(31)
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(27)
-enemy_healthbar.draw_health_bar()
-print()
-
-
-# Creating Battle with turns
-battle = Battle(player, enemy)
-# battle.start_battle()
+# player_healthbar = HealthBar(player)
+# print()
+# player_healthbar.draw_health_bar()
+# player.take_damage(41)
+# player_healthbar.draw_health_bar()
+# player.take_damage(33)
+# player_healthbar.draw_health_bar()
+# print()
+# enemy_healthbar = HealthBar(enemy)
+# print()
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(31)
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(27)
+# enemy_healthbar.draw_health_bar()
+# print()
 
 # Creating Player inventory
 player.inventory = Inventory()
 
-# Creating Dice
-dice = Dice()
+# Creating Player spellbook
+player.spellbook = SpellBook()
+player.spellbook.add_spell(fireball)
+print(player.spellbook.spells)
+
+# Creating Battle with turns
+battle = Battle(player, enemy)
+battle.start_battle()
+
+# # Creating and rolling Dice
+# dice = Dice()
+# print(dice.roll("2d12+1"))
 
 # Creating Player
 
@@ -145,6 +151,4 @@ def area_activity(area):
         area_activity(area)
 
 
-# area_activity(forest)
-
-print(dice.roll("2d12+1"))
+area_activity(forest)
