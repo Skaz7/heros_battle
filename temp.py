@@ -1,35 +1,51 @@
 from characters import *
 from world import Area
 from battle import Battle
+from classes import Dice
 from objects import *
+from spellbook import SpellBook, fireball
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
+from data import *
 import os
 import time
 
 
 ## Health Bar creation and drawing
-player_healthbar = HealthBar(player)
-print()
-player_healthbar.draw_health_bar()
-player.take_damage(41)
-player_healthbar.draw_health_bar()
-player.take_damage(33)
-player_healthbar.draw_health_bar()
-print()
-enemy_healthbar = HealthBar(enemy)
-print()
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(31)
-enemy_healthbar.draw_health_bar()
-enemy.take_damage(27)
-enemy_healthbar.draw_health_bar()
-print()
+# player_healthbar = HealthBar(player)
+# print()
+# player_healthbar.draw_health_bar()
+# player.take_damage(41)
+# player_healthbar.draw_health_bar()
+# player.take_damage(33)
+# player_healthbar.draw_health_bar()
+# print()
+# enemy_healthbar = HealthBar(enemy)
+# print()
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(31)
+# enemy_healthbar.draw_health_bar()
+# enemy.take_damage(27)
+# enemy_healthbar.draw_health_bar()
+# print()
 
+# Creating Player inventory
+player.inventory = Inventory()
+
+# Creating Player spellbook
+player.spellbook = SpellBook()
+player.spellbook.add_spell(fireball)
+print(player.spellbook.spells)
 
 # Creating Battle with turns
 battle = Battle(player, enemy)
-# battle.start_battle()
+battle.start_battle()
+
+# # Creating and rolling Dice
+# dice = Dice()
+# print(dice.roll("2d12+1"))
+
+# Creating Player
 
 # print_all_stats(player)
 # print_all_stats(enemy)
@@ -37,32 +53,6 @@ battle = Battle(player, enemy)
 # print_battle_stats(enemy)
 
 # player.inventory.show()
-
-forest = Area(
-    name="Forest",
-    description="A dark old forest.",
-    available_directions=["Town", "Plains", "Ruins"],
-    enemies=["Goblin", "Orc"],
-    treasures=["Small chest"],
-    npcs=["Old Man"],
-    visited=False,
-)
-town = Area(
-    name="Town",
-    description="A Town with many people.",
-    available_directions=["Forest", "Plains", "Ruins"],
-    enemies=None,
-    treasures=None,
-    npcs=["Merchant"],
-    visited=False,
-)
-
-# areas = {
-#     "Forest": forest,
-#     "Town": town,
-#     "Plains": None,
-#     "Ruins": None,
-# }
 
 
 def explore_area(area):

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from items import Inventory
+from spellbook import SpellBook
 from decorators import print_one_line_in_frame, slow_print
 
 
@@ -20,6 +21,7 @@ class Creature:
     status: str = None
     inventory: Inventory = Inventory()
     is_alive: bool = True
+    spellbook: SpellBook = SpellBook()
 
     @property
     def name(self):
