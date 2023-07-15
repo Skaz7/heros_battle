@@ -1,7 +1,7 @@
 from characters import *
 from world import Area
 from battle import Battle
-from classes import Dice
+from classes import Dice, TreasureChest
 from objects import *
 from spellbook import SpellBook, fireball
 from decorators import print_one_line_in_frame
@@ -33,24 +33,22 @@ import time
 player.inventory = Inventory()
 
 # Creating Player spellbook
-player.spellbook = SpellBook()
-player.spellbook.add_spell(fireball)
-print(player.spellbook.spells)
+# player.spellbook = SpellBook()
+# player.spellbook.add_spell(fireball)
+# print(player.spellbook.spells)
 
 # Creating Battle with turns
-battle = Battle(player, enemy)
-battle.start_battle()
+# battle = Battle(player, enemy)
+# battle.start_battle()
 
-# # Creating and rolling Dice
-# dice = Dice()
-# print(dice.roll("2d12+1"))
+# Creating and rolling Dice
+dice = Dice()
 
 # Creating Player
-
 # print_all_stats(player)
 # print_all_stats(enemy)
-# print_battle_stats(player)
-# print_battle_stats(enemy)
+# print_basic_stats(player)
+# print_basic_stats(enemy)
 
 # player.inventory.show()
 
@@ -151,4 +149,19 @@ def area_activity(area):
         area_activity(area)
 
 
-area_activity(forest)
+# area_activity(forest)
+
+chest = TreasureChest(
+    name="Red Chest",
+    description="A red chest with a gold key inside.",
+    size=1,
+    items=[excalibur, life_potion],
+    trapped=True,
+    opened=False,
+)
+
+# print(chest.opened)
+# chest.open()
+# print(chest.opened)
+
+player.level_up()

@@ -1,6 +1,7 @@
 import random
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import List
 
 
 class Dice:
@@ -86,3 +87,83 @@ class Status:
         self.name = name
         self.description = description
         self.duration = duration
+
+
+@dataclass
+class TreasureChest:
+    """ """
+
+    name: str = "Treasure Chest"
+    description: str = "A chest that contains some items. It can be trapped, so you have to be careful."
+    size: int = 1
+    items: List[str] = list()
+    trapped: bool = False
+    opened: bool = False
+
+    ### Getters and Setters ###
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def description(self):
+        return self._description
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def items(self):
+        return self._items
+
+    @property
+    def opened(self):
+        return self._opened
+
+    @name.setter
+    def name(self, new_name):
+        self._name = new_name
+
+    @description.setter
+    def description(self, new_description):
+        self._description = new_description
+
+    @size.setter
+    def size(self, new_size):
+        self._size = new_size
+
+    @items.setter
+    def items(self, new_items):
+        self._items = new_items
+
+    @opened.setter
+    def opened(self, new_opened):
+        self._opened = new_opened
+
+    def open(self):
+        if self.opened:
+            print("This chest is already opened.")
+            return
+
+        self.menu()
+        choice = int(input(" > "))
+        self.choice_handler(choice, player)
+
+    def menu(self):
+        print("This chest contains:")
+        for item in self.items:
+            print(f"  - {item.name}")
+        print("1. Open")
+        print("2. Exit")
+
+    def choice_handler(self, choice, player):
+        if choice == 1:
+            self.opened = True
+            for item in self.items:
+                player.inventory.add_item(item)
+        elif choice == 2:
+            return
+        else:
+            print("Wrong choice. Try again.")
+            self.menu()

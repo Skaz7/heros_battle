@@ -3,7 +3,7 @@ from characters import *
 from creatureclass import Hero, Enemy
 from items import Inventory, Item, Weapon, Armor, Consumable
 from world import Area
-from infos import print_all_stats, print_battle_stats
+from infos import print_all_stats, print_baasic_stats
 from battle import Battle
 from objects import *
 from data import areas, forest, town, plains, ruins

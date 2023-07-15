@@ -9,7 +9,7 @@ def print_all_stats(creature):
     creature.inventory.show()
 
 
-def print_battle_stats(creature):
+def print_basic_stats(creature):
     print()
     print_one_line_in_frame(f"{creature.name} Stats:")
     slow_print(f"    Health : {creature.health}/{creature.max_health}\n")
