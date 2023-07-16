@@ -10,7 +10,7 @@ class Creature:
     """Initializes a new instance of Creature class.
     Player & Enemy classes are a subclasses of Creature class."""
 
-    name: str = "Hero"
+    name: str = "Creature"
     level: int = 1
     experience: int = 0
     race: str = None
@@ -74,6 +74,10 @@ class Creature:
     def is_alive(self):
         return self._is_alive
 
+    @property
+    def spellbook(self):
+        return self._spellbook
+
     @name.setter
     def name(self, new_name):
         self._name = new_name
@@ -121,6 +125,10 @@ class Creature:
     @is_alive.setter
     def is_alive(self, new_is_alive):
         self._is_alive = new_is_alive
+
+    @spellbook.setter
+    def spellbook(self, new_spellbook):
+        self._spellbook = new_spellbook
 
     ######## Methods ########
 
@@ -282,6 +290,14 @@ class Hero(Creature):
         self.dexterity += consumable.dexterity
 
         consumable.destroy()
+
+    def open_chest(self, chest):
+        chest.opened = True
+        choice = None
+        while choice != 0:
+            chest.show_items()
+            choice = int(input(" > "))
+            chest.choice_handler(choice, self.inventory)
 
     def level_up(self):
         if self.level % 5 == 0:

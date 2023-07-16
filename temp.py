@@ -1,7 +1,7 @@
-from characters import *
+from characters import player, enemy
 from world import Area
 from battle import Battle
-from classes import Dice, TreasureChest
+from classes import Dice, TreasureChest, HeroChest
 from objects import *
 from spellbook import SpellBook, fireball
 from decorators import print_one_line_in_frame
@@ -160,8 +160,10 @@ chest = TreasureChest(
     opened=False,
 )
 
-# print(chest.opened)
-# chest.open()
-# print(chest.opened)
+# hero_chest = HeroChest()
 
-player.level_up()
+print(chest.opened)
+player.open_chest(chest)
+print(chest.opened)
+
+# player.level_up()

@@ -1,6 +1,6 @@
 import pytest
 from battle import Battle
-from classes import Quest
+from classes import Quest, TreasureChest, HeroChest
 from creatureclass import Hero, Enemy
 from items import *
 
@@ -18,6 +18,7 @@ player = Hero(
     status="Sick",
     inventory=None,
     is_alive=True,
+    spellbook=None,
     max_mana=20,
     mana=10,
 )
@@ -34,6 +35,7 @@ enemy = Enemy(
     status="Stunned",
     inventory=None,
     is_alive=True,
+    spellbook=None,
     weakness="Cold",
     resistance="Fire",
 )
@@ -250,26 +252,26 @@ def test_battle():
     enemy.health = 70
     battle = Battle(player, enemy)
     assert battle.turn == 0
-    battle.attack(player, enemy)
+    player.attack(enemy)
     assert enemy.health == 65
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 95
     player.equip_weapon(excalibur)
-    battle.attack(player, enemy)
+    player.attack(enemy)
     assert enemy.health == 50
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 90
     player.equip_armor(leather_armor)
     assert player.armor == 10
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 90
     player.unequip_armor(leather_armor)
     assert player.armor == 5
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 85
     player.unequip_weapon(excalibur)
     assert player.strength == 15
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 80
 
 
@@ -293,3 +295,9 @@ def test_consumables():
     player.use_consumable(strength_potion)
     assert player.strength == 30
     assert inventory.items == []
+
+
+# test treasure chest
+def test_treasure_chest():
+    chest = TreasureChest(items=[excalibur])
+    assert chest.items == [excalibur]

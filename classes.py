@@ -1,7 +1,8 @@
 import random
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
+from items import Inventory
 
 
 class Dice:
@@ -90,15 +91,11 @@ class Status:
 
 
 @dataclass
-class TreasureChest:
-    """ """
-
-    name: str = "Treasure Chest"
-    description: str = "A chest that contains some items. It can be trapped, so you have to be careful."
+class Chest:
+    name: str = "Chest"
+    description: str = ""
     size: int = 1
     items: List[str] = list()
-    trapped: bool = False
-    opened: bool = False
 
     ### Getters and Setters ###
     @property
@@ -117,10 +114,6 @@ class TreasureChest:
     def items(self):
         return self._items
 
-    @property
-    def opened(self):
-        return self._opened
-
     @name.setter
     def name(self, new_name):
         self._name = new_name
@@ -137,33 +130,51 @@ class TreasureChest:
     def items(self, new_items):
         self._items = new_items
 
+    def show_items(self):
+        if len(self.items) > 0:
+            print("This chest contains some items, would you like to pick something?")
+            for i, item in enumerate(self.items, start=1):
+                print(f"{i} -> Pick {item.name}")
+
+            print("0. Exit")
+        else:
+            print("This chest is empty.")
+        return
+
+    def choice_handler(self, choice, inventory):
+        if choice in range(1, len(self.items) + 1):
+            selected_item = self.items[choice - 1]
+            if inventory.slots < selected_item.slot_size:
+                print("Not enough space in inventory.")
+                return
+            inventory.add_item(selected_item)
+            print(f"You picked {selected_item.name}.")
+            self.items.pop(choice - 1)
+            # self.show_items()
+
+        else:
+            print("Wrong choice. Try again.")
+            self.show_items()
+
+
+@dataclass
+class TreasureChest(Chest):
+    trapped: bool = False
+    opened: bool = False
+
+    @property
+    def opened(self):
+        return self._opened
+
     @opened.setter
     def opened(self, new_opened):
         self._opened = new_opened
 
-    def open(self):
-        if self.opened:
-            print("This chest is already opened.")
+
+@dataclass
+class HeroChest(Chest):
+    def put_item(self, item):
+        if self.size < item.slot_size:
+            print("Not enough space in chest.")
             return
-
-        self.menu()
-        choice = int(input(" > "))
-        self.choice_handler(choice, player)
-
-    def menu(self):
-        print("This chest contains:")
-        for item in self.items:
-            print(f"  - {item.name}")
-        print("1. Open")
-        print("2. Exit")
-
-    def choice_handler(self, choice, player):
-        if choice == 1:
-            self.opened = True
-            for item in self.items:
-                player.inventory.add_item(item)
-        elif choice == 2:
-            return
-        else:
-            print("Wrong choice. Try again.")
-            self.menu()
+        self.items.append(item)
