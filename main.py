@@ -1,19 +1,19 @@
-from classes import Dice, Spell, Status, HealthBar, Quest
+from classes import Dice, Status, HealthBar, Quest
 from characters import *
-from creatureclass import Hero, Enemy
 from items import Inventory, Item, Weapon, Armor, Consumable
+from spellbook import SpellBook
 from world import Area
-from infos import print_all_stats, print_baasic_stats
+from infos import *
 from battle import Battle
 from objects import *
-from data import areas, forest, town, plains, ruins
-from decorators import slow_print, print_one_line_in_frame
+from data import areas, town
+from decorators import *
 from collections import OrderedDict
 import os
 import time
 
 
-def area_activity(area):
+def examine(area):
     activities = OrderedDict()
     activities["Show inventory"] = player.inventory.show
     activities["Leave area"] = None
@@ -39,7 +39,7 @@ def area_activity(area):
     except (ValueError, IndexError):
         print("Invalid choice!")
         time.sleep(1)
-        area_activity(area)
+        examine(area)
 
 
 def explore_area(area):
@@ -67,12 +67,17 @@ def explore_area(area):
     print()
 
     for i, next_area in enumerate(area.available_directions, start=1):
-        print(f"{i}. Go to {next_area} and explore.")
+        print(f"{i}. Go to {next_area}.")
+
+    print(f"{i+1}. Examine {area.name}.")
 
     try:
         choice = int(input("\n > "))
-        next_area = areas.get(area.available_directions[choice - 1])
-        if next_area is not None:
+        if choice == i + 1:
+            print(i + 1)
+            examine(area)
+        elif 1 <= choice <= (len(area.available_directions) + 1):
+            next_area = areas.get(area.available_directions[choice - 1])
             explore_area(next_area)
         else:
             print("Invalid choice")
@@ -86,6 +91,7 @@ def main():
     # Create inventories and add some items
     player.inventory = Inventory([], 20, 20)
     enemy.inventory = Inventory([], 5, 5)
+    player.spellbook = SpellBook([fireball, freeze])
     player.inventory.add_item(excalibur)
     player.inventory.add_item(iceblizzard)
     player.inventory.add_item(thorshammer)
@@ -96,6 +102,9 @@ def main():
     player.inventory.add_item(boost_potion)
     player.inventory.add_item(strength_potion)
     player.inventory.add_item(leather_armor)
+    player.spellbook.add_spell(fireball)
+    player.spellbook.add_spell(freeze)
+    player.spellbook.add_spell(reveal)
 
 
 if __name__ == "__main__":

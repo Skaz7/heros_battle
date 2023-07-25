@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from items import Inventory, Weapon, Armor, Consumable
 from spellbook import SpellBook
-from decorators import print_one_line_in_frame, slow_print
+from decorators import *
 from classes import Dice
+from infos import print_full_stats
 
 
 @dataclass
@@ -151,8 +152,29 @@ class Creature:
         """
         base_attack = self.strength
         additional_attack = 0
+        base_defense = defender.armor
+        additional_defense = 0
+
+        for weapon in self.inventory.items:
+            print(weapon)
+
+        for weapon in self.inventory.items:
+            if isinstance(weapon, Weapon) and weapon.is_equipped:
+                additional_attack += weapon.damage
+                print(f"{weapon} equipped!\n")
+            else:
+                additional_attack += 0
+                print(f"{weapon} not equipped!\n")
+
+        for armor in defender.inventory.items:
+            if isinstance(armor, Armor) and armor.is_equipped:
+                additional_defense = armor.protection
+            else:
+                additional_defense = 0
+
         total_attack = base_attack + additional_attack
-        damage = total_attack - defender.armor
+        total_defense = base_defense + additional_defense
+        damage = total_attack - total_defense
         defender.take_damage(damage)
         print(f"\n{self.name} attacks {defender.name} for {damage} damage!\n")
 
@@ -163,16 +185,28 @@ class Creature:
 
     def use_magic(self, defender):
         """Use magic method for both players."""
-        print(f"Spells in your spellbook: ")
-        for spell in self.spellbook.spells:
-            print(f"{spell.name}")
-        input("ENTER -> Go Back.\n")
+        print(f"\nSpells in your spellbook: ")
+        print("-------------------------")
+        self.spellbook.show()
+        choice = input("Which spell would you like to use?\n > ")
+        self._use_magic_choice_handler(choice, defender)
+
+    def _use_magic_choice_handler(self, choice, defender):
+        if choice == "0":
+            return
+        else:
+            spell = self.spellbook.spells[int(choice) - 1]
+        if self.mana < spell.mana_cost:
+            print_red(f"You don't have enough mana to cast {spell.name}!\n")
+            self.use_magic(defender)
+        else:
+            spell.cast(self, defender)
 
     def flee(self):
         dice = Dice()
         flee_chance = dice.roll(10)
         if flee_chance <= 2:
-            print(
+            print_red(
                 f"\n{self.name} get hurt while running from battle and failed to escape!\n"
             )
             self.health -= int(self.max_health / 20)
@@ -181,30 +215,8 @@ class Creature:
             print(f"\n{self.name} failed to escape from the battlefield!\n")
             return
         elif 5 < flee_chance <= 10:
-            print(f"\n{self.name} escaped from the battlefield!\n")
+            print_green(f"\n{self.name} escaped from the battlefield!\n")
             exit()
-
-    def print_basic_stats(self):
-        print()
-        print_one_line_in_frame(f"{self.name} Stats:")
-        slow_print(f"    Health : {self.health}/{self.max_health}\n")
-        slow_print(f"    Experience : {self.experience}\n")
-        slow_print(f"    Level : {self.level}\n\n")
-
-    def print_full_stats(self):
-        print()
-        print_one_line_in_frame(f"{self.name} Stats:")
-        slow_print(f"   1. Level : {self.level}\n")
-        slow_print(f"   2. Experience : {self.experience}\n")
-        slow_print(f"   3. Race : {self.race}\n")
-        slow_print(f"   3. Health : {self.health}/{self.max_health}\n")
-        slow_print(f"   4. Strength : {self.strength}\n")
-        slow_print(f"   5. Dexterity : {self.dexterity}\n")
-        slow_print(f"   6. Armor : {self.armor}\n")
-        slow_print(f"   7. Mana : {self.mana}/{self.max_mana}\n")
-        slow_print(f"   8. Status : {self.status}\n")
-        slow_print(f"   9. Inventory : {self.inventory}\n")
-        slow_print(f"   10. Spellbook : {self.spellbook}\n")
 
 
 @dataclass
@@ -230,28 +242,24 @@ class Hero(Creature):
 
     def equip_weapon(self, weapon):
         """Equips a weapon to the hero."""
-        self.strength += weapon.damage
         weapon.is_equipped = True
 
     def unequip_weapon(self, weapon):
         """Unequips a weapon from the hero."""
-        self.strength -= weapon.damage
         weapon.is_equipped = False
 
     def equip_armor(self, armor):
         """Equips an armor to the hero."""
-        self.armor += armor.protection
         armor.is_equipped = True
 
     def unequip_armor(self, armor):
         """Unequips an armor from the hero."""
-        self.armor -= armor.protection
         armor.is_equipped = False
 
     def use_item(self):
         self.inventory.show()
         choice = int(input("> "))
-        selected_item = self.player.inventory.items[choice - 1]
+        selected_item = self.inventory.items[choice - 1]
         selected_item.info()
         print(f"1 - Use {selected_item.name}?")
         print("0 - Go Back.\n")
@@ -267,6 +275,7 @@ class Hero(Creature):
                 self.equip_armor(selected_item)
             elif isinstance(selected_item, Consumable):
                 self.use_consumable(selected_item)
+            return
         elif choice == 0:
             return
         else:
@@ -298,6 +307,10 @@ class Hero(Creature):
             chest.show_items()
             choice = int(input(" > "))
             chest.choice_handler(choice, self.inventory)
+
+    def put_item(self, item, chest):
+        self.inventory.remove_item(item)
+        chest.add_item(item)
 
     def level_up(self):
         if self.level % 5 == 0:
@@ -359,3 +372,8 @@ class Enemy(Creature):
     @resistance.setter
     def resistance(self, new_resistance):
         self._resistance = new_resistance
+
+    def reveal_all(self):
+        """Reveals all enemy attributes."""
+        print_one_line_in_frame(f"{self.name} revealed!")
+        print_full_stats(self)

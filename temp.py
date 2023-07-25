@@ -3,9 +3,10 @@ from world import Area
 from battle import Battle
 from classes import Dice, TreasureChest, HeroChest
 from objects import *
-from spellbook import SpellBook, fireball
+from spellbook import SpellBook
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
+from infos import *
 from data import *
 import os
 import time
@@ -33,20 +34,21 @@ import time
 player.inventory = Inventory()
 
 # Creating Player spellbook
-# player.spellbook = SpellBook()
-# player.spellbook.add_spell(fireball)
-# print(player.spellbook.spells)
+player.spellbook = SpellBook()
+player.spellbook.add_spell(fireball)
+player.spellbook.add_spell(freeze)
+print(player.spellbook.spells)
 
 # Creating Battle with turns
-# battle = Battle(player, enemy)
-# battle.start_battle()
+battle = Battle(player, enemy)
+battle.start_battle()
 
 # Creating and rolling Dice
 dice = Dice()
 
 # Creating Player
-# print_all_stats(player)
-# print_all_stats(enemy)
+# print_full_stats(player)
+# print_full_stats(enemy)
 # print_basic_stats(player)
 # print_basic_stats(enemy)
 
@@ -90,9 +92,6 @@ def explore_area(area):
     except (ValueError, IndexError):
         print("Invalid choice")
         explore_area(area)
-
-
-# explore_area(town)
 
 
 # def area_activity(area):
@@ -149,21 +148,37 @@ def area_activity(area):
         area_activity(area)
 
 
-# area_activity(forest)
+# explore_area(town)
+area_activity(forest)
 
-chest = TreasureChest(
-    name="Red Chest",
-    description="A red chest with a gold key inside.",
-    size=1,
-    items=[excalibur, life_potion],
-    trapped=True,
-    opened=False,
-)
+# treasure_chest = TreasureChest(
+#     name="Red Chest",
+#     description="A red chest with a gold key inside.",
+#     size=1,
+#     items=[excalibur, life_potion],
+#     trapped=True,
+#     opened=False,
+# )
 
-# hero_chest = HeroChest()
-
-print(chest.opened)
-player.open_chest(chest)
-print(chest.opened)
+# hero_chest = HeroChest(
+#     description="Chest for the hero for his items.",
+#     size=10,
+#     items=[
+#         life_potion,
+#         leather_armor,
+#     ],
+# )
 
 # player.level_up()
+
+# player.inventory.add_item(life_potion)
+# player.inventory.add_item(thorshammer)
+# player.inventory.add_item(life_potion)
+# player.inventory.add_item(excalibur)
+# print(f"Inventory - {[item.name for item in player.inventory.items]}")
+# hero_chest.show_items()
+# player.put_item(excalibur, hero_chest)
+# print(f"Inventory - {[item.name for item in hero_chest.items]}")
+# hero_chest.show_items()
+
+# player.open_chest(hero_chest)

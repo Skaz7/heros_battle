@@ -173,8 +173,10 @@ class TreasureChest(Chest):
 
 @dataclass
 class HeroChest(Chest):
-    def put_item(self, item):
+    def add_item(self, item):
         if self.size < item.slot_size:
             print("Not enough space in chest.")
             return
         self.items.append(item)
+        self.size -= item.slot_size
+        print(f"You put {item.name} to your chest.")

@@ -26,7 +26,7 @@ class Battle:
 
     def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
-        self.player.print_basic_stats()
+        print_battle_stats(player, enemy)
         self.print_options()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)

@@ -13,9 +13,10 @@ class Inventory:
 
     def show(self):
         """Prints all items from inventory."""
-        print(f"\n    Items in your inventory:")
+        print(f"\n    Items in inventory:")
         for i, item in enumerate(self.items, start=1):
             print(f"\t\t\t    {i}. {item.name} - {item.description}")
+        print()
 
     def add_item(self, item):
         """Adds a new item to the inventory.
