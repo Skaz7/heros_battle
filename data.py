@@ -1,4 +1,4 @@
-from world import Area
+from world import *
 
 weaknesses = [
     "slash",
@@ -50,6 +50,7 @@ town = Area(
     enemies=None,
     treasures=None,
     npcs=["Merchant"],
+    store=Shop(),
     visited=False,
 )
 ruins = Area(
@@ -98,6 +99,7 @@ docks = Area(
     enemies=["Robber"],
     treasures=None,
     npcs=None,
+    store=Blacksmith(),
     visited=False,
 )
 
@@ -118,6 +120,7 @@ swamp = Area(
     enemies=["Dragon"],
     treasures=None,
     npcs=None,
+    store=Temple(),
     visited=False,
 )
 

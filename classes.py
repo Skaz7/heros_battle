@@ -2,7 +2,6 @@ import random
 import re
 from dataclasses import dataclass, field
 from typing import List
-from items import Inventory
 
 
 class Dice:
@@ -58,7 +57,10 @@ class HealthBar:
         health_bar_color = self.get_health_bar_color(current_health, max_health)
         health_size = int((current_health / max_health) * 100)
 
-        print(f"Health: {health_bar_color}{current_health}/{max_health}  ", end="")
+        print(
+            f"Health: {health_bar_color}{current_health}/{max_health}  ".ljust(25),
+            end="",
+        )
         print(f"[{health_size * '█'}{(100 - health_size) * '-'}] \033[0m")
 
     @staticmethod

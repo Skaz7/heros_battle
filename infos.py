@@ -40,3 +40,12 @@ def print_battle_stats(player, enemy):
     print(f"Mana : {player.mana}/{player.max_mana}".ljust(30))
     print("-" * 67)
     print()
+
+
+def print_turn_options():
+    print("1. Attack")
+    print("2. Defend")
+    print("3. Use Magic")
+    print("4. Use Item")
+    print("5. Flee")
+    print("6. End Game")

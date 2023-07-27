@@ -6,6 +6,7 @@ from decorators import print_green, print_red, print_yellow
 class Spell:
     name: str = ""
     description: str = ""
+    required_level: int = 1
     base_damage: int = 5
     damage_type: str = ""
     category: str = ""

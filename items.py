@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decorators import *
 import time
 
 
@@ -64,7 +65,7 @@ class Item:
         self.durability -= 1
         if self.durability == 0:
             if isinstance(self, Weapon):
-                print(f"Your {self.name} is broken down.")
+                print_red(f"Your {self.name} is broken down.")
                 self.name = (
                     self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
                 )

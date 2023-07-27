@@ -106,6 +106,9 @@ def main():
     player.spellbook.add_spell(freeze)
     player.spellbook.add_spell(reveal)
 
+    player_healthbar = HealthBar(player)
+    enemy_healthbar = HealthBar(enemy)
+
 
 if __name__ == "__main__":
     os.system("clear")

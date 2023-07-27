@@ -156,19 +156,16 @@ class Creature:
         additional_defense = 0
 
         for weapon in self.inventory.items:
-            print(weapon)
-
-        for weapon in self.inventory.items:
             if isinstance(weapon, Weapon) and weapon.is_equipped:
                 additional_attack += weapon.damage
-                print(f"{weapon} equipped!\n")
+                weapon.degrade()
             else:
                 additional_attack += 0
-                print(f"{weapon} not equipped!\n")
 
         for armor in defender.inventory.items:
             if isinstance(armor, Armor) and armor.is_equipped:
                 additional_defense = armor.protection
+                armor.degrade()
             else:
                 additional_defense = 0
 

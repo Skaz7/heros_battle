@@ -11,6 +11,9 @@ class Battle:
         self.enemy = enemy
         self.turn = 0
 
+        self.player_healthbar = HealthBar(player)
+        self.enemy_healthbar = HealthBar(enemy)
+
     def start_battle(self):
         while self.player.is_alive and self.enemy.is_alive:
             self.next_turn()
@@ -27,17 +30,14 @@ class Battle:
     def player_turn(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
         print_battle_stats(player, enemy)
+        self.player_healthbar.draw_health_bar()
+        self.enemy_healthbar.draw_health_bar()
         self.print_options()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
 
     def print_options(self):
-        print("1. Attack")
-        print("2. Defend")
-        print("3. Use Magic")
-        print("4. Use Item")
-        print("5. Flee")
-        print("6. End Game")
+        print_turn_options()
 
     def get_player_choice(self):
         """Get player choice and return it."""
