@@ -16,7 +16,7 @@ player = Hero(
     dexterity=8,
     armor=5,
     status="Sick",
-    inventory=None,
+    inventory=Inventory([]),
     is_alive=True,
     spellbook=None,
     max_mana=20,
@@ -33,7 +33,7 @@ enemy = Enemy(
     dexterity=5,
     armor=10,
     status="Stunned",
-    inventory=None,
+    inventory=Inventory(),
     is_alive=True,
     spellbook=None,
     weakness="Cold",
@@ -139,7 +139,7 @@ def test_hero_creation():
     assert player.dexterity == 8
     assert player.armor == 5
     assert player.status == "Sick"
-    assert player.inventory == None
+    assert player.inventory.items == []
     assert player.max_mana == 20
     assert player.mana == 10
 
@@ -156,7 +156,7 @@ def test_enemy_creation():
     assert enemy.dexterity == 5
     assert enemy.armor == 10
     assert enemy.status == "Stunned"
-    assert enemy.inventory == None
+    assert enemy.inventory.items == []
     assert enemy.weakness == "Cold"
     assert enemy.resistance == "Fire"
 
@@ -204,17 +204,20 @@ def test_quest_creation():
 def test_equip_weapon():
     assert player.strength == 15
     player.equip_weapon(excalibur)
-    assert player.strength == 25
+    assert excalibur.is_equipped == True
     player.unequip_weapon(excalibur)
+    assert excalibur.is_equipped == False
     assert player.strength == 15
 
 
 # test armor equip
 def test_equip_armor():
+    enemy.inventory.add_item(leather_armor)
     assert player.armor == 5
     player.equip_armor(leather_armor)
-    assert player.armor == 10
+    assert leather_armor.is_equipped == True
     player.unequip_armor(leather_armor)
+    assert leather_armor.is_equipped == False
     assert player.armor == 5
 
 

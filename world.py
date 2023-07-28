@@ -1,9 +1,8 @@
 from dataclasses import dataclass, field
 from items import Item, Inventory
-from typing import Protocol
 
 
-class Store(Protocol):
+class Store:
     name: str = ""
     description: str = ""
     stock: Inventory = Inventory()
@@ -14,14 +13,14 @@ class Store(Protocol):
 
 
 @dataclass
-class Shop:
+class Shop(Store):
     def show_stock(self):
         for i, item in enumerate(self.stock.items, start=1):
             print(f"{i}. {item.name} - ${item.price}")
 
 
 @dataclass
-class Temple:
+class Temple(Store):
     def show_stock(self):
         for i, item in enumerate(self.stock.items, start=1):
             print(f"{i}. {item.name} - ${item.price}")
@@ -35,7 +34,7 @@ class Temple:
 
 
 @dataclass
-class Blacksmith:
+class Blacksmith(Store):
     def show_stock(self):
         for i, item in enumerate(self.stock.items, start=1):
             print(f"{i}. {item.name} - ${item.price}")
