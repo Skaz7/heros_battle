@@ -150,28 +150,20 @@ class Creature:
         If the defender is defending, the damage dealt is reduced by the defender's armor.
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
-        base_attack = self.strength
-        additional_attack = 0
-        base_defense = defender.armor
-        additional_defense = 0
+        # base_attack = self.strength
+        # additional_attack = 0
+        # base_defense = defender.armor
+        # additional_defense = 0
 
         for weapon in self.inventory.items:
             if isinstance(weapon, Weapon) and weapon.is_equipped:
-                additional_attack += weapon.damage
                 weapon.degrade()
-            else:
-                additional_attack += 0
 
         for armor in defender.inventory.items:
             if isinstance(armor, Armor) and armor.is_equipped:
-                additional_defense = armor.protection
                 armor.degrade()
-            else:
-                additional_defense = 0
 
-        total_attack = base_attack + additional_attack
-        total_defense = base_defense + additional_defense
-        damage = total_attack - total_defense
+        damage = self.strength - defender.armor
         defender.take_damage(damage)
         print(f"\n{self.name} attacks {defender.name} for {damage} damage!\n")
 
@@ -240,18 +232,22 @@ class Hero(Creature):
     def equip_weapon(self, weapon):
         """Equips a weapon to the hero."""
         weapon.is_equipped = True
+        self.strength += weapon.damage
 
     def unequip_weapon(self, weapon):
         """Unequips a weapon from the hero."""
         weapon.is_equipped = False
+        self.strength -= weapon.damage
 
     def equip_armor(self, armor):
         """Equips an armor to the hero."""
         armor.is_equipped = True
+        self.armor += armor.protection
 
     def unequip_armor(self, armor):
         """Unequips an armor from the hero."""
         armor.is_equipped = False
+        self.armor -= armor.protection
 
     def use_item(self):
         self.inventory.show()

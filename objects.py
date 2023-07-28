@@ -15,9 +15,9 @@ excalibur = Weapon(
     max_durability=5,
     durability=2,
     inventory=Inventory,
+    is_equipped=False,
     damage_type="Slash",
     damage=15,
-    is_equipped=False,
 )
 
 iceblizzard = Weapon(
@@ -31,9 +31,9 @@ iceblizzard = Weapon(
     max_durability=10,
     durability=10,
     inventory=Inventory,
+    is_equipped=False,
     damage_type="ice",
     damage=10,
-    is_equipped=False,
 )
 
 thorshammer = Weapon(
@@ -47,9 +47,9 @@ thorshammer = Weapon(
     max_durability=20,
     durability=20,
     inventory=Inventory,
+    is_equipped=False,
     damage_type="blunt",
     damage=20,
-    is_equipped=False,
 )
 
 elvisheyes = Weapon(
@@ -63,9 +63,9 @@ elvisheyes = Weapon(
     max_durability=25,
     durability=25,
     inventory=Inventory,
+    is_equipped=False,
     damage_type="stab",
     damage=12,
-    is_equipped=False,
 )
 
 longspear = Weapon(
@@ -79,9 +79,9 @@ longspear = Weapon(
     max_durability=10,
     durability=10,
     inventory=Inventory,
+    is_equipped=False,
     damage_type="stab",
     damage=15,
-    is_equipped=False,
 )
 
 silver_plate = Armor(
@@ -95,9 +95,9 @@ silver_plate = Armor(
     max_durability=40,
     durability=40,
     inventory=Inventory,
+    is_equipped=False,
     resistance="Cold",
     protection=20,
-    is_equipped=False,
 )
 
 leather_armor = Armor(
@@ -111,9 +111,9 @@ leather_armor = Armor(
     max_durability=15,
     durability=10,
     inventory=Inventory,
+    is_equipped=False,
     resistance="Cold",
     protection=5,
-    is_equipped=False,
 )
 
 life_potion = Consumable(

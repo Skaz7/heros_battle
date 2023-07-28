@@ -57,6 +57,7 @@ class Item:
     max_durability: int
     durability: int
     inventory: Inventory = None
+    is_equipped: bool = False
 
     def set_inventory(self, inventory):
         self.inventory = inventory
@@ -69,10 +70,10 @@ class Item:
                 self.name = (
                     self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
                 )
-                self.damage = 0
+                self.is_equipped = False
             elif isinstance(self, Armor):
                 print(f"Your {self.name} is broken down.")
-                self.protection = 0
+                self.is_equipped = False
             elif isinstance(self, Consumable):
                 self.destroy()
 
@@ -110,7 +111,6 @@ class Weapon(Item):
 
     damage_type: str = ""
     damage: int = 10
-    is_equipped: bool = False
 
 
 @dataclass
@@ -121,7 +121,6 @@ class Armor(Item):
 
     resistance: str = ""
     protection: int = 0
-    is_equipped: bool = False
 
 
 @dataclass
