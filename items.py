@@ -58,6 +58,7 @@ class Item:
     durability: int
     inventory: Inventory = None
     is_equipped: bool = False
+    is_broken: bool = False
 
     def set_inventory(self, inventory):
         self.inventory = inventory

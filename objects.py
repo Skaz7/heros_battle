@@ -1,5 +1,5 @@
 from classes import *
-from items import Inventory, Item, Weapon, Armor, Consumable
+from items import Inventory, Weapon, Armor, Consumable
 from spellbook import Spell
 
 
@@ -16,6 +16,7 @@ excalibur = Weapon(
     durability=3,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     damage_type="Slash",
     damage=15,
 )
@@ -32,6 +33,7 @@ iceblizzard = Weapon(
     durability=10,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     damage_type="ice",
     damage=10,
 )
@@ -48,6 +50,7 @@ thorshammer = Weapon(
     durability=20,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     damage_type="blunt",
     damage=20,
 )
@@ -64,6 +67,7 @@ elvisheyes = Weapon(
     durability=25,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     damage_type="stab",
     damage=12,
 )
@@ -80,6 +84,7 @@ longspear = Weapon(
     durability=10,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     damage_type="stab",
     damage=15,
 )
@@ -96,6 +101,7 @@ silver_plate = Armor(
     durability=40,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     resistance="Cold",
     protection=20,
 )
@@ -112,6 +118,7 @@ leather_armor = Armor(
     durability=10,
     inventory=Inventory,
     is_equipped=False,
+    is_broken=False,
     resistance="Cold",
     protection=5,
 )

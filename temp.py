@@ -1,5 +1,5 @@
 from characters import player, enemy
-from world import Area
+from world import Area, Shop, Temple, Blacksmith
 from battle import Battle
 from classes import Dice, TreasureChest, HeroChest
 from objects import *
@@ -35,13 +35,12 @@ player.inventory = Inventory()
 
 # Creating Player spellbook
 player.spellbook = SpellBook()
-player.spellbook.add_spell(fireball)
 player.spellbook.add_spell(freeze)
-print(player.spellbook.spells)
+# print(player.spellbook.spells)
 
 # Creating Battle with turns
-battle = Battle(player, enemy)
-battle.start_battle()
+# battle = Battle(player, enemy)
+# battle.start_battle()
 
 # Creating and rolling Dice
 dice = Dice()
@@ -149,7 +148,7 @@ def area_activity(area):
 
 
 # explore_area(town)
-area_activity(forest)
+# area_activity(forest)
 
 # treasure_chest = TreasureChest(
 #     name="Red Chest",
@@ -182,3 +181,49 @@ area_activity(forest)
 # hero_chest.show_items()
 
 # player.open_chest(hero_chest)
+
+shop = Shop(
+    name="General Store",
+    description="A general store with many items.",
+    stock=Inventory([life_potion, boost_potion, strength_potion], slots=10),
+    discount=0,
+)
+
+shop.show_stock()
+print(player.inventory.items)
+shop.buy_item(player, 1)
+shop.show_stock()
+print(player.inventory.items)
+
+temple = Temple(
+    name="Temple",
+    description="A temple with many items.",
+    stock=Inventory([freeze, fireball]),
+)
+
+print(player.spellbook.spells)
+temple.show_stock()
+temple.learn_spell(player, fireball)
+print(player.spellbook.spells)
+
+blacksmith = Blacksmith(
+    name="Blacksmith",
+    description="A blacksmith with many items.",
+    stock=Inventory([excalibur, thorshammer]),
+    discount=0,
+)
+
+blacksmith.show_stock()
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)
+
+blacksmith.buy_item(player, 1)
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)
+
+blacksmith.repair_weapon(excalibur)
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)
