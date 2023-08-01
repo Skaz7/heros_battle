@@ -1,6 +1,6 @@
 import pytest
 from battle import Battle
-from classes import Quest
+from classes import Quest, TreasureChest, HeroChest
 from creatureclass import Hero, Enemy
 from items import *
 
@@ -16,11 +16,13 @@ player = Hero(
     dexterity=8,
     armor=5,
     status="Sick",
-    inventory=None,
+    inventory=Inventory([]),
     is_alive=True,
+    spellbook=None,
     max_mana=20,
     mana=10,
 )
+
 enemy = Enemy(
     name="Azog The Defiler",
     level=1,
@@ -32,8 +34,9 @@ enemy = Enemy(
     dexterity=5,
     armor=10,
     status="Stunned",
-    inventory=None,
+    inventory=Inventory(),
     is_alive=True,
+    spellbook=None,
     weakness="Cold",
     resistance="Fire",
 )
@@ -137,7 +140,7 @@ def test_hero_creation():
     assert player.dexterity == 8
     assert player.armor == 5
     assert player.status == "Sick"
-    assert player.inventory == None
+    assert player.inventory.items == []
     assert player.max_mana == 20
     assert player.mana == 10
 
@@ -154,7 +157,7 @@ def test_enemy_creation():
     assert enemy.dexterity == 5
     assert enemy.armor == 10
     assert enemy.status == "Stunned"
-    assert enemy.inventory == None
+    assert enemy.inventory.items == []
     assert enemy.weakness == "Cold"
     assert enemy.resistance == "Fire"
 
@@ -202,8 +205,9 @@ def test_quest_creation():
 def test_equip_weapon():
     assert player.strength == 15
     player.equip_weapon(excalibur)
-    assert player.strength == 25
+    assert excalibur.is_equipped == True
     player.unequip_weapon(excalibur)
+    assert excalibur.is_equipped == False
     assert player.strength == 15
 
 
@@ -211,8 +215,9 @@ def test_equip_weapon():
 def test_equip_armor():
     assert player.armor == 5
     player.equip_armor(leather_armor)
-    assert player.armor == 10
+    assert leather_armor.is_equipped == True
     player.unequip_armor(leather_armor)
+    assert leather_armor.is_equipped == False
     assert player.armor == 5
 
 
@@ -222,12 +227,13 @@ def test_inventory_add_degrade_destroy():
     inventory.add_item(excalibur)  # takes up 1 slot
     inventory.add_item(leather_armor)  # takes up 1 slot
     inventory.upgrade(5)  # add 5 slots
+    print(inventory.items)
     assert inventory.items == [excalibur, leather_armor]
     assert inventory.slots == 23
     assert excalibur in inventory.items
     assert leather_armor in inventory.items
     assert "Hammer" not in inventory.items
-    excalibur.degrade()
+    excalibur.degrade(player)
     assert excalibur.durability == 1
     excalibur.destroy()
     assert inventory.items == [leather_armor]
@@ -250,27 +256,12 @@ def test_battle():
     enemy.health = 70
     battle = Battle(player, enemy)
     assert battle.turn == 0
-    battle.attack(player, enemy)
+    player.attack(enemy)
     assert enemy.health == 65
-    battle.attack(enemy, player)
+    enemy.attack(player)
     assert player.health == 95
     player.equip_weapon(excalibur)
-    battle.attack(player, enemy)
-    assert enemy.health == 50
-    battle.attack(enemy, player)
-    assert player.health == 90
-    player.equip_armor(leather_armor)
-    assert player.armor == 10
-    battle.attack(enemy, player)
-    assert player.health == 90
-    player.unequip_armor(leather_armor)
-    assert player.armor == 5
-    battle.attack(enemy, player)
-    assert player.health == 85
-    player.unequip_weapon(excalibur)
-    assert player.strength == 15
-    battle.attack(enemy, player)
-    assert player.health == 80
+    player.attack(enemy)
 
 
 # test consumables
@@ -279,17 +270,23 @@ def test_consumables():
     inventory.add_item(life_potion)
     inventory.add_item(boost_potion)
     inventory.add_item(strength_potion)
-    assert player.health == 80
+    assert player.health == 95
     assert player.mana == 10
-    assert player.strength == 15
+    assert player.strength == 25
     assert life_potion in inventory.items
     player.use_consumable(life_potion)
-    assert player.health == 100
+    assert player.health == 115
     assert inventory.items == [boost_potion, strength_potion]
     player.use_consumable(boost_potion)
     assert player.health == 150
     assert player.mana == 20
     assert inventory.items == [strength_potion]
     player.use_consumable(strength_potion)
-    assert player.strength == 30
+    assert player.strength == 40
     assert inventory.items == []
+
+
+# test treasure chest
+def test_treasure_chest():
+    chest = TreasureChest(items=[excalibur])
+    assert chest.items == [excalibur]

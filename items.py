@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decorators import *
 import time
 
 
@@ -13,9 +14,10 @@ class Inventory:
 
     def show(self):
         """Prints all items from inventory."""
-        print(f"\n    Items in your inventory:")
+        print(f"\n    Items in inventory:")
         for i, item in enumerate(self.items, start=1):
             print(f"\t\t\t    {i}. {item.name} - {item.description}")
+        print()
 
     def add_item(self, item):
         """Adds a new item to the inventory.
@@ -55,22 +57,27 @@ class Item:
     max_durability: int
     durability: int
     inventory: Inventory = None
+    is_equipped: bool = False
+    is_broken: bool = False
 
     def set_inventory(self, inventory):
         self.inventory = inventory
 
-    def degrade(self):
+    def degrade(self, attacker):
         self.durability -= 1
         if self.durability == 0:
             if isinstance(self, Weapon):
-                print(f"Your {self.name} is broken down.")
+                print_red(f"Your {self.name} is broken down.")
                 self.name = (
                     self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
                 )
-                self.damage = 0
+                self.is_equipped = False
+                attacker.unequip_weapon(self)
+                print(self.is_equipped)
             elif isinstance(self, Armor):
                 print(f"Your {self.name} is broken down.")
-                self.protection = 0
+                self.is_equipped = False
+                attacker.unequip_armor(self)
             elif isinstance(self, Consumable):
                 self.destroy()
 
@@ -108,7 +115,6 @@ class Weapon(Item):
 
     damage_type: str = ""
     damage: int = 10
-    is_equipped: bool = False
 
 
 @dataclass
@@ -119,7 +125,6 @@ class Armor(Item):
 
     resistance: str = ""
     protection: int = 0
-    is_equipped: bool = False
 
 
 @dataclass

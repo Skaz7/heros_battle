@@ -1,11 +1,12 @@
-from characters import *
-from world import Area
+from characters import player, enemy
+from world import Area, Shop, Temple, Blacksmith
 from battle import Battle
-from classes import Dice
+from classes import Dice, TreasureChest, HeroChest
 from objects import *
-from spellbook import SpellBook, fireball
+from spellbook import SpellBook
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
+from infos import *
 from data import *
 import os
 import time
@@ -34,23 +35,21 @@ player.inventory = Inventory()
 
 # Creating Player spellbook
 player.spellbook = SpellBook()
-player.spellbook.add_spell(fireball)
-print(player.spellbook.spells)
+player.spellbook.add_spell(freeze)
+# print(player.spellbook.spells)
 
 # Creating Battle with turns
-battle = Battle(player, enemy)
-battle.start_battle()
+# battle = Battle(player, enemy)
+# battle.start_battle()
 
-# # Creating and rolling Dice
-# dice = Dice()
-# print(dice.roll("2d12+1"))
+# Creating and rolling Dice
+dice = Dice()
 
 # Creating Player
-
-# print_all_stats(player)
-# print_all_stats(enemy)
-# print_battle_stats(player)
-# print_battle_stats(enemy)
+# print_full_stats(player)
+# print_full_stats(enemy)
+# print_basic_stats(player)
+# print_basic_stats(enemy)
 
 # player.inventory.show()
 
@@ -92,9 +91,6 @@ def explore_area(area):
     except (ValueError, IndexError):
         print("Invalid choice")
         explore_area(area)
-
-
-# explore_area(town)
 
 
 # def area_activity(area):
@@ -151,4 +147,83 @@ def area_activity(area):
         area_activity(area)
 
 
-area_activity(forest)
+# explore_area(town)
+# area_activity(forest)
+
+# treasure_chest = TreasureChest(
+#     name="Red Chest",
+#     description="A red chest with a gold key inside.",
+#     size=1,
+#     items=[excalibur, life_potion],
+#     trapped=True,
+#     opened=False,
+# )
+
+# hero_chest = HeroChest(
+#     description="Chest for the hero for his items.",
+#     size=10,
+#     items=[
+#         life_potion,
+#         leather_armor,
+#     ],
+# )
+
+# player.level_up()
+
+# player.inventory.add_item(life_potion)
+# player.inventory.add_item(thorshammer)
+# player.inventory.add_item(life_potion)
+# player.inventory.add_item(excalibur)
+# print(f"Inventory - {[item.name for item in player.inventory.items]}")
+# hero_chest.show_items()
+# player.put_item(excalibur, hero_chest)
+# print(f"Inventory - {[item.name for item in hero_chest.items]}")
+# hero_chest.show_items()
+
+# player.open_chest(hero_chest)
+
+shop = Shop(
+    name="General Store",
+    description="A general store with many items.",
+    stock=Inventory([life_potion, boost_potion, strength_potion], slots=10),
+    discount=0,
+)
+
+shop.show_stock()
+print(player.inventory.items)
+shop.buy_item(player, 1)
+shop.show_stock()
+print(player.inventory.items)
+
+temple = Temple(
+    name="Temple",
+    description="A temple with many items.",
+    stock=Inventory([freeze, fireball]),
+)
+
+print(player.spellbook.spells)
+temple.show_stock()
+temple.learn_spell(player, fireball)
+print(player.spellbook.spells)
+
+blacksmith = Blacksmith(
+    name="Blacksmith",
+    description="A blacksmith with many items.",
+    stock=Inventory([excalibur, thorshammer]),
+    discount=0,
+)
+
+blacksmith.show_stock()
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)
+
+blacksmith.buy_item(player, 1)
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)
+
+blacksmith.repair_weapon(excalibur)
+for item in player.inventory.items:
+    if isinstance(item, Weapon):
+        print(item)

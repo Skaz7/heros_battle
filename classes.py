@@ -1,6 +1,7 @@
 import random
 import re
 from dataclasses import dataclass, field
+from typing import List
 
 
 class Dice:
@@ -56,7 +57,10 @@ class HealthBar:
         health_bar_color = self.get_health_bar_color(current_health, max_health)
         health_size = int((current_health / max_health) * 100)
 
-        print(f"Health: {health_bar_color}{current_health}/{max_health}  ", end="")
+        print(
+            f"Health: {health_bar_color}{current_health}/{max_health}  ".ljust(25),
+            end="",
+        )
         print(f"[{health_size * '█'}{(100 - health_size) * '-'}] \033[0m")
 
     @staticmethod
@@ -86,3 +90,95 @@ class Status:
         self.name = name
         self.description = description
         self.duration = duration
+
+
+@dataclass
+class Chest:
+    name: str = "Chest"
+    description: str = ""
+    size: int = 1
+    items: List[str] = list()
+
+    ### Getters and Setters ###
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def description(self):
+        return self._description
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def items(self):
+        return self._items
+
+    @name.setter
+    def name(self, new_name):
+        self._name = new_name
+
+    @description.setter
+    def description(self, new_description):
+        self._description = new_description
+
+    @size.setter
+    def size(self, new_size):
+        self._size = new_size
+
+    @items.setter
+    def items(self, new_items):
+        self._items = new_items
+
+    def show_items(self):
+        if len(self.items) > 0:
+            print("This chest contains some items, would you like to pick something?")
+            for i, item in enumerate(self.items, start=1):
+                print(f"{i} -> Pick {item.name}")
+
+            print("0. Exit")
+        else:
+            print("This chest is empty.")
+        return
+
+    def choice_handler(self, choice, inventory):
+        if choice in range(1, len(self.items) + 1):
+            selected_item = self.items[choice - 1]
+            if inventory.slots < selected_item.slot_size:
+                print("Not enough space in inventory.")
+                return
+            inventory.add_item(selected_item)
+            print(f"You picked {selected_item.name}.")
+            self.items.pop(choice - 1)
+            # self.show_items()
+
+        else:
+            print("Wrong choice. Try again.")
+            self.show_items()
+
+
+@dataclass
+class TreasureChest(Chest):
+    trapped: bool = False
+    opened: bool = False
+
+    @property
+    def opened(self):
+        return self._opened
+
+    @opened.setter
+    def opened(self, new_opened):
+        self._opened = new_opened
+
+
+@dataclass
+class HeroChest(Chest):
+    def add_item(self, item):
+        if self.size < item.slot_size:
+            print("Not enough space in chest.")
+            return
+        self.items.append(item)
+        self.size -= item.slot_size
+        print(f"You put {item.name} to your chest.")
