@@ -22,6 +22,7 @@ player = Hero(
     max_mana=20,
     mana=10,
 )
+
 enemy = Enemy(
     name="Azog The Defiler",
     level=1,
@@ -232,7 +233,7 @@ def test_inventory_add_degrade_destroy():
     assert excalibur in inventory.items
     assert leather_armor in inventory.items
     assert "Hammer" not in inventory.items
-    excalibur.degrade()
+    excalibur.degrade(player)
     assert excalibur.durability == 1
     excalibur.destroy()
     assert inventory.items == [leather_armor]
@@ -271,7 +272,7 @@ def test_consumables():
     inventory.add_item(strength_potion)
     assert player.health == 95
     assert player.mana == 10
-    assert player.strength == 15
+    assert player.strength == 25
     assert life_potion in inventory.items
     player.use_consumable(life_potion)
     assert player.health == 115
@@ -281,7 +282,7 @@ def test_consumables():
     assert player.mana == 20
     assert inventory.items == [strength_potion]
     player.use_consumable(strength_potion)
-    assert player.strength == 30
+    assert player.strength == 40
     assert inventory.items == []
 
 
