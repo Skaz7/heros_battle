@@ -8,6 +8,7 @@ from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from infos import *
 from data import *
+from cli import *
 import os
 import time
 
@@ -194,6 +195,7 @@ print(player.inventory.items)
 shop.buy_item(player, 1)
 shop.show_stock()
 print(player.inventory.items)
+print(shop_menu(shop))
 
 temple = Temple(
     name="Temple",
