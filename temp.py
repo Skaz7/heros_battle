@@ -4,6 +4,7 @@ from battle import Battle
 from classes import Dice, TreasureChest, HeroChest
 from objects import *
 from spellbook import SpellBook
+from status import *
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from infos import *
@@ -229,3 +230,6 @@ blacksmith.repair_weapon(excalibur)
 for item in player.inventory.items:
     if isinstance(item, Weapon):
         print(item)
+
+strenght_buff = Buff(name="Strength Boost", description="Increases Strength by 10 percent.", duration=5, attribute_to_buff="strenght", modification_value=10, )
+

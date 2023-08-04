@@ -42,3 +42,4 @@ class Debuff:
 
     def reset(self):
         pass
+
