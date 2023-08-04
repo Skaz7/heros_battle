@@ -25,7 +25,7 @@ class Creature:
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
 
-    ######## Getters and setters ########
+    # ####### Getters and setters ########
 
     @property
     def name(self):
@@ -131,7 +131,7 @@ class Creature:
     def spellbook(self, new_spellbook):
         self._spellbook = new_spellbook
 
-    ######## Methods ########
+    # ####### Methods ########
 
     def heal(self, additional_health):
         self.health += additional_health
@@ -144,17 +144,30 @@ class Creature:
             self.status = "dead"
             self.is_alive = False
 
+    def apply_status_effect(self):
+        if self.status.lower() == "bleeding":
+            self.health = self.health * 0.9
+        if self.status.lower() == "paralyzed":
+            pass
+        if self.status.lower() == "weakened":
+            pass  # weakness will make player strenght decrease
+        if self.status.lower() == "silenced":
+            pass  # silence will make player unable to cast spells
+        if self.status.lower() == "defenseless":
+            self.armor == self.armor * 0.5
+        if self.status == "poisoned":
+            pass
+        if self.status == "cursed":
+            pass
+        if self.status == "scared":
+            pass
+
     def attack(self, defender):
         """Attack method for both players.
         Damage dealt to defender is based on the attacker's strength and additional damage provided by equipped weapon.
         If the defender is defending, the damage dealt is reduced by the defender's armor.
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
-        # base_attack = self.strength
-        # additional_attack = 0
-        # base_defense = defender.armor
-        # additional_defense = 0
-
         for weapon in self.inventory.items:
             if isinstance(weapon, Weapon) and weapon.is_equipped == True:
                 weapon.degrade(self)

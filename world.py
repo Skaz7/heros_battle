@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from items import Inventory
 from objects import *
+from cli import *
 
 
 @dataclass
@@ -11,8 +12,7 @@ class Store:
     discount: int = 0
 
     def show_stock(self) -> None:
-        for i, item in enumerate(self.stock.items, start=1):
-            print(f"{i}. {item.name:20} - ${item.value}")
+        shop_menu(self)
 
 
 @dataclass
