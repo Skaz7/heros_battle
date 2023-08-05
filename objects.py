@@ -1,6 +1,7 @@
 from classes import *
 from items import Inventory, Weapon, Armor, Consumable
 from spellbook import Spell
+from creatureclass import Status
 
 
 # Create weapons
@@ -205,4 +206,20 @@ reveal = Spell(
     category="Elemental Magic",
     mana_cost=7,
     value=15,
+)
+
+# create statuses
+bleed = Status(
+    name="Bleed",
+    description="Bleeding",
+    duration=3,
+    attribute_to_change="health",
+    modification_value=5,
+)
+burn = Status(
+    name="Burn",
+    description="Burning",
+    duration=3,
+    attribute_to_change="health",
+    modification_value=10,
 )

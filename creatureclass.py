@@ -20,7 +20,7 @@ class Creature:
     strength: int = 10
     dexterity: int = 10
     armor: int = 10
-    status: str = None
+    status: None
     inventory: Inventory = Inventory()
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
@@ -143,24 +143,6 @@ class Creature:
             self.health = 0
             self.status = "dead"
             self.is_alive = False
-
-    def apply_status_effect(self):
-        if self.status.lower() == "bleeding":
-            self.health = self.health * 0.9
-        if self.status.lower() == "paralyzed":
-            pass
-        if self.status.lower() == "weakened":
-            pass  # weakness will make player strenght decrease
-        if self.status.lower() == "silenced":
-            pass  # silence will make player unable to cast spells
-        if self.status.lower() == "defenseless":
-            self.armor == self.armor * 0.5
-        if self.status == "poisoned":
-            pass
-        if self.status == "cursed":
-            pass
-        if self.status == "scared":
-            pass
 
     def attack(self, defender):
         """Attack method for both players.
@@ -388,3 +370,26 @@ class Enemy(Creature):
         """Reveals all enemy attributes."""
         print_one_line_in_frame(f"{self.name} revealed!")
         print_full_stats(self)
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def process(self, creature: Creature):
+        setattr(
+            creature,
+            self.attribute_to_change,
+            max(
+                0, getattr(creature, self.attribute_to_change) - self.modification_value
+            ),
+        )
+        if self.attribute_to_change == "health" and creature.health == 0:
+            creature.is_alive = False
+
+    def reset(self):
+        duration = 0

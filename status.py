@@ -1,8 +1,19 @@
 from dataclasses import dataclass
 from creatureclass import Creature
+from abc import ABC, abstractmethod
 
 
-@dataclass
+class StatusProcessor(ABC):
+    def buff_status(self):
+        pass
+
+    def debuff_status(self):
+        pass
+    
+
+
+
+dataclass
 class Status:
     name: str = ""
     description: str = ""

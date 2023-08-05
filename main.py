@@ -34,12 +34,17 @@ def examine(area):
         choice = input(" > ")
         if choice == "1":
             activities["Show inventory"]()
+        elif choice == "2":
+            explore_area(area)
+        elif choice == "3":
+            exit()
         elif choice == "4":
             activities["Fight"]()
     except (ValueError, IndexError):
         print("Invalid choice!")
         time.sleep(1)
         examine(area)
+    examine(area)
 
 
 def explore_area(area):
