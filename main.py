@@ -119,4 +119,4 @@ if __name__ == "__main__":
     os.system("clear")
     main()
     explore_area(town)
-    # area_activity(forest)
+
