@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from items import Inventory
 from objects import *
 from cli import *
-
+from creatureclass import Npc
 
 @dataclass
 class Store:
@@ -58,6 +58,6 @@ class Area:
     available_directions: list = field(default_factory=list)
     enemies: list = field(default_factory=list)
     treasures: Chest = Chest()
-    npcs: list = field(default_factory=list)
+    npcs: Npc = Npc()
     store: Store = Store()
     visited: bool = False

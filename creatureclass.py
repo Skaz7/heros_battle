@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from items import Inventory, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
-from classes import Dice
+from classes import Dice, Quest
 from infos import print_full_stats
 
 
@@ -370,6 +370,24 @@ class Enemy(Creature):
         """Reveals all enemy attributes."""
         print_one_line_in_frame(f"{self.name} revealed!")
         print_full_stats(self)
+
+
+@dataclass
+class Npc:
+    name: str = ""
+    description: str = ""
+    occupation: str = ""
+    trader: bool = False
+    quest: Quest = Quest()
+
+    def talk(self):
+        print(f"You talk to {self.name}.")
+
+    def give_quest(self, quest):
+        pass
+
+    def give_reward(self, reward, player):
+        pass
 
 
 @dataclass

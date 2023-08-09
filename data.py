@@ -1,6 +1,7 @@
 from world import *
-from classes import TreasureChest
+from classes import TreasureChest, Quest
 from objects import excalibur, life_potion
+from characters import merchant
 
 weaknesses = [
     "slash",
@@ -50,7 +51,7 @@ forest = Area(
     available_directions=["Town", "Clearing", "Cliff"],
     enemies=["Goblin", "Orc"],
     treasures=small_chest,
-    npcs=["Old Man"],
+    npcs=None,
     visited=False,
 )
 town = Area(
@@ -59,7 +60,7 @@ town = Area(
     available_directions=["Forest", "Coast", "Ruins", "Plains"],
     enemies=None,
     treasures=None,
-    npcs=["Merchant"],
+    npcs=merchant,
     store=Shop(),
     visited=False,
 )

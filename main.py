@@ -14,12 +14,23 @@ import os
 import time
 
 
-def examine(area):
+def examine(area) -> None:
+    print("\nWhat do you want to do?\n")
+
+    activities = list_area_activities(area)
+
+    for key, value in activities.items():
+        print(f"{key}. {value}")
+
+    choice = int(input(" > "))
+    examine_handler(choice, area, activities)
+
+
+def list_area_activities(area) -> dict:
     activities_dict = {
         1: "Show inventory",
         2: "Stop examining area",
     }
-
     activities_list = []
     if area.enemies is not None:
         activities_list.append("Fight Enemy")
@@ -28,17 +39,13 @@ def examine(area):
     if area.npcs is not None:
         activities_list.append("Talk to NPC")
 
-    print("\nWhat do you want to do?\n")
+    activities_dict.update(
+        {i: activity for i, activity in enumerate(activities_list, start=3)}
+    )
+    return activities_dict
 
-    activities_dict.update({i: activity for i, activity in enumerate(activities_list, start=3)})
 
-    for key, value in activities_dict.items():
-        print(f"{key}. {value}")
-
-    choice = int(input(" > "))
-    examine_handler(choice, area, activities_dict)
-
-def examine_handler(choice, area, activities_dict):
+def examine_handler(choice, area, activities_dict) -> None:
     if choice not in activities_dict.keys():
         print_red("Invalid choice!")
         time.sleep(0.5)
@@ -57,12 +64,11 @@ def examine_handler(choice, area, activities_dict):
         elif result == "Open chest":
             player.open_chest(area.treasures)
         elif result == "Talk to NPC":
-            talk_to_npc()
+            npc = area.npcs.talk()
             print()
 
 
-
-def explore_area(area):
+def explore_area(area) -> None:
     print_one_line_in_frame(f"You are in {area.name}")
     area.visited = True
 
@@ -81,8 +87,7 @@ def explore_area(area):
 
     print("\nYou can see the following npcs: ")
     if area.npcs is not None:
-        for npc in area.npcs:
-            print(npc)
+        print(area.npcs.name)
     print()
 
     for number, next_area in enumerate(area.available_directions, start=1):
@@ -128,7 +133,7 @@ def game_menu_handler(choice):
         game_menu_handler(choice)
 
 
-def exit_game():
+def exit_game() -> None:
     print_one_line_in_frame("ARE YOU SURE? (Y/N)")
     choice = input(" > ")
     if choice.lower() == "y":
@@ -139,7 +144,7 @@ def exit_game():
         return
 
 
-def talk_to_npc():
+def talk_to_npc(npc) -> None:
     print("You talk to NPC")
     return
 

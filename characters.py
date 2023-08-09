@@ -1,5 +1,5 @@
-from creatureclass import Hero, Enemy
-
+from creatureclass import Hero, Enemy, Npc
+from quests import find_dog
 
 # Create Hero and Enemy
 player = Hero(
@@ -35,4 +35,11 @@ enemy = Enemy(
     spellbook=None,
     weakness="Cold",
     resistance="Fire",
+)
+
+merchant = Npc(
+    name="Thomas",
+    description="Town merchant",
+    trader=True,
+    quest=find_dog,
 )
