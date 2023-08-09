@@ -15,34 +15,46 @@ import time
 
 
 def examine(area):
-    activities = OrderedDict()
-    activities["Show inventory"] = player.inventory.show
-    activities["Leave area"] = None
+    activities_dict = {
+        1: "Show inventory",
+        2: "Stop examining area",
+    }
 
+    activities_list = []
     if area.enemies is not None:
-        battle = Battle(player, enemy)
-        activities["Fight"] = battle.start_battle
+        activities_list.append("Fight Enemy")
     if area.treasures is not None:
-        activities["Open chest"] = None
+        activities_list.append("Open chest")
     if area.npcs is not None:
-        activities["Talk to NPC"] = talk_to_npc() # TODO need to write this function
-        return
+        activities_list.append("Talk to NPC")
+
     print("\nWhat do you want to do?\n")
-    for i, activity in enumerate(activities.keys(), start=1):
-        print(f"{i}. {activity}")
-    try:
-        choice = input(" > ")
-        if choice == "1":
-            activities["Show inventory"]()
-        elif choice == "2":
-            explore_area(area)
-        elif choice == "3":
-            activities["Fight"]()
-    except (ValueError, IndexError):
-        print("Invalid choice!")
-        time.sleep(1)
+
+    activities_dict.update({i: activity for i, activity in enumerate(activities_list, start=3)})
+
+    for key, value in activities_dict.items():
+        print(f"{key}. {value}")
+
+    choice = int(input(" > "))
+
+    if choice not in activities_dict.keys():
+        print_red("Invalid choice!")
+        time.sleep(0.5)
         examine(area)
-    examine(area)
+    else:
+        result = activities_dict[choice]
+        if result == "Show inventory":
+            player.inventory.show()
+        elif result == "Stop examining area":
+            return
+        elif result == "Fight Enemy":
+            battle = Battle(player, enemy)
+            battle.start_battle()
+        elif result == "Open chest":
+            player.open_chest(area.treasures)
+        elif result == "Talk to NPC":
+            talk_to_npc()
+
 
 
 def explore_area(area):
@@ -60,8 +72,7 @@ def explore_area(area):
 
     print("\nYou can see the following treasures: ")
     if area.treasures is not None:
-        for treasure in area.treasures:
-            print(treasure)
+        print(area.treasures.name)
 
     print("\nYou can see the following npcs: ")
     if area.npcs is not None:
@@ -69,39 +80,28 @@ def explore_area(area):
             print(npc)
     print()
 
-    for i, next_area in enumerate(area.available_directions, start=1):
-        print(f"{i}. Go to {next_area}.")
+    for number, next_area in enumerate(area.available_directions, start=1):
+        print(f"{number}. Go to {next_area}.")
 
-    print(f"{i+1}. Examine {area.name}.")
+    print(f"{number+1}. Examine {area.name}.")
     print("0. OPTIONS.")
 
-    try:
-        choice = int(input("\n > "))
+    choice = int(input("\n > "))
+    explore_area_choice_handler(number, choice, area)
+    explore_area(area)
 
-        if choice == i + 1:
-            print(i + 1)
-            examine(area)
 
-        elif choice == len(area.available_directions) + 1:
-            print_green("YOU CHOSED NEW OPTION")
-            input()
+def explore_area_choice_handler(number, choice, area):
+    if 1 <= choice <= (len(area.available_directions)):
+        next_area = areas.get(area.available_directions[choice - 1])
+        explore_area(next_area)
 
-        elif choice == 0:
-            print_game_menu()
-            choice = input(" > ")
-            game_menu_handler(choice)
-            explore_area(area)
-
-        elif 1 <= choice <= (len(area.available_directions) + 1):
-            next_area = areas.get(area.available_directions[choice - 1])
-            explore_area(next_area)
-
-        else:
-            print("Invalid choice")
-            explore_area(area)
-
-    except (ValueError, IndexError):
-        print("Invalid choice")
+    elif choice == (number + 1):
+        examine(area)
+    elif choice == 0:
+        print_game_menu()
+        choice = input(" > ")
+        game_menu_handler(choice)
         explore_area(area)
 
 
@@ -119,7 +119,7 @@ def game_menu_handler(choice):
         exit_game()
         return
     else:
-        print_red("Wrong choice!")
+        print_red("Invalid choice!")
         game_menu_handler(choice)
 
 
@@ -127,13 +127,17 @@ def exit_game():
     print_one_line_in_frame("ARE YOU SURE? (Y/N)")
     choice = input(" > ")
     if choice.lower() == "y":
+        print_yellow("GOOD BYE...")
+        time.sleep(1)
         exit()
     else:
         return
 
+
 def talk_to_npc():
     print("You talk to NPC")
     return
+
 
 def main():
     # Create inventories and add some items

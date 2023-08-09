@@ -1,4 +1,6 @@
 from world import *
+from classes import TreasureChest
+from objects import excalibur, life_potion
 
 weaknesses = [
     "slash",
@@ -33,13 +35,21 @@ states = [
     "blind",
 ]
 
+small_chest = TreasureChest(
+    name="Red Chest",
+    description="A red chest with a gold key inside.",
+    size=1,
+    items=[excalibur, life_potion],
+    trapped=True,
+    opened=False,
+)
 
 forest = Area(
     name="Forest",
     description="A dark old forest.",
     available_directions=["Town", "Clearing", "Cliff"],
     enemies=["Goblin", "Orc"],
-    treasures=["Small chest"],
+    treasures=small_chest,
     npcs=["Old Man"],
     visited=False,
 )
@@ -58,7 +68,7 @@ ruins = Area(
     description="A ruined castle.",
     available_directions=["Town", "Clearing", "Swamp"],
     enemies=["Dragon"],
-    treasures=["Small chest"],
+    treasures=small_chest,
     npcs=None,
     visited=False,
 )

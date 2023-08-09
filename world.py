@@ -57,7 +57,7 @@ class Area:
     description: str = ""
     available_directions: list = field(default_factory=list)
     enemies: list = field(default_factory=list)
-    treasures: list = field(default_factory=list)
+    treasures: Chest = Chest()
     npcs: list = field(default_factory=list)
     store: Store = Store()
     visited: bool = False
