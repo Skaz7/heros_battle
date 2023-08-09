@@ -36,7 +36,9 @@ def examine(area):
         print(f"{key}. {value}")
 
     choice = int(input(" > "))
+    examine_handler(choice, area, activities_dict)
 
+def examine_handler(choice, area, activities_dict):
     if choice not in activities_dict.keys():
         print_red("Invalid choice!")
         time.sleep(0.5)
@@ -45,6 +47,8 @@ def examine(area):
         result = activities_dict[choice]
         if result == "Show inventory":
             player.inventory.show()
+            input()
+            examine(area)
         elif result == "Stop examining area":
             return
         elif result == "Fight Enemy":
@@ -54,6 +58,7 @@ def examine(area):
             player.open_chest(area.treasures)
         elif result == "Talk to NPC":
             talk_to_npc()
+            print()
 
 
 
