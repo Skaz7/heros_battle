@@ -9,7 +9,7 @@ class Inventory:
         self.slots = slots
         self.gold = gold  # gold is not an item and takes no slot space
 
-    def __reppr__(self):
+    def __repr__(self):
         return f"Inventory: {self.items}"
 
     def show(self):
@@ -17,7 +17,6 @@ class Inventory:
         print(f"\n    Items in inventory:")
         for i, item in enumerate(self.items, start=1):
             print(f"\t\t\t    {i}. {item.name} - {item.description}")
-        print()
 
     def add_item(self, item):
         """Adds a new item to the inventory.

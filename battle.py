@@ -1,6 +1,5 @@
 from classes import *
-from characters import *
-from items import *
+from data.characters import *
 from infos import *
 from decorators import *
 
@@ -27,12 +26,15 @@ class Battle:
         else:
             self.enemy_turn()
 
-    def player_turn(self):
+    def print_info(self):
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
         print_battle_stats(player, enemy)
         self.player_healthbar.draw_health_bar()
         self.enemy_healthbar.draw_health_bar()
         self.print_options()
+
+    def player_turn(self):
+        self.print_info()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
 

@@ -1,6 +1,4 @@
-from classes import *
-from items import Inventory, Weapon, Armor, Consumable
-from spellbook import Spell
+from inventory import Inventory, Weapon, Armor
 
 
 # Create weapons
@@ -121,88 +119,4 @@ leather_armor = Armor(
     is_broken=False,
     resistance="Cold",
     protection=5,
-)
-
-life_potion = Consumable(
-    name="Life Potion",
-    description="Restores 20 health.",
-    value=20,
-    slot_size=1,
-    required_strength=0,
-    required_dexterity=0,
-    allowed_race="Human",
-    max_durability=1,
-    durability=1,
-    inventory=Inventory,
-    heal=20,
-    mana=0,
-    strength=0,
-    dexterity=0,
-)
-
-boost_potion = Consumable(
-    name="Boost Potion",
-    description="Restores 10 health and 10 mana.",
-    value=20,
-    slot_size=1,
-    required_strength=0,
-    required_dexterity=0,
-    allowed_race="Human",
-    max_durability=1,
-    durability=1,
-    inventory=Inventory,
-    heal=90,
-    mana=10,
-    strength=0,
-    dexterity=0,
-)
-
-strength_potion = Consumable(
-    name="Strenght Potion",
-    description="Increases Strength by 20",
-    value=20,
-    slot_size=1,
-    required_strength=0,
-    required_dexterity=0,
-    allowed_race="Human",
-    max_durability=1,
-    durability=1,
-    inventory=Inventory,
-    heal=0,
-    mana=0,
-    strength=15,
-    dexterity=0,
-)
-
-fireball = Spell(
-    name="Fireball",
-    description="A small ball of fire",
-    required_level=1,
-    base_damage=10,
-    damage_type="Fire",
-    category="Elemental Magic",
-    mana_cost=5,
-    value=10,
-)
-
-freeze = Spell(
-    name="Freeze",
-    description="Freezes the enemy",
-    required_level=1,
-    base_damage=10,
-    damage_type="Cold",
-    category="Elemental Magic",
-    mana_cost=5,
-    value=10,
-)
-
-reveal = Spell(
-    name="Reveal",
-    description="Reveals the enemy",
-    required_level=1,
-    base_damage=0,
-    damage_type="Reveal",
-    category="Elemental Magic",
-    mana_cost=7,
-    value=15,
 )

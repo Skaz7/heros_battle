@@ -1,14 +1,10 @@
-from characters import player, enemy
-from world import Area, Shop, Temple, Blacksmith
-from battle import Battle
-from classes import Dice, TreasureChest, HeroChest
-from objects import *
+from data.characters import player
+from classes import Dice
 from spellbook import SpellBook
-from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from infos import *
-from data import *
-import os
+from data.world import *
+from cli import *
 import time
 
 
@@ -182,48 +178,57 @@ def area_activity(area):
 
 # player.open_chest(hero_chest)
 
-shop = Shop(
-    name="General Store",
-    description="A general store with many items.",
-    stock=Inventory([life_potion, boost_potion, strength_potion], slots=10),
-    discount=0,
-)
+# shop = Shop(
+#     name="General Store",
+#     description="A general store with many items.",
+#     stock=Inventory([life_potion, boost_potion, strength_potion], slots=10),
+#     discount=0,
+# )
 
-shop.show_stock()
-print(player.inventory.items)
-shop.buy_item(player, 1)
-shop.show_stock()
-print(player.inventory.items)
+# shop.show_stock()
+# print(player.inventory.items)
+# shop.buy_item(player, 1)
+# shop.show_stock()
+# print(player.inventory.items)
+# print(shop_menu(shop))
 
-temple = Temple(
-    name="Temple",
-    description="A temple with many items.",
-    stock=Inventory([freeze, fireball]),
-)
+# temple = Temple(
+#     name="Temple",
+#     description="A temple with many items.",
+#     stock=Inventory([freeze, fireball]),
+# )
 
-print(player.spellbook.spells)
-temple.show_stock()
-temple.learn_spell(player, fireball)
-print(player.spellbook.spells)
+# print(player.spellbook.spells)
+# temple.show_stock()
+# temple.learn_spell(player, fireball)
+# print(player.spellbook.spells)
 
-blacksmith = Blacksmith(
-    name="Blacksmith",
-    description="A blacksmith with many items.",
-    stock=Inventory([excalibur, thorshammer]),
-    discount=0,
-)
+# blacksmith = Blacksmith(
+#     name="Blacksmith",
+#     description="A blacksmith with many items.",
+#     stock=Inventory([excalibur, thorshammer]),
+#     discount=0,
+# )
 
-blacksmith.show_stock()
-for item in player.inventory.items:
-    if isinstance(item, Weapon):
-        print(item)
+# blacksmith.show_stock()
+# for item in player.inventory.items:
+#     if isinstance(item, Weapon):
+#         print(item)
 
-blacksmith.buy_item(player, 1)
-for item in player.inventory.items:
-    if isinstance(item, Weapon):
-        print(item)
+# blacksmith.buy_item(player, 1)
+# for item in player.inventory.items:
+#     if isinstance(item, Weapon):
+#         print(item)
 
-blacksmith.repair_weapon(excalibur)
-for item in player.inventory.items:
-    if isinstance(item, Weapon):
-        print(item)
+# blacksmith.repair_weapon(excalibur)
+# for item in player.inventory.items:
+#     if isinstance(item, Weapon):
+#         print(item)
+
+
+player.status = bleed
+while bleed.duration != 0:
+    print_full_stats(player)
+    bleed.process(player)
+    bleed.duration -= 1
+    print_full_stats(player)

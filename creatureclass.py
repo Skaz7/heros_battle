@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from items import Inventory, Weapon, Armor, Consumable
+from inventory import Inventory, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
-from classes import Dice
+from classes import Dice, Quest
 from infos import print_full_stats
 
 
@@ -20,12 +20,12 @@ class Creature:
     strength: int = 10
     dexterity: int = 10
     armor: int = 10
-    status: str = None
+    status: None
     inventory: Inventory = Inventory()
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
 
-    ######## Getters and setters ########
+    # ####### Getters and setters ########
 
     @property
     def name(self):
@@ -131,7 +131,7 @@ class Creature:
     def spellbook(self, new_spellbook):
         self._spellbook = new_spellbook
 
-    ######## Methods ########
+    # ####### Methods ########
 
     def heal(self, additional_health):
         self.health += additional_health
@@ -150,11 +150,6 @@ class Creature:
         If the defender is defending, the damage dealt is reduced by the defender's armor.
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
-        # base_attack = self.strength
-        # additional_attack = 0
-        # base_defense = defender.armor
-        # additional_defense = 0
-
         for weapon in self.inventory.items:
             if isinstance(weapon, Weapon) and weapon.is_equipped == True:
                 weapon.degrade(self)
@@ -194,7 +189,7 @@ class Creature:
 
     def flee(self):
         dice = Dice()
-        flee_chance = dice.roll(10)
+        flee_chance = dice.roll("1d10")
         if flee_chance <= 2:
             print_red(
                 f"\n{self.name} get hurt while running from battle and failed to escape!\n"
@@ -375,3 +370,44 @@ class Enemy(Creature):
         """Reveals all enemy attributes."""
         print_one_line_in_frame(f"{self.name} revealed!")
         print_full_stats(self)
+
+
+@dataclass
+class Npc:
+    name: str = ""
+    description: str = ""
+    occupation: str = ""
+    trader: bool = False
+    quest: Quest = Quest()
+
+    def talk(self):
+        print(f"You talk to {self.name}.")
+
+    def give_quest(self, quest):
+        pass
+
+    def give_reward(self, reward, player):
+        pass
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def process(self, creature: Creature):
+        setattr(
+            creature,
+            self.attribute_to_change,
+            max(
+                0, getattr(creature, self.attribute_to_change) - self.modification_value
+            ),
+        )
+        if self.attribute_to_change == "health" and creature.health == 0:
+            creature.is_alive = False
+
+    def reset(self):
+        duration = 0

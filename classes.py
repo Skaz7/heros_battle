@@ -77,8 +77,7 @@ class HealthBar:
 class Quest:
     name: str = ""
     description: str = ""
-    giver: str = ""
-    reward: tuple = ()
+    reward: dict = field(default_factory=dict)
     completed: bool = False
 
     def complete_quest(self):
@@ -138,9 +137,10 @@ class Chest:
             for i, item in enumerate(self.items, start=1):
                 print(f"{i} -> Pick {item.name}")
 
-            print("0. Exit")
         else:
             print("This chest is empty.")
+      
+        print("0. Exit")
         return
 
     def choice_handler(self, choice, inventory):
@@ -152,7 +152,6 @@ class Chest:
             inventory.add_item(selected_item)
             print(f"You picked {selected_item.name}.")
             self.items.pop(choice - 1)
-            # self.show_items()
 
         else:
             print("Wrong choice. Try again.")

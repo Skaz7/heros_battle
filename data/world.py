@@ -1,46 +1,26 @@
-from world import *
+from areas import *
+from classes import TreasureChest
+from data.objects import life_potion
+from data.weapons import excalibur
+from data.characters import merchant
 
-weaknesses = [
-    "slash",
-    "blunt",
-    "stab",
-    "fire",
-    "water",
-    "wind",
-    "ice",
-    "poison",
-    "electric",
-]
-resistances = [
-    "slash",
-    "blunt",
-    "stab",
-    "fire",
-    "water",
-    "wind",
-    "ice",
-    "poison",
-    "electric",
-]
 
-states = [
-    "frozen",
-    "burn",
-    "poisoned",
-    "shocked",
-    "scared",
-    "sleep",
-    "blind",
-]
-
+small_chest = TreasureChest(
+    name="Red Chest",
+    description="A red chest with a gold key inside.",
+    size=1,
+    items=[excalibur, life_potion],
+    trapped=True,
+    opened=False,
+)
 
 forest = Area(
     name="Forest",
     description="A dark old forest.",
     available_directions=["Town", "Clearing", "Cliff"],
     enemies=["Goblin", "Orc"],
-    treasures=["Small chest"],
-    npcs=["Old Man"],
+    treasures=small_chest,
+    npcs=None,
     visited=False,
 )
 town = Area(
@@ -49,7 +29,7 @@ town = Area(
     available_directions=["Forest", "Coast", "Ruins", "Plains"],
     enemies=None,
     treasures=None,
-    npcs=["Merchant"],
+    npcs=merchant,
     store=Shop(),
     visited=False,
 )
@@ -58,7 +38,7 @@ ruins = Area(
     description="A ruined castle.",
     available_directions=["Town", "Clearing", "Swamp"],
     enemies=["Dragon"],
-    treasures=["Small chest"],
+    treasures=small_chest,
     npcs=None,
     visited=False,
 )
