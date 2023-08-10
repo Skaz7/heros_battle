@@ -12,60 +12,6 @@ import os
 import time
 
 
-def examine(area) -> None:
-    print("\nWhat do you want to do?\n")
-
-    activities = list_area_activities(area)
-
-    for key, value in activities.items():
-        print(f"{key}. {value}")
-
-    choice = int(input(" > "))
-    examine_handler(choice, area, activities)
-
-
-def list_area_activities(area) -> dict:
-    activities_dict = {
-        1: "Show inventory",
-        2: "Stop examining area",
-    }
-    activities_list = []
-    if area.enemies is not None:
-        activities_list.append("Fight Enemy")
-    if area.treasures is not None:
-        activities_list.append("Open chest")
-    if area.npcs is not None:
-        activities_list.append("Talk to NPC")
-
-    activities_dict.update(
-        {i: activity for i, activity in enumerate(activities_list, start=3)}
-    )
-    return activities_dict
-
-
-def examine_handler(choice, area, activities_dict) -> None:
-    if choice not in activities_dict.keys():
-        print_red("Invalid choice!")
-        time.sleep(0.5)
-        examine(area)
-    else:
-        result = activities_dict[choice]
-        if result == "Show inventory":
-            player.inventory.show()
-            input()
-            examine(area)
-        elif result == "Stop examining area":
-            return
-        elif result == "Fight Enemy":
-            battle = Battle(player, enemy)
-            battle.start_battle()
-        elif result == "Open chest":
-            player.open_chest(area.treasures)
-        elif result == "Talk to NPC":
-            npc = area.npcs.talk()
-            print()
-
-
 def explore_area(area) -> None:
     print_one_line_in_frame(f"You are in {area.name}")
     area.visited = True
@@ -105,7 +51,7 @@ def explore_area_choice_handler(number, choice, area):
         explore_area(next_area)
 
     elif choice == (number + 1):
-        examine(area)
+        area.examine()
     elif choice == 0:
         print_game_menu()
         choice = input(" > ")
@@ -162,8 +108,6 @@ def main():
     player.inventory.add_item(boost_potion)
     player.inventory.add_item(strength_potion)
     player.inventory.add_item(leather_armor)
-    player.spellbook.add_spell(fireball)
-    player.spellbook.add_spell(freeze)
     player.spellbook.add_spell(reveal)
 
     player_healthbar = HealthBar(player)

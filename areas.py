@@ -3,6 +3,9 @@ from data.weapons import *
 from cli import *
 from creatureclass import Npc
 from classes import Chest
+from decorators import *
+from battle import Battle
+from data.characters import player, enemy
 
 
 @dataclass
@@ -63,3 +66,53 @@ class Area:
     store: Store = Store()
     visited: bool = False
 
+    def examine(self) -> None:
+        print("\nWhat do you want to do?\n")
+
+        activities = self.list_area_activities()
+
+        for key, value in activities.items():
+            print(f"{key}. {value}")
+
+        choice = int(input(" > "))
+        self.examine_handler(choice, activities)
+
+    def list_area_activities(self) -> dict:
+        activities_dict = {
+            1: "Show inventory",
+            2: "Stop examining area",
+        }
+        activities_list = []
+        if self.enemies is not None:
+            activities_list.append("Fight Enemy")
+        if self.treasures is not None:
+            activities_list.append("Open chest")
+        if self.npcs is not None:
+            activities_list.append("Talk to NPC")
+
+        activities_dict.update(
+            {i: activity for i, activity in enumerate(activities_list, start=3)}
+        )
+        return activities_dict
+
+    def examine_handler(self, choice, activities_dict) -> None:
+        if choice not in activities_dict.keys():
+            print_red("Invalid choice!")
+            time.sleep(0.5)
+            self.examine()
+        else:
+            result = activities_dict[choice]
+            if result == "Show inventory":
+                player.inventory.show()
+                input()
+                self.examine()
+            elif result == "Stop examining area":
+                return
+            elif result == "Fight Enemy":
+                battle = Battle(player, enemy)
+                battle.start_battle()
+            elif result == "Open chest":
+                player.open_chest(self.treasures)
+            elif result == "Talk to NPC":
+                npc = self.npcs.talk()
+                print()

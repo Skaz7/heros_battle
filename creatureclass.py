@@ -189,7 +189,7 @@ class Creature:
 
     def flee(self):
         dice = Dice()
-        flee_chance = dice.roll(10)
+        flee_chance = dice.roll("1d10")
         if flee_chance <= 2:
             print_red(
                 f"\n{self.name} get hurt while running from battle and failed to escape!\n"
