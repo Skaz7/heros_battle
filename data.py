@@ -1,6 +1,7 @@
 from world import *
 from classes import TreasureChest, Quest
-from objects import excalibur, life_potion
+from objects import life_potion
+from weapons import excalibur
 from characters import merchant
 
 weaknesses = [

@@ -1,15 +1,13 @@
-from classes import Dice, Status, HealthBar, Quest
+from classes import HealthBar
 from characters import *
-from inventory import Inventory, Item, Weapon, Armor, Consumable
+from weapons import *
+from spells import *
+from objects import *
 from spellbook import SpellBook
-from world import Area
-from infos import *
 from cli import print_game_menu
 from battle import Battle
-from objects import *
 from data import areas, town
 from decorators import *
-from collections import OrderedDict
 import os
 import time
 

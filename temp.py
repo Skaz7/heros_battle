@@ -4,7 +4,6 @@ from battle import Battle
 from classes import Dice, TreasureChest, HeroChest
 from objects import *
 from spellbook import SpellBook
-from status import *
 from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from infos import *

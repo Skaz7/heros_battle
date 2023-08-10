@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
-from inventory import Inventory
-from objects import *
+from weapons import *
 from cli import *
 from creatureclass import Npc
+from classes import Chest
+
 
 @dataclass
 class Store:
@@ -61,3 +62,4 @@ class Area:
     npcs: Npc = Npc()
     store: Store = Store()
     visited: bool = False
+
