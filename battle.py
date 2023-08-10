@@ -1,6 +1,5 @@
 from classes import *
 from characters import *
-from items import *
 from infos import *
 from decorators import *
 

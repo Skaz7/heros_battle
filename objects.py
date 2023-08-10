@@ -1,5 +1,5 @@
 from classes import *
-from items import Inventory, Weapon, Armor, Consumable
+from inventory import Inventory, Weapon, Armor, Consumable
 from spellbook import Spell
 from creatureclass import Status
 

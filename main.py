@@ -1,6 +1,6 @@
 from classes import Dice, Status, HealthBar, Quest
 from characters import *
-from items import Inventory, Item, Weapon, Armor, Consumable
+from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from world import Area
 from infos import *

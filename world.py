@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from items import Inventory
+from inventory import Inventory
 from objects import *
 from cli import *
 from creatureclass import Npc

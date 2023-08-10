@@ -2,7 +2,7 @@ import pytest
 from battle import Battle
 from classes import Quest, TreasureChest, HeroChest
 from creatureclass import Hero, Enemy
-from items import *
+from inventory import *
 
 
 player = Hero(

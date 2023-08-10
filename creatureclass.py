@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from items import Inventory, Weapon, Armor, Consumable
+from inventory import Inventory, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
