@@ -1,41 +1,9 @@
-from world import *
-from classes import TreasureChest, Quest
-from objects import life_potion
-from weapons import excalibur
-from characters import merchant
+from areas import *
+from classes import TreasureChest
+from data.objects import life_potion
+from data.weapons import excalibur
+from data.characters import merchant
 
-weaknesses = [
-    "slash",
-    "blunt",
-    "stab",
-    "fire",
-    "water",
-    "wind",
-    "ice",
-    "poison",
-    "electric",
-]
-resistances = [
-    "slash",
-    "blunt",
-    "stab",
-    "fire",
-    "water",
-    "wind",
-    "ice",
-    "poison",
-    "electric",
-]
-
-states = [
-    "frozen",
-    "burn",
-    "poisoned",
-    "shocked",
-    "scared",
-    "sleep",
-    "blind",
-]
 
 small_chest = TreasureChest(
     name="Red Chest",

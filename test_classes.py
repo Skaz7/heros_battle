@@ -1,6 +1,5 @@
-import pytest
 from battle import Battle
-from classes import Quest, TreasureChest, HeroChest
+from classes import Quest, TreasureChest
 from creatureclass import Hero, Enemy
 from inventory import *
 
@@ -71,11 +70,10 @@ leather_armor = Armor(
     is_equipped=False,
 )
 quest = Quest(
-    "Find Blueberries.",
-    "Find 7 Blueberries in the Forest.",
-    "Town Medic",
-    (7, "Blueberry"),
-    False,
+    name="Find Blueberries.",
+    description="Find 7 Blueberries in the Forest.",
+    reward={"Blueberry": 7},
+    completed=False,
 )
 
 life_potion = Consumable(
@@ -194,8 +192,7 @@ def test_armor_creation():
 def test_quest_creation():
     assert quest.name == "Find Blueberries."
     assert quest.description == "Find 7 Blueberries in the Forest."
-    assert quest.giver == "Town Medic"
-    assert quest.reward == (7, "Blueberry")
+    assert quest.reward == {"Blueberry": 7}
     assert quest.completed == False
     quest.complete_quest()
     assert quest.completed == True

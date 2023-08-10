@@ -1,12 +1,12 @@
 from classes import HealthBar
-from characters import *
-from weapons import *
-from spells import *
-from objects import *
+from data.characters import *
+from data.weapons import *
+from data.spells import *
+from data.objects import *
 from spellbook import SpellBook
 from cli import print_game_menu
 from battle import Battle
-from data import areas, town
+from data.world import areas, town
 from decorators import *
 import os
 import time

@@ -1,5 +1,5 @@
 from creatureclass import Hero, Enemy, Npc
-from quests import find_dog
+from data.quests import find_dog
 
 # Create Hero and Enemy
 player = Hero(

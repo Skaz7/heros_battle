@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from weapons import *
+from data.weapons import *
 from cli import *
 from creatureclass import Npc
 from classes import Chest

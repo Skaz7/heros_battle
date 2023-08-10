@@ -1,15 +1,10 @@
-from characters import player, enemy
-from world import Area, Shop, Temple, Blacksmith
-from battle import Battle
-from classes import Dice, TreasureChest, HeroChest
-from objects import *
+from data.characters import player
+from classes import Dice
 from spellbook import SpellBook
-from decorators import print_one_line_in_frame
 from collections import OrderedDict
 from infos import *
-from data import *
+from data.world import *
 from cli import *
-import os
 import time
 
 
