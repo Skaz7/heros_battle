@@ -1,7 +1,7 @@
 import random
 import re
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Tuple, Match
 
 
 class Dice:
@@ -20,10 +20,28 @@ class Dice:
         self.roll_string = roll_string
         self.sides = [4, 6, 8, 10, 12, 20, 100]
 
-    def roll(self, roll_string):
+    def roll(self, roll_string) -> int:
+        num_sides, num_dice, modifier = self.parse_string(roll_string)
+
+        # Simulating dice rolls
+        dice_rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
+        total_sum = sum(dice_rolls)
+
+        # Return result with modifier
+        return total_sum + modifier
+
+    def parse_string(self, roll_string) -> Tuple[int, int, int]:
+        match = self.check_pattern_match(roll_string)
+
+        # Parsing X, Y i Z
+        num_dice = int(match.group(1))
+        num_sides = int(match.group(2))
+        modifier = int(match.group(3) or 0)
+        return num_dice, num_sides, modifier
+
+    def check_pattern_match(self, roll_string) -> Match[str]:
         pattern = r"(\d+)d(\d+)([+-]\d+)?"  # Regex for pattern: XkY(+/-)Z
         match = re.match(pattern, roll_string)  # Check if string matches pattern
-
         if not match:
             raise ValueError(
                 "Wrong roll string format. Use XdY(+/-)Z e.g. 2d6 or 1d20+3"
@@ -32,18 +50,7 @@ class Dice:
             raise ValueError(
                 "Wrong dice sides number. Use d4, d6, d8, d10, d12, d20 or d100"
             )
-
-        # Parsing X, Y i Z
-        num_dice = int(match.group(1))
-        num_sides = int(match.group(2))
-        modifier = int(match.group(3) or 0)
-
-        # Simulating dice rolls
-        dice_rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
-        total_sum = sum(dice_rolls)
-
-        # Return result with modifier
-        return total_sum + modifier
+        return match
 
 
 class HealthBar:
@@ -139,7 +146,7 @@ class Chest:
 
         else:
             print("This chest is empty.")
-      
+
         print("0. Exit")
         return
 

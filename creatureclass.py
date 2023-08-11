@@ -1,9 +1,32 @@
 from dataclasses import dataclass
-from inventory import Inventory, Weapon, Armor, Consumable
+from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
 from infos import print_full_stats
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def process(self, creature: Creature):
+        setattr(
+            creature,
+            self.attribute_to_change,
+            max(
+                0, getattr(creature, self.attribute_to_change) - self.modification_value
+            ),
+        )
+        if self.attribute_to_change == "health" and creature.health == 0:
+            creature.is_alive = False
+
+    def reset(self):
+        duration = 0
 
 
 @dataclass
@@ -196,10 +219,10 @@ class Creature:
             )
             self.health -= int(self.max_health / 20)
             return
-        elif 2 < flee_chance <= 5:
+        elif 2 < flee_chance <= 9:
             print(f"\n{self.name} failed to escape from the battlefield!\n")
             return
-        elif 5 < flee_chance <= 10:
+        elif 9 < flee_chance <= 10:
             print_green(f"\n{self.name} escaped from the battlefield!\n")
             exit()
 
@@ -342,7 +365,16 @@ class Hero(Creature):
             return
         else:
             print("Wrong choice! Please repeat.")
-            self.level_up_choice_handler(choice)
+            self._level_up_choice_handler(choice)
+
+    def repair_item(self, item: Item) -> None:
+        repair_cost = int(item.value * 0.25)
+        if self.inventory.gold < repair_cost:
+            print(f"You don't have enought gold to repair {item.name}...")
+        else:
+            self.inventory.gold -= repair_cost
+            item.durability = item.max_durability
+            print(f"\n{item.name} has been repaired.\n")
 
 
 @dataclass
@@ -376,38 +408,13 @@ class Enemy(Creature):
 class Npc:
     name: str = ""
     description: str = ""
-    occupation: str = ""
-    trader: bool = False
     quest: Quest = Quest()
 
-    def talk(self):
-        print(f"You talk to {self.name}.")
+    def talk_to(self):
+        print_yellow(f"\nYou talk to {self.name}.\n")
 
     def give_quest(self, quest):
         pass
 
     def give_reward(self, reward, player):
         pass
-
-
-@dataclass
-class Status:
-    name: str
-    description: str
-    duration: int
-    attribute_to_change: str
-    modification_value: int
-
-    def process(self, creature: Creature):
-        setattr(
-            creature,
-            self.attribute_to_change,
-            max(
-                0, getattr(creature, self.attribute_to_change) - self.modification_value
-            ),
-        )
-        if self.attribute_to_change == "health" and creature.health == 0:
-            creature.is_alive = False
-
-    def reset(self):
-        duration = 0

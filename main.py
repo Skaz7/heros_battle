@@ -8,6 +8,7 @@ from cli import print_game_menu
 from battle import Battle
 from data.world import areas, town
 from decorators import *
+from game import GameMenu
 import os
 import time
 
@@ -22,30 +23,30 @@ def explore_area(area) -> None:
 
     print("\nYou can see the following enemies: ")
     if area.enemies is not None:
-        for enemy in area.enemies:
-            print(enemy)
+        for monster in area.enemies:
+            print(monster)
 
     print("\nYou can see the following treasures: ")
-    if area.treasures is not None:
-        print(area.treasures.name)
+    if area.treasure is not None:
+        print(area.treasure.name)
 
     print("\nYou can see the following npcs: ")
-    if area.npcs is not None:
-        print(area.npcs.name)
+    if area.npc is not None:
+        print(area.npc.name)
     print()
 
     for number, next_area in enumerate(area.available_directions, start=1):
         print(f"{number}. Go to {next_area}.")
 
-    print(f"{number+1}. Examine {area.name}.")
+    print(f"{number + 1}. Examine {area.name}.")
     print("0. OPTIONS.")
 
     choice = int(input("\n > "))
-    explore_area_choice_handler(number, choice, area)
+    handle_area_choice(number, choice, area)
     explore_area(area)
 
 
-def explore_area_choice_handler(number, choice, area):
+def handle_area_choice(number, choice, area):
     if 1 <= choice <= (len(area.available_directions)):
         next_area = areas.get(area.available_directions[choice - 1])
         explore_area(next_area)
@@ -53,13 +54,17 @@ def explore_area_choice_handler(number, choice, area):
     elif choice == (number + 1):
         area.examine()
     elif choice == 0:
-        print_game_menu()
-        choice = input(" > ")
-        game_menu_handler(choice)
-        explore_area(area)
+        game_menu(area)
 
 
-def game_menu_handler(choice):
+def game_menu(area):
+    print_game_menu()
+    choice = input(" > ")
+    handle_game_menu(choice)
+    explore_area(area)
+
+
+def handle_game_menu(choice):
     if choice == "1":
         player.inventory.show()
         print("Enter - Back")
@@ -74,7 +79,7 @@ def game_menu_handler(choice):
         return
     else:
         print_red("Invalid choice!")
-        game_menu_handler(choice)
+        handle_game_menu(choice)
 
 
 def exit_game() -> None:
@@ -114,7 +119,10 @@ def main():
     enemy_healthbar = HealthBar(enemy)
 
 
+menu = GameMenu()
+
 if __name__ == "__main__":
     os.system("clear")
     main()
+    menu.show()
     explore_area(town)

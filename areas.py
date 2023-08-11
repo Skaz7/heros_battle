@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from data.weapons import *
-from cli import *
-from creatureclass import Npc
+from creatureclass import Hero, Npc
+from spellbook import Spell
 from classes import Chest
 from decorators import *
 from battle import Battle
@@ -12,48 +12,43 @@ from data.characters import player, enemy
 class Store:
     name: str = ""
     description: str = ""
-    stock: Inventory = Inventory()
+    stock: list = field(default_factory=list)
     discount: int = 0
 
     def show_stock(self) -> None:
-        shop_menu(self)
+        print("Item you can buy in this place:")
+        for i, item in enumerate(self.stock, start=1):
+            print(f"{i}. {item.name:20} for price {item.value}")
 
 
-@dataclass
 class Shop(Store):
     def buy_item(self, player, item_index):
-        item = self.stock.items[item_index - 1]
+        item = self.stock[item_index - 1]
         player.inventory.add_item(item)
-        self.stock.remove_item(item)
-        print(f"You bought {self.stock}!")
+        self.stock.remove(item)
+        print(f"You bought {item.name}!")
 
 
 @dataclass
 class Temple(Store):
-    def heal_player(self, player):
+    def heal_player(self, player: Hero):
         player.health = player.max_health
 
-    def learn_spell(self, player, spell):
+    def learn_spell(self, player, spell: Spell):
         if spell.required_level <= player.level:
             player.spellbook.add_spell(spell)
+        else:
+            print_red("You don't have required level to learn this spell.")
 
 
 @dataclass
 class Blacksmith(Store):
-    def repair_weapon(self, weapon):
-        repair_cost = int(weapon.value * 0.25)
-        weapon.durability = weapon.max_durability
+    owner: str = "John"
+    price_multipier = 0.5
 
-    def repair_armor(self, armor):
-        repair_cost = int(armor.value * 0.25)
-        armor.durability = armor.max_durability
-
-    def buy_item(self, player, item_index):
-        item = self.stock.items[item_index - 1]
-        player.inventory.add_item(item)
-        self.stock.remove_item(item)
-        print(f"You bought {item.name}!")
-
+    def info(self):
+        print_one_line_in_frame(f"{self.owner} the Blacksmith")
+        print("You can repair your stuff here.")
 
 @dataclass
 class Area:
@@ -61,41 +56,23 @@ class Area:
     description: str = ""
     available_directions: list = field(default_factory=list)
     enemies: list = field(default_factory=list)
-    treasures: Chest = Chest()
-    npcs: Npc = Npc()
+    treasure: Chest = Chest()
+    npc: Npc = Npc()
     store: Store = Store()
     visited: bool = False
 
     def examine(self) -> None:
         print("\nWhat do you want to do?\n")
 
-        activities = self.list_area_activities()
+        activities = list_area_activities(self)
 
         for key, value in activities.items():
             print(f"{key}. {value}")
 
         choice = int(input(" > "))
-        self.examine_handler(choice, activities)
+        self.handle_examine_choice(choice, activities)
 
-    def list_area_activities(self) -> dict:
-        activities_dict = {
-            1: "Show inventory",
-            2: "Stop examining area",
-        }
-        activities_list = []
-        if self.enemies is not None:
-            activities_list.append("Fight Enemy")
-        if self.treasures is not None:
-            activities_list.append("Open chest")
-        if self.npcs is not None:
-            activities_list.append("Talk to NPC")
-
-        activities_dict.update(
-            {i: activity for i, activity in enumerate(activities_list, start=3)}
-        )
-        return activities_dict
-
-    def examine_handler(self, choice, activities_dict) -> None:
+    def handle_examine_choice(self, choice, activities_dict) -> None:
         if choice not in activities_dict.keys():
             print_red("Invalid choice!")
             time.sleep(0.5)
@@ -112,7 +89,25 @@ class Area:
                 battle = Battle(player, enemy)
                 battle.start_battle()
             elif result == "Open chest":
-                player.open_chest(self.treasures)
-            elif result == "Talk to NPC":
-                npc = self.npcs.talk()
+                player.open_chest(self.treasure)
+            elif result == f"Talk to {self.npc.name}":
+                npc = self.npc.talk_to()
                 print()
+
+
+def list_area_activities(area=Area()) -> dict[int, str]:
+    activities_dict = {
+        1: "Show inventory",
+        2: "Stop examining area",
+    }
+    activities_list = []
+    if area.enemies is not None:
+        activities_list.append("Fight Enemy")
+    if area.treasure is not None:
+        activities_list.append("Open chest")
+    if area.npc is not None:
+        activities_list.append(f"Talk to {area.npc.name}")
+    activities_dict.update(
+        {i: activity for i, activity in enumerate(activities_list, start=3)}
+    )
+    return activities_dict
