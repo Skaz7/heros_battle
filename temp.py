@@ -58,13 +58,27 @@ temple.learn_spell(player, fireball)
 print([spell.name for spell in player.spellbook.spells])
 
 
-
-print([(item.name, item.durability, item.max_durability) for item in player.inventory.items])
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
 thorshammer.durability -= 10
-print([(item.name, item.durability, item.max_durability) for item in player.inventory.items])
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
 
 player.repair_item(thorshammer)
-print([(item.name, item.durability, item.max_durability) for item in player.inventory.items])
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
 
 
 # CHECK PLAYER STATUS WITH DURATION
@@ -74,3 +88,17 @@ print([(item.name, item.durability, item.max_durability) for item in player.inve
 #     bleed.process(player)
 #     bleed.duration -= 1
 #     print_full_stats(player)
+
+bleed = Status(
+    name="Bleed",
+    description="Causes bleeding for 3 turns",
+    duration=3,
+    attribute_to_change="health",
+    modification_value=5,
+)
+
+player.status = bleed
+print(player.health)
+print(player.status.name)
+bleed.process(player)
+print(player.health)

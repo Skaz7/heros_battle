@@ -7,29 +7,6 @@ from infos import print_full_stats
 
 
 @dataclass
-class Status:
-    name: str
-    description: str
-    duration: int
-    attribute_to_change: str
-    modification_value: int
-
-    def process(self, creature: Creature):
-        setattr(
-            creature,
-            self.attribute_to_change,
-            max(
-                0, getattr(creature, self.attribute_to_change) - self.modification_value
-            ),
-        )
-        if self.attribute_to_change == "health" and creature.health == 0:
-            creature.is_alive = False
-
-    def reset(self):
-        duration = 0
-
-
-@dataclass
 class Creature:
     """Initializes a new instance of Creature class.
     Player & Enemy classes are a subclasses of Creature class."""
@@ -418,3 +395,26 @@ class Npc:
 
     def give_reward(self, reward, player):
         pass
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def process(self, creature: Creature):
+        setattr(
+            creature,
+            self.attribute_to_change,
+            max(
+                0, getattr(creature, self.attribute_to_change) - self.modification_value
+            ),
+        )
+        if self.attribute_to_change == "health" and creature.health == 0:
+            creature.is_alive = False
+
+    def reset(self):
+        duration = 0
