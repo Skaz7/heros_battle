@@ -21,7 +21,7 @@ class Dice:
         self.sides = [4, 6, 8, 10, 12, 20, 100]
 
     def roll(self, roll_string) -> int:
-        num_sides, num_dice, modifier = self.parse_string(roll_string)
+        num_dice, num_sides, modifier = self.parse_string(roll_string)
 
         # Simulating dice rolls
         dice_rolls = [random.randint(1, num_sides) for _ in range(num_dice)]
