@@ -5,3 +5,4 @@ add pytest tests
 v0.2.0 classes mainly works, statuses are applying during battle
 Shop class works but is not implemented.
 v0.2.1 fixed flee from battle when player was always succeeded
+v0.2.2 fixed error with armor broke

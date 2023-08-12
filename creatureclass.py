@@ -31,7 +31,7 @@ class Creature:
     health: int = 100
     strength: int = 10
     dexterity: int = 10
-    armor: int = 10
+    defense: int = 10
     statuses: list = field(default_factory=list[Status])
     inventory: Inventory = Inventory()
     is_alive: bool = True
@@ -72,8 +72,8 @@ class Creature:
         return self._dexterity
 
     @property
-    def armor(self):
-        return self._armor
+    def defense(self):
+        return self._defense
 
     @property
     def statuses(self):
@@ -123,9 +123,9 @@ class Creature:
     def dexterity(self, new_dexterity):
         self._dexterity = new_dexterity
 
-    @armor.setter
-    def armor(self, new_armor):
-        self._armor = new_armor
+    @defense.setter
+    def defense(self, new_defense):
+        self._defense = new_defense
 
     @statuses.setter
     def statuses(self, new_statuses):
@@ -163,22 +163,24 @@ class Creature:
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
         for weapon in self.inventory.items:
-            if isinstance(weapon, Weapon) and weapon.is_equipped == True:
+            if isinstance(weapon, Weapon) and weapon.is_equipped:
+                print_green(f"{self.name} is holding {weapon.name}")
                 weapon.degrade(self)
 
         for armor in defender.inventory.items:
             if isinstance(armor, Armor) and armor.is_equipped:
+                print_green(f"{defender.name} wears {armor.name}")
                 additional_protection = armor.protection
                 armor.degrade(self)
 
-        damage = self.strength - defender.armor
+        damage = self.strength - defender.defense
         defender.take_damage(damage)
         print(f"\n{self.name} attacks {defender.name} for {damage} damage!\n")
 
     def defend(self):
-        self.armor = int(self.armor * 1.5)
+        self.defense = int(self.defense * 1.5)
         print(f"\n{self.name} is defending!\n")
-        print(f"{self.name}'s armor is now {self.armor}!\n")
+        print(f"{self.name}'s armor is now {self.defense}!\n")
 
     def use_magic(self, defender):
         """Use magic method for both players."""
@@ -232,6 +234,16 @@ class Creature:
                 if status.attribute_to_change == "health" and self.health == 0:
                     self.is_alive = False
 
+    def equip_armor(self, armor):
+        """Equips an armor to the Creature."""
+        armor.is_equipped = True
+        self.defense += armor.protection
+
+    def unequip_armor(self, armor):
+        """Unequips an armor from the Creature."""
+        armor.is_equipped = False
+        self.defense -= armor.protection
+
 
 @dataclass
 class Hero(Creature):
@@ -263,16 +275,6 @@ class Hero(Creature):
         """Unequips a weapon from the hero."""
         weapon.is_equipped = False
         self.strength -= weapon.damage
-
-    def equip_armor(self, armor):
-        """Equips an armor to the hero."""
-        armor.is_equipped = True
-        self.armor += armor.protection
-
-    def unequip_armor(self, armor):
-        """Unequips an armor from the hero."""
-        armor.is_equipped = False
-        self.armor -= armor.protection
 
     def use_item(self):
         self.inventory.show()
@@ -354,7 +356,7 @@ class Hero(Creature):
         print_one_line_in_frame(f"{self.name} leveled up!")
         print(f"\n    1. Strength ({self.strength})")
         print(f"    2. Dexterity ({self.dexterity})")
-        print(f"    3. Armor ({self.armor})")
+        print(f"    3. Armor ({self.defense})")
         print(f"    4. Mana ({self.max_mana})")
         print("\n    0. Go Back.")
 
@@ -364,7 +366,7 @@ class Hero(Creature):
         elif choice == 2:
             self.dexterity += 1
         elif choice == 3:
-            self.armor += 1
+            self.defense += 1
         elif choice == 4:
             self.max_mana += 1
         elif choice == 0:

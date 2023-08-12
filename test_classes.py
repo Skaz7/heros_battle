@@ -13,7 +13,7 @@ player = Hero(
     health=100,
     strength=15,
     dexterity=8,
-    armor=5,
+    defense=5,
     statuses="Sick",
     inventory=Inventory([]),
     is_alive=True,
@@ -31,7 +31,7 @@ enemy = Enemy(
     health=70,
     strength=10,
     dexterity=5,
-    armor=10,
+    defense=10,
     statuses="Stunned",
     inventory=Inventory(),
     is_alive=True,
@@ -136,7 +136,7 @@ def test_hero_creation():
     assert player.health == 100
     assert player.strength == 15
     assert player.dexterity == 8
-    assert player.armor == 5
+    assert player.defense == 5
     assert player.statuses == "Sick"
     assert player.inventory.items == []
     assert player.max_mana == 20
@@ -153,7 +153,7 @@ def test_enemy_creation():
     assert enemy.health == 70
     assert enemy.strength == 10
     assert enemy.dexterity == 5
-    assert enemy.armor == 10
+    assert enemy.defense == 10
     assert enemy.statuses == "Stunned"
     assert enemy.inventory.items == []
     assert enemy.weakness == "Cold"
@@ -210,12 +210,12 @@ def test_equip_weapon():
 
 # test armor equip
 def test_equip_armor():
-    assert player.armor == 5
+    assert player.defense == 5
     player.equip_armor(leather_armor)
     assert leather_armor.is_equipped == True
     player.unequip_armor(leather_armor)
     assert leather_armor.is_equipped == False
-    assert player.armor == 5
+    assert player.defense == 5
 
 
 # test add to inventory, degrade, destroy, remove from inventory

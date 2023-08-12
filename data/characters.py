@@ -1,6 +1,6 @@
 from creatureclass import Hero, Enemy, Npc
 from data.quests import find_dog
-from inventory import Inventory
+from inventory import Inventory, Weapon, Armor
 from spellbook import SpellBook
 from data.statuses import *
 
@@ -14,7 +14,7 @@ player = Hero(
     health=100,
     strength=15,
     dexterity=8,
-    armor=5,
+    defense=5,
     statuses=[bleed],
     inventory=Inventory(),
     is_alive=True,
@@ -31,7 +31,7 @@ enemy = Enemy(
     health=70,
     strength=10,
     dexterity=5,
-    armor=10,
+    defense=10,
     statuses=[],
     inventory=Inventory(),
     is_alive=True,

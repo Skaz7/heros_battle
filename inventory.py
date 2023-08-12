@@ -74,7 +74,7 @@ class Item:
                 attacker.unequip_weapon(self)
                 print(self.is_equipped)
             elif isinstance(self, Armor):
-                print(f"Your {self.name} is broken down.")
+                print_red(f"Your {self.name} is broken down.")
                 self.is_equipped = False
                 attacker.unequip_armor(self)
             elif isinstance(self, Consumable):
