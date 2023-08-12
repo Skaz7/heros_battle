@@ -291,12 +291,19 @@ class Hero(Creature):
                     if isinstance(weapon, Weapon) and weapon.is_equipped:
                         self.unequip_weapon(weapon)
                 if selected_item.durability <= 0:
-                    print(f"{selected_item.name} is broken and can't be used!")
+                    print_red(f"{selected_item.name} is broken and can't be used!")
                     return
                 else:
                     self.equip_weapon(selected_item)
             elif isinstance(selected_item, Armor):
-                self.equip_armor(selected_item)
+                for armor in self.inventory.items:
+                    if isinstance(armor, Armor) and armor.is_equipped:
+                        self.unequip_armor(armor)
+                if selected_item.durability <= 0:
+                    print_red(f"{selected_item.name} is broken and can't be used!")
+                    return
+                else:
+                    self.equip_armor(selected_item)
             elif isinstance(selected_item, Consumable):
                 self.use_consumable(selected_item)
             return
