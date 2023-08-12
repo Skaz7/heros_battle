@@ -5,12 +5,24 @@ from data.spells import *
 from data.objects import *
 from spellbook import SpellBook
 from cli import print_game_menu
-from battle import Battle
 from data.world import areas, town
 from decorators import *
 from game import GameMenu
 import os
 import time
+import platform
+
+
+def clear_screen():
+    # Get operating system name
+    system = platform.uname()[0]
+    # Set clear_screen proper for operating system
+    if "linux" in system.lower():
+        os.system("clear")
+    elif "windows" in system.lower():
+        os.system("cls")
+    elif "macos" in system.lower():
+        pass
 
 
 def explore_area(area) -> None:
@@ -122,7 +134,7 @@ def main():
 menu = GameMenu()
 
 if __name__ == "__main__":
-    os.system("clear")
+    clear_screen()
     main()
     menu.show()
     explore_area(town)

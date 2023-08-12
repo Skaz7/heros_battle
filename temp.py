@@ -12,6 +12,7 @@ from infos import *
 from data.world import *
 from cli import *
 import time
+import platform
 
 
 # Creating Player inventory
@@ -82,13 +83,6 @@ print(
 
 
 # CHECK PLAYER STATUS WITH DURATION
-# player.status = bleed
-# while bleed.duration != 0:
-#     print_full_stats(player)
-#     bleed.process(player)
-#     bleed.duration -= 1
-#     print_full_stats(player)
-
 bleed = Status(
     name="Bleed",
     description="Causes bleeding for 3 turns",
@@ -97,8 +91,20 @@ bleed = Status(
     modification_value=5,
 )
 
-player.status = bleed
+poison = Status(
+    name="Poison",
+    description="Causes poison for 4 turns",
+    duration=4,
+    attribute_to_change="health",
+    modification_value=2,
+)
+
+player.statuses.append(bleed)
 print(player.health)
-print(player.status.name)
-bleed.process(player)
+print([status.name for status in player.statuses])
+player.handle_statuses()
+print(player.health)
+player.statuses.append(poison)
+player.handle_statuses()
+print([status.name for status in player.statuses])
 print(player.health)

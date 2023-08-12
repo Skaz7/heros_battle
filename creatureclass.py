@@ -1,9 +1,21 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
 from infos import print_full_stats
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def reset(self):
+        duration = 0
 
 
 @dataclass
@@ -20,7 +32,7 @@ class Creature:
     strength: int = 10
     dexterity: int = 10
     armor: int = 10
-    status: None
+    statuses: list = field(default_factory=list[Status])
     inventory: Inventory = Inventory()
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
@@ -64,8 +76,8 @@ class Creature:
         return self._armor
 
     @property
-    def status(self):
-        return self._status
+    def statuses(self):
+        return self._statuses
 
     @property
     def inventory(self):
@@ -115,9 +127,9 @@ class Creature:
     def armor(self, new_armor):
         self._armor = new_armor
 
-    @status.setter
-    def status(self, new_status):
-        self._status = new_status
+    @statuses.setter
+    def statuses(self, new_statuses):
+        self._statuses = new_statuses
 
     @inventory.setter
     def inventory(self, new_inventory):
@@ -202,6 +214,22 @@ class Creature:
         elif 9 < flee_chance <= 10:
             print_green(f"\n{self.name} escaped from the battlefield!\n")
             exit()
+
+    def handle_statuses(self):
+        for status in self.statuses:
+            if status.duration > 0:
+                setattr(
+                    self,
+                    status.attribute_to_change,
+                    max(
+                        0,
+                        getattr(self, status.attribute_to_change)
+                        - status.modification_value,
+                    ),
+                )
+                status.duration -= 1
+                if status.attribute_to_change == "health" and self.health == 0:
+                    self.is_alive = False
 
 
 @dataclass
@@ -395,26 +423,3 @@ class Npc:
 
     def give_reward(self, reward, player):
         pass
-
-
-@dataclass
-class Status:
-    name: str
-    description: str
-    duration: int
-    attribute_to_change: str
-    modification_value: int
-
-    def process(self, creature: Creature):
-        setattr(
-            creature,
-            self.attribute_to_change,
-            max(
-                0, getattr(creature, self.attribute_to_change) - self.modification_value
-            ),
-        )
-        if self.attribute_to_change == "health" and creature.health == 0:
-            creature.is_alive = False
-
-    def reset(self):
-        duration = 0

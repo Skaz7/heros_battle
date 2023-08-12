@@ -73,8 +73,3 @@ class GameMenu:
                 hero_info()
             elif choice == 5:
                 exit_game()
-
-
-menu = GameMenu()
-
-menu.show()

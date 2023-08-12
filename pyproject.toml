@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hero's battle"
-version = "0.1.0"
+version = "0.2.0"
 description = "Turn Based Battle"
 authors = ["Sebastian Kupis <sebastian.kupis@gmail.com>"]
 license = "MIT"

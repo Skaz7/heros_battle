@@ -34,6 +34,7 @@ class Battle:
         self.print_options()
 
     def player_turn(self):
+        player.handle_statuses()
         self.print_info()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
