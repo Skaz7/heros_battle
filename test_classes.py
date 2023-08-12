@@ -14,7 +14,7 @@ player = Hero(
     strength=15,
     dexterity=8,
     armor=5,
-    status="Sick",
+    statuses="Sick",
     inventory=Inventory([]),
     is_alive=True,
     spellbook=None,
@@ -32,7 +32,7 @@ enemy = Enemy(
     strength=10,
     dexterity=5,
     armor=10,
-    status="Stunned",
+    statuses="Stunned",
     inventory=Inventory(),
     is_alive=True,
     spellbook=None,
@@ -137,7 +137,7 @@ def test_hero_creation():
     assert player.strength == 15
     assert player.dexterity == 8
     assert player.armor == 5
-    assert player.status == "Sick"
+    assert player.statuses == "Sick"
     assert player.inventory.items == []
     assert player.max_mana == 20
     assert player.mana == 10
@@ -154,7 +154,7 @@ def test_enemy_creation():
     assert enemy.strength == 10
     assert enemy.dexterity == 5
     assert enemy.armor == 10
-    assert enemy.status == "Stunned"
+    assert enemy.statuses == "Stunned"
     assert enemy.inventory.items == []
     assert enemy.weakness == "Cold"
     assert enemy.resistance == "Fire"

@@ -2,7 +2,7 @@ from areas import *
 from classes import TreasureChest
 from data.objects import life_potion
 from data.weapons import excalibur
-from data.characters import merchant
+from data.characters import thomas
 
 
 small_chest = TreasureChest(
@@ -19,8 +19,8 @@ forest = Area(
     description="A dark old forest.",
     available_directions=["Town", "Clearing", "Cliff"],
     enemies=["Goblin", "Orc"],
-    treasures=small_chest,
-    npcs=None,
+    treasure=small_chest,
+    npc=None,
     visited=False,
 )
 town = Area(
@@ -28,8 +28,8 @@ town = Area(
     description="A Town with many people.",
     available_directions=["Forest", "Coast", "Ruins", "Plains"],
     enemies=None,
-    treasures=None,
-    npcs=merchant,
+    treasure=None,
+    npc=thomas,
     store=Shop(),
     visited=False,
 )
@@ -38,8 +38,8 @@ ruins = Area(
     description="A ruined castle.",
     available_directions=["Town", "Clearing", "Swamp"],
     enemies=["Dragon"],
-    treasures=small_chest,
-    npcs=None,
+    treasure=small_chest,
+    npc=None,
     visited=False,
 )
 plains = Area(
@@ -47,8 +47,8 @@ plains = Area(
     description="A plains.",
     available_directions=["Docks", "Town", "Swamp"],
     enemies=["Thief"],
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     visited=False,
 )
 
@@ -57,8 +57,8 @@ cliff = Area(
     description="A Cliff.",
     available_directions=["Coast", "Forest"],
     enemies=["Pirate"],
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     visited=False,
 )
 
@@ -67,8 +67,8 @@ coast = Area(
     description="A Coast.",
     available_directions=["Docks", "Town", "Cliff"],
     enemies=["Pirate"],
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     visited=False,
 )
 
@@ -77,8 +77,8 @@ docks = Area(
     description="A Docks.",
     available_directions=["Docks", "Plains"],
     enemies=["Robber"],
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     store=Blacksmith(),
     visited=False,
 )
@@ -88,8 +88,8 @@ clearing = Area(
     description="A Clearing.",
     available_directions=["Ruins", "Forest"],
     enemies=None,
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     visited=False,
 )
 
@@ -98,8 +98,8 @@ swamp = Area(
     description="A Swamp.",
     available_directions=["Plains", "Ruins"],
     enemies=["Dragon"],
-    treasures=None,
-    npcs=None,
+    treasure=None,
+    npc=None,
     store=Temple(),
     visited=False,
 )

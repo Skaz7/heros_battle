@@ -48,4 +48,3 @@ def print_turn_options():
     print("3. Use Magic")
     print("4. Use Item")
     print("5. Flee")
-    print("6. End Game")

@@ -34,6 +34,7 @@ class Battle:
         self.print_options()
 
     def player_turn(self):
+        player.handle_statuses()
         self.print_info()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
@@ -58,8 +59,6 @@ class Battle:
             player.use_item()
         elif choice == "5":
             player.flee()
-        elif choice == "6":
-            self.end()
         else:
             print("Invalid choice!")
             time.sleep(1)
@@ -73,6 +72,3 @@ class Battle:
         print_one_line_in_frame(f"{attacker.name} wins the battle!")
         attacker.experience += self.enemy.experience
         attacker.health = attacker.max_health
-
-    def end(self):
-        exit()

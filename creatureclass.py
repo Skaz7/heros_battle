@@ -1,9 +1,21 @@
-from dataclasses import dataclass
-from inventory import Inventory, Weapon, Armor, Consumable
+from dataclasses import dataclass, field
+from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
 from infos import print_full_stats
+
+
+@dataclass
+class Status:
+    name: str
+    description: str
+    duration: int
+    attribute_to_change: str
+    modification_value: int
+
+    def reset(self):
+        duration = 0
 
 
 @dataclass
@@ -20,7 +32,7 @@ class Creature:
     strength: int = 10
     dexterity: int = 10
     armor: int = 10
-    status: None
+    statuses: list = field(default_factory=list[Status])
     inventory: Inventory = Inventory()
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
@@ -64,8 +76,8 @@ class Creature:
         return self._armor
 
     @property
-    def status(self):
-        return self._status
+    def statuses(self):
+        return self._statuses
 
     @property
     def inventory(self):
@@ -115,9 +127,9 @@ class Creature:
     def armor(self, new_armor):
         self._armor = new_armor
 
-    @status.setter
-    def status(self, new_status):
-        self._status = new_status
+    @statuses.setter
+    def statuses(self, new_statuses):
+        self._statuses = new_statuses
 
     @inventory.setter
     def inventory(self, new_inventory):
@@ -196,12 +208,28 @@ class Creature:
             )
             self.health -= int(self.max_health / 20)
             return
-        elif 2 < flee_chance <= 5:
+        elif 2 < flee_chance <= 9:
             print(f"\n{self.name} failed to escape from the battlefield!\n")
             return
-        elif 5 < flee_chance <= 10:
+        elif 9 < flee_chance <= 10:
             print_green(f"\n{self.name} escaped from the battlefield!\n")
             exit()
+
+    def handle_statuses(self):
+        for status in self.statuses:
+            if status.duration > 0:
+                setattr(
+                    self,
+                    status.attribute_to_change,
+                    max(
+                        0,
+                        getattr(self, status.attribute_to_change)
+                        - status.modification_value,
+                    ),
+                )
+                status.duration -= 1
+                if status.attribute_to_change == "health" and self.health == 0:
+                    self.is_alive = False
 
 
 @dataclass
@@ -342,7 +370,16 @@ class Hero(Creature):
             return
         else:
             print("Wrong choice! Please repeat.")
-            self.level_up_choice_handler(choice)
+            self._level_up_choice_handler(choice)
+
+    def repair_item(self, item: Item) -> None:
+        repair_cost = int(item.value * 0.25)
+        if self.inventory.gold < repair_cost:
+            print(f"You don't have enought gold to repair {item.name}...")
+        else:
+            self.inventory.gold -= repair_cost
+            item.durability = item.max_durability
+            print(f"\n{item.name} has been repaired.\n")
 
 
 @dataclass
@@ -376,38 +413,13 @@ class Enemy(Creature):
 class Npc:
     name: str = ""
     description: str = ""
-    occupation: str = ""
-    trader: bool = False
     quest: Quest = Quest()
 
-    def talk(self):
-        print(f"You talk to {self.name}.")
+    def talk_to(self):
+        print_yellow(f"\nYou talk to {self.name}.\n")
 
     def give_quest(self, quest):
         pass
 
     def give_reward(self, reward, player):
         pass
-
-
-@dataclass
-class Status:
-    name: str
-    description: str
-    duration: int
-    attribute_to_change: str
-    modification_value: int
-
-    def process(self, creature: Creature):
-        setattr(
-            creature,
-            self.attribute_to_change,
-            max(
-                0, getattr(creature, self.attribute_to_change) - self.modification_value
-            ),
-        )
-        if self.attribute_to_change == "health" and creature.health == 0:
-            creature.is_alive = False
-
-    def reset(self):
-        duration = 0

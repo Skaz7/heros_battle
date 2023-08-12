@@ -1,5 +1,8 @@
 from creatureclass import Hero, Enemy, Npc
 from data.quests import find_dog
+from inventory import Inventory
+from spellbook import SpellBook
+from data.statuses import *
 
 # Create Hero and Enemy
 player = Hero(
@@ -12,10 +15,10 @@ player = Hero(
     strength=15,
     dexterity=8,
     armor=5,
-    status="Sick",
-    inventory=None,
+    statuses=[bleed],
+    inventory=Inventory(),
     is_alive=True,
-    spellbook=None,
+    spellbook=SpellBook(),
     max_mana=20,
     mana=10,
 )
@@ -29,17 +32,16 @@ enemy = Enemy(
     strength=10,
     dexterity=5,
     armor=10,
-    status="Stunned",
-    inventory=None,
+    statuses=[],
+    inventory=Inventory(),
     is_alive=True,
-    spellbook=None,
+    spellbook=SpellBook(),
     weakness="Cold",
     resistance="Fire",
 )
 
-merchant = Npc(
+thomas = Npc(
     name="Thomas",
     description="Town merchant",
-    trader=True,
     quest=find_dog,
 )

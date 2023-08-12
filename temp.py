@@ -1,30 +1,19 @@
 from data.characters import player
 from classes import Dice
 from spellbook import SpellBook
+from data.spells import *
+from data.statuses import *
+from data.characters import *
+from data.weapons import *
+from data.objects import *
+from data.world import *
 from collections import OrderedDict
 from infos import *
 from data.world import *
 from cli import *
 import time
+import platform
 
-
-## Health Bar creation and drawing
-# player_healthbar = HealthBar(player)
-# print()
-# player_healthbar.draw_health_bar()
-# player.take_damage(41)
-# player_healthbar.draw_health_bar()
-# player.take_damage(33)
-# player_healthbar.draw_health_bar()
-# print()
-# enemy_healthbar = HealthBar(enemy)
-# print()
-# enemy_healthbar.draw_health_bar()
-# enemy.take_damage(31)
-# enemy_healthbar.draw_health_bar()
-# enemy.take_damage(27)
-# enemy_healthbar.draw_health_bar()
-# print()
 
 # Creating Player inventory
 player.inventory = Inventory()
@@ -34,201 +23,88 @@ player.spellbook = SpellBook()
 player.spellbook.add_spell(freeze)
 # print(player.spellbook.spells)
 
-# Creating Battle with turns
-# battle = Battle(player, enemy)
-# battle.start_battle()
 
-# Creating and rolling Dice
-dice = Dice()
+# Create Shop and test buy method
+shop = Shop()
+shop.stock.append(life_potion)
+shop.stock.append(thorshammer)
+shop.stock.append(boost_potion)
+shop.stock.append(strength_potion)
+shop.stock.append(elvisheyes)
+shop.stock.append(leather_armor)
+shop.show_stock()
+print()
+for item in player.inventory.items:
+    print(item.name)
+print()
+shop.buy_item(player, 2)
+shop.buy_item(player, 4)
+print()
+shop.show_stock()
+print()
+print(f"Hero's inventory - {[item.name for item in player.inventory.items]}")
+print()
+shop.show_stock()
 
-# Creating Player
-# print_full_stats(player)
-# print_full_stats(enemy)
-# print_basic_stats(player)
-# print_basic_stats(enemy)
-
-# player.inventory.show()
-
-
-def explore_area(area):
-    print_one_line_in_frame(f"You are in {area.name}")
-    area.visited = True
-
-    print("\nYou can go to the following areas: ")
-    for direction in area.available_directions:
-        print(direction)
-
-    print("\nYou can see the following enemies: ")
-    if area.enemies is not None:
-        for enemy in area.enemies:
-            print(enemy)
-    print("\nYou can see the following treasures: ")
-    if area.treasures is not None:
-        for treasure in area.treasures:
-            print(treasure)
-
-    print("\nYou can see the following npcs: ")
-    if area.npcs is not None:
-        for npc in area.npcs:
-            print(npc)
-    print()
-
-    for i, next_area in enumerate(area.available_directions, start=1):
-        print(f"{i}. Go to {next_area} and explore.")
-
-    try:
-        choice = int(input("\n > "))
-        next_area = areas.get(area.available_directions[choice - 1])
-        if next_area is not None:
-            explore_area(next_area)
-        else:
-            print("Invalid choice")
-            explore_area(area)
-    except (ValueError, IndexError):
-        print("Invalid choice")
-        explore_area(area)
+# Create Temple and test heal and learn spell methods
+temple = Temple(
+    name="Temple",
+    description="A temple with many items.",
+    stock=[freeze, fireball],
+)
+print()
+print([spell.name for spell in player.spellbook.spells])
+temple.show_stock()
+temple.learn_spell(player, fireball)
+print([spell.name for spell in player.spellbook.spells])
 
 
-# def area_activity(area):
-#     activities = [
-#         "Show inventory",
-#         "Leave area",
-#         "Exit game",
-#     ]
-#     if area.enemies is not None:
-#         activities.insert(0, "Fight")
-#     if area.treasures is not None:
-#         activities.insert(0, "Open chest")
-#     if area.npcs is not None:
-#         activities.insert(0, "Talk to NPC")
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
+thorshammer.durability -= 10
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
 
-#     print("\nWhat do you want to do?\n")
-#     for i, activity in enumerate(activities, start=1):
-#         print(f"{i}. {activity}")
-#     try:
-#         choice = input(" > ")
-#         if choice == "1":
-#             area.inventory.show()
-#     except (ValueError, IndexError):
-#         print("Invalid choice!")
-#         time.sleep(1)
-#         area_activity(area)
+player.repair_item(thorshammer)
+print(
+    [
+        (item.name, item.durability, item.max_durability)
+        for item in player.inventory.items
+    ]
+)
 
 
-def area_activity(area):
-    activities = OrderedDict()
-    activities["Show inventory"] = player.inventory.show
-    activities["Leave area"] = None
-    activities["Exit game"] = exit
+# CHECK PLAYER STATUS WITH DURATION
+bleed = Status(
+    name="Bleed",
+    description="Causes bleeding for 3 turns",
+    duration=3,
+    attribute_to_change="health",
+    modification_value=5,
+)
 
-    if area.enemies is not None:
-        activities["Fight"] = battle.start_battle
-    if area.treasures is not None:
-        activities["Open chest"] = None
-    if area.npcs is not None:
-        activities["Talk to NPC"] = None
+poison = Status(
+    name="Poison",
+    description="Causes poison for 4 turns",
+    duration=4,
+    attribute_to_change="health",
+    modification_value=2,
+)
 
-    print("\nWhat do you want to do?\n")
-    for i, activity in enumerate(activities.keys(), start=1):
-        print(f"{i}. {activity}")
-    try:
-        choice = input(" > ")
-        if choice == "1":
-            activities["Show inventory"]()
-        elif choice == "4":
-            activities["Fight"]()
-    except (ValueError, IndexError):
-        print("Invalid choice!")
-        time.sleep(1)
-        area_activity(area)
-
-
-# explore_area(town)
-# area_activity(forest)
-
-# treasure_chest = TreasureChest(
-#     name="Red Chest",
-#     description="A red chest with a gold key inside.",
-#     size=1,
-#     items=[excalibur, life_potion],
-#     trapped=True,
-#     opened=False,
-# )
-
-# hero_chest = HeroChest(
-#     description="Chest for the hero for his items.",
-#     size=10,
-#     items=[
-#         life_potion,
-#         leather_armor,
-#     ],
-# )
-
-# player.level_up()
-
-# player.inventory.add_item(life_potion)
-# player.inventory.add_item(thorshammer)
-# player.inventory.add_item(life_potion)
-# player.inventory.add_item(excalibur)
-# print(f"Inventory - {[item.name for item in player.inventory.items]}")
-# hero_chest.show_items()
-# player.put_item(excalibur, hero_chest)
-# print(f"Inventory - {[item.name for item in hero_chest.items]}")
-# hero_chest.show_items()
-
-# player.open_chest(hero_chest)
-
-# shop = Shop(
-#     name="General Store",
-#     description="A general store with many items.",
-#     stock=Inventory([life_potion, boost_potion, strength_potion], slots=10),
-#     discount=0,
-# )
-
-# shop.show_stock()
-# print(player.inventory.items)
-# shop.buy_item(player, 1)
-# shop.show_stock()
-# print(player.inventory.items)
-# print(shop_menu(shop))
-
-# temple = Temple(
-#     name="Temple",
-#     description="A temple with many items.",
-#     stock=Inventory([freeze, fireball]),
-# )
-
-# print(player.spellbook.spells)
-# temple.show_stock()
-# temple.learn_spell(player, fireball)
-# print(player.spellbook.spells)
-
-# blacksmith = Blacksmith(
-#     name="Blacksmith",
-#     description="A blacksmith with many items.",
-#     stock=Inventory([excalibur, thorshammer]),
-#     discount=0,
-# )
-
-# blacksmith.show_stock()
-# for item in player.inventory.items:
-#     if isinstance(item, Weapon):
-#         print(item)
-
-# blacksmith.buy_item(player, 1)
-# for item in player.inventory.items:
-#     if isinstance(item, Weapon):
-#         print(item)
-
-# blacksmith.repair_weapon(excalibur)
-# for item in player.inventory.items:
-#     if isinstance(item, Weapon):
-#         print(item)
-
-
-player.status = bleed
-while bleed.duration != 0:
-    print_full_stats(player)
-    bleed.process(player)
-    bleed.duration -= 1
-    print_full_stats(player)
+player.statuses.append(bleed)
+print(player.health)
+print([status.name for status in player.statuses])
+player.handle_statuses()
+print(player.health)
+player.statuses.append(poison)
+player.handle_statuses()
+print([status.name for status in player.statuses])
+print(player.health)
