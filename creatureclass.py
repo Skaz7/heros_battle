@@ -3,7 +3,14 @@ from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
-from infos import print_full_stats
+
+# from game import clear_screen
+import time
+import os
+
+
+def clear_screen():
+    os.system("clear")
 
 
 @dataclass
@@ -145,6 +152,21 @@ class Creature:
 
     # ####### Methods ########
 
+    def show_info(self):
+        clear_screen()
+        print()
+        print_one_line_in_frame(f"{self.name.upper()} INFORMATION")
+        for key, value in self.__dict__.items():
+            if (
+                key[1:] != "inventory"
+                and key[1:] != "spellbook"
+                and key[1:] != "statuses"
+            ):
+                slow_print(f"    {key[1:].title().replace('_', ' '):10} : {value}\n")
+        print(f"    Statuses   : {', '.join(status.name for status in self.statuses)}")
+        self.inventory.show()
+        self.spellbook.show()
+
     def heal(self, additional_health):
         self.health += additional_health
 
@@ -181,41 +203,46 @@ class Creature:
         self.defense = int(self.defense * 1.5)
         print(f"\n{self.name} is defending!\n")
         print(f"{self.name}'s armor is now {self.defense}!\n")
+        time.sleep(1)
 
     def use_magic(self, defender):
         """Use magic method for both players."""
-        print(f"\nSpells in your spellbook: ")
-        print("-------------------------")
         self.spellbook.show()
         choice = input("Which spell would you like to use?\n > ")
         self._use_magic_choice_handler(choice, defender)
 
     def _use_magic_choice_handler(self, choice, defender):
-        if choice == "0":
+        if choice == "":
             return
         else:
             spell = self.spellbook.spells[int(choice) - 1]
         if self.mana < spell.mana_cost:
             print_red(f"You don't have enough mana to cast {spell.name}!\n")
+            time.sleep(1)
             self.use_magic(defender)
         else:
             spell.cast(self, defender)
+            time.sleep(1)
 
     def flee(self):
         dice = Dice()
         flee_chance = dice.roll("1d10")
         print(f"You rolled {flee_chance}")
+        time.sleep(0.5)
         if flee_chance <= 2:
             print_red(
                 f"\n{self.name} get hurt while running from battle and failed to escape!\n"
             )
             self.health -= int(self.max_health / 20)
+            time.sleep(1)
             return
         elif 2 < flee_chance <= 9:
             print(f"\n{self.name} failed to escape from the battlefield!\n")
+            time.sleep(1)
             return
         elif 9 < flee_chance <= 10:
             print_green(f"\n{self.name} escaped from the battlefield!\n")
+            time.sleep(1)
             exit()
 
     def handle_statuses(self):
@@ -350,7 +377,7 @@ class Hero(Creature):
             points_to_spend = 4
         self.level += 1
         self.max_health = int(self.max_health * 1.1)
-        self.health += self.max_health
+        self.health = self.max_health
         while points_to_spend > 0:
             self._level_up_menu()
             print(f"\nYou have {points_to_spend} points to spend.")
@@ -415,8 +442,10 @@ class Enemy(Creature):
 
     def reveal_all(self):
         """Reveals all enemy attributes."""
-        print_one_line_in_frame(f"{self.name} revealed!")
-        print_full_stats(self)
+        print_one_line_in_frame("Enemy revealed!")
+        time.sleep(1)
+        self.show_info()
+        input()
 
 
 @dataclass

@@ -1,3 +1,6 @@
+from game import GameMenu
+
+
 weaknesses = [
     "slash",
     "blunt",

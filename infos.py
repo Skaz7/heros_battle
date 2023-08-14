@@ -1,15 +1,6 @@
 from decorators import slow_print, print_one_line_in_frame
 
 
-def print_full_stats(creature):
-    print()
-    print_one_line_in_frame(f"{creature.name} Stats:")
-    for key, value in creature.__dict__.items():
-        if key[1:] != "inventory":
-            slow_print(f"    {key[1:].title().replace('_', ' '):10} : {value}\n")
-    creature.inventory.show()
-
-
 def print_basic_stats(creature):
     print()
     print_one_line_in_frame(f"{creature.name} Stats:")

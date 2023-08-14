@@ -2,6 +2,8 @@ from classes import *
 from data.characters import *
 from infos import *
 from decorators import *
+from game import menu, clear_screen
+import time
 
 
 class Battle:
@@ -16,10 +18,14 @@ class Battle:
     def start_battle(self):
         while self.player.is_alive and self.enemy.is_alive:
             self.next_turn()
-        return
+        if player.health == 0:
+            self.win(enemy)
+        if enemy.health == 0:
+            self.win(player)
 
     def next_turn(self):
         self.turn += 1
+        clear_screen()
         print(f"Turn {self.turn}")
         if self.turn % 2 != 0:
             self.player_turn()
@@ -27,6 +33,7 @@ class Battle:
             self.enemy_turn()
 
     def print_info(self):
+        clear_screen()
         print(f"\n{self.player.name} vs {self.enemy.name}\n")
         print_battle_stats(player, enemy)
         self.player_healthbar.draw_health_bar()
@@ -67,8 +74,17 @@ class Battle:
     def enemy_turn(self):
         print(f"\n{self.enemy.name} vs {self.player.name}\n")
         enemy.attack(self.player)
+        input("[ENTER] - continue")
 
     def win(self, attacker):
         print_one_line_in_frame(f"{attacker.name} wins the battle!")
-        attacker.experience += self.enemy.experience
-        attacker.health = attacker.max_health
+        print("\n\nEnter - continue")
+        if attacker == self.enemy:
+            input()
+            menu.show()
+        elif attacker == self.player:
+            self.player.experience += self.enemy.experience
+            self.player.health = self.player.max_health
+            if self.player.experience >= 10:
+                self.player.level_up()
+            input()
