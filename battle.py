@@ -26,16 +26,15 @@ class Battle:
     def next_turn(self):
         self.turn += 1
         clear_screen()
-        print(f"Turn {self.turn}")
         if self.turn % 2 != 0:
             self.player_turn()
         else:
             self.enemy_turn()
 
     def print_info(self):
-        clear_screen()
-        print(f"\n{self.player.name} vs {self.enemy.name}\n")
         print_battle_stats(player, enemy)
+        print_one_line_in_frame(f"Turn {self.turn}")
+        print()
         self.player_healthbar.draw_health_bar()
         self.enemy_healthbar.draw_health_bar()
         self.print_options()
@@ -45,6 +44,8 @@ class Battle:
         self.print_info()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
+        input("[ENTER] - continue")
+
 
     def print_options(self):
         print_turn_options()
@@ -71,8 +72,11 @@ class Battle:
             time.sleep(1)
             self.player_turn()
 
+    def print_action_info(self):
+        pass
+
     def enemy_turn(self):
-        print(f"\n{self.enemy.name} vs {self.player.name}\n")
+        self.print_info()
         enemy.attack(self.player)
         input("[ENTER] - continue")
 

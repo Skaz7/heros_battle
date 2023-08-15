@@ -3,8 +3,6 @@ from inventory import Inventory, Item, Weapon, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
-
-# from game import clear_screen
 import time
 import os
 
@@ -15,6 +13,7 @@ def clear_screen():
 
 @dataclass
 class Status:
+    """Class for storing player status, which is handled during battles."""
     name: str
     description: str
     duration: int
@@ -22,13 +21,17 @@ class Status:
     modification_value: int
 
     def reset(self):
-        duration = 0
+        self.duration = 0
 
 
 @dataclass
 class Creature:
     """Initializes a new instance of Creature class.
-    Player & Enemy classes are a subclasses of Creature class."""
+    Player & Enemy classes are a subclasses of Creature class.
+    :param name: name of creature
+    :param experience: actual experience of player, or enemy experience to gain by player after defeating enemy
+
+    """
 
     name: str = "Creature"
     level: int = 1
@@ -153,14 +156,21 @@ class Creature:
     # ####### Methods ########
 
     def show_info(self):
+        """
+        Shows all available information about Creature object (player or enemy).
+        Takes dictionary from Class attributes and prints it by key - value.
+        Inventory, SpellBook and Statuses are not printed directly as they are themselves instances of their classes.
+        They are printed using classes methods.
+
+        """
         clear_screen()
         print()
         print_one_line_in_frame(f"{self.name.upper()} INFORMATION")
         for key, value in self.__dict__.items():
             if (
-                key[1:] != "inventory"
-                and key[1:] != "spellbook"
-                and key[1:] != "statuses"
+                key[1:] != "inventory" # don't print this because you will get Inventory Class information
+                and key[1:] != "spellbook" # don't print this because you will get SpellBook Class information 
+                and key[1:] != "statuses" # don't print this because you will get list of classes
             ):
                 slow_print(f"    {key[1:].title().replace('_', ' '):10} : {value}\n")
         print(f"    Statuses   : {', '.join(status.name for status in self.statuses)}")
@@ -175,7 +185,7 @@ class Creature:
             self.health -= damage
         if self.health < 0:
             self.health = 0
-            self.status = "dead"
+            self.statuses = ["dead"]
             self.is_alive = False
 
     def attack(self, defender):
@@ -200,10 +210,12 @@ class Creature:
         print(f"\n{self.name} attacks {defender.name} for {damage} damage!\n")
 
     def defend(self):
+        """
+        When player defends, his defense is multiplied by 50%.
+        """
         self.defense = int(self.defense * 1.5)
         print(f"\n{self.name} is defending!\n")
         print(f"{self.name}'s armor is now {self.defense}!\n")
-        time.sleep(1)
 
     def use_magic(self, defender):
         """Use magic method for both players."""
@@ -222,7 +234,7 @@ class Creature:
             self.use_magic(defender)
         else:
             spell.cast(self, defender)
-            time.sleep(1)
+            print(f"You used your magic skills casting {spell.name} spell.")
 
     def flee(self):
         dice = Dice()
@@ -230,10 +242,11 @@ class Creature:
         print(f"You rolled {flee_chance}")
         time.sleep(0.5)
         if flee_chance <= 2:
+            health_lost = int(self.max_health / 20)
             print_red(
-                f"\n{self.name} get hurt while running from battle and failed to escape!\n"
+                f"\n{self.name} failed to escape and hurt himself for {health_lost}!\n"
             )
-            self.health -= int(self.max_health / 20)
+            self.health -= health_lost
             time.sleep(1)
             return
         elif 2 < flee_chance <= 9:
@@ -387,6 +400,7 @@ class Hero(Creature):
                 points_to_spend -= 1
 
     def _level_up_menu(self):
+        clear_screen()
         print_one_line_in_frame(f"{self.name} leveled up!")
         print(f"\n    1. Strength ({self.strength})")
         print(f"    2. Dexterity ({self.dexterity})")
