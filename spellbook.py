@@ -55,6 +55,9 @@ class SpellBook:
         self.spells.remove(spell)
 
     def show(self):
+        print(f"\n    Spells in spellbook: ")
+        print("    -------------------------")
+
         for i, spell in enumerate(self.spells, start=1):
-            print(f"[{i}] {spell.name} - {spell.description}")
-        print("[0] - BACK\n")
+            print(f"\t\t\t[{i}] {spell.name} - {spell.description}")
+        print("[ENTER] - continue\n")

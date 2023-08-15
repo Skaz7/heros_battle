@@ -3,6 +3,7 @@ from data.weapons import *
 from creatureclass import Hero, Npc
 from spellbook import Spell
 from classes import Chest
+from game import clear_screen
 from decorators import *
 from battle import Battle
 from data.characters import player, enemy
@@ -62,6 +63,7 @@ class Area:
     visited: bool = False
 
     def examine(self) -> None:
+        clear_screen()
         print("\nWhat do you want to do?\n")
 
         activities = list_area_activities(self)
