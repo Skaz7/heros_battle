@@ -1,4 +1,5 @@
 from decorators import slow_print, print_one_line_in_frame
+from inventory import Weapon
 
 
 def print_basic_stats(creature):
@@ -26,9 +27,23 @@ def print_battle_stats(player, enemy):
     print(
         f"Experience : {player.experience:}".ljust(30)
         + "       "
-        + f"Experience :     {enemy.experience}".rjust(30)
+        + f"Experience :    {enemy.experience}".rjust(30)
     )
     print(f"Mana : {player.mana}/{player.max_mana}".ljust(30))
+    print(
+        f"Status: {', '.join(status.name for status in player.statuses)}".ljust(30)
+        + "       "
+        + f"Status:    {', '.join(status.name for status in enemy.statuses)}".rjust(30)
+    )
+    # print(f"Weapon held: {[item.name for item in player.inventory.items if isinstance(item, Weapon) and item.is_equipped]}")
+    try:
+        print(f"Weapon held: {player.equipped_weapon.name}")
+    except AttributeError:
+        print("Weapon held: None")
+    try:
+        print(f"Armor worn: {player.equipped_armor.name}")
+    except AttributeError:
+        print("Armor worn: None")
     print("-" * 67)
     print()
 

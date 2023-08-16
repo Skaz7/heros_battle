@@ -14,6 +14,7 @@ def clear_screen():
 @dataclass
 class Status:
     """Class for storing player status, which is handled during battles."""
+
     name: str
     description: str
     duration: int
@@ -46,112 +47,8 @@ class Creature:
     inventory: Inventory = Inventory()
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
-
-    # ####### Getters and setters ########
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def level(self):
-        return self._level
-
-    @property
-    def experience(self):
-        return self._experience
-
-    @property
-    def race(self):
-        return self._race
-
-    @property
-    def max_health(self):
-        return self._max_health
-
-    @property
-    def health(self):
-        return self._health
-
-    @property
-    def strength(self):
-        return self._strength
-
-    @property
-    def dexterity(self):
-        return self._dexterity
-
-    @property
-    def defense(self):
-        return self._defense
-
-    @property
-    def statuses(self):
-        return self._statuses
-
-    @property
-    def inventory(self):
-        return self._inventory
-
-    @property
-    def is_alive(self):
-        return self._is_alive
-
-    @property
-    def spellbook(self):
-        return self._spellbook
-
-    @name.setter
-    def name(self, new_name):
-        self._name = new_name
-
-    @level.setter
-    def level(self, new_level):
-        self._level = new_level
-
-    @experience.setter
-    def experience(self, new_experience):
-        self._experience = new_experience
-
-    @race.setter
-    def race(self, new_race):
-        self._race = new_race
-
-    @max_health.setter
-    def max_health(self, new_max_health):
-        self._max_health = new_max_health
-
-    @health.setter
-    def health(self, new_health):
-        self._health = new_health
-
-    @strength.setter
-    def strength(self, new_strength):
-        self._strength = new_strength
-
-    @dexterity.setter
-    def dexterity(self, new_dexterity):
-        self._dexterity = new_dexterity
-
-    @defense.setter
-    def defense(self, new_defense):
-        self._defense = new_defense
-
-    @statuses.setter
-    def statuses(self, new_statuses):
-        self._statuses = new_statuses
-
-    @inventory.setter
-    def inventory(self, new_inventory):
-        self._inventory = new_inventory
-
-    @is_alive.setter
-    def is_alive(self, new_is_alive):
-        self._is_alive = new_is_alive
-
-    @spellbook.setter
-    def spellbook(self, new_spellbook):
-        self._spellbook = new_spellbook
+    equipped_weapon = None
+    equipped_armor = None
 
     # ####### Methods ########
 
@@ -168,9 +65,12 @@ class Creature:
         print_one_line_in_frame(f"{self.name.upper()} INFORMATION")
         for key, value in self.__dict__.items():
             if (
-                key[1:] != "inventory" # don't print this because you will get Inventory Class information
-                and key[1:] != "spellbook" # don't print this because you will get SpellBook Class information 
-                and key[1:] != "statuses" # don't print this because you will get list of classes
+                key[1:]
+                != "inventory"  # don't print this because you will get Inventory Class information
+                and key[1:]
+                != "spellbook"  # don't print this because you will get SpellBook Class information
+                and key[1:]
+                != "statuses"  # don't print this because you will get list of classes
             ):
                 slow_print(f"    {key[1:].title().replace('_', ' '):10} : {value}\n")
         print(f"    Statuses   : {', '.join(status.name for status in self.statuses)}")
@@ -236,86 +136,6 @@ class Creature:
             spell.cast(self, defender)
             print(f"You used your magic skills casting {spell.name} spell.")
 
-    def flee(self):
-        dice = Dice()
-        flee_chance = dice.roll("1d10")
-        print(f"You rolled {flee_chance}")
-        time.sleep(0.5)
-        if flee_chance <= 2:
-            health_lost = int(self.max_health / 20)
-            print_red(
-                f"\n{self.name} failed to escape and hurt himself for {health_lost}!\n"
-            )
-            self.health -= health_lost
-            time.sleep(1)
-            return
-        elif 2 < flee_chance <= 9:
-            print(f"\n{self.name} failed to escape from the battlefield!\n")
-            time.sleep(1)
-            return
-        elif 9 < flee_chance <= 10:
-            print_green(f"\n{self.name} escaped from the battlefield!\n")
-            time.sleep(1)
-            exit()
-
-    def handle_statuses(self):
-        for status in self.statuses:
-            if status.duration > 0:
-                setattr(
-                    self,
-                    status.attribute_to_change,
-                    max(
-                        0,
-                        getattr(self, status.attribute_to_change)
-                        - status.modification_value,
-                    ),
-                )
-                status.duration -= 1
-                if status.attribute_to_change == "health" and self.health == 0:
-                    self.is_alive = False
-
-    def equip_armor(self, armor):
-        """Equips an armor to the Creature."""
-        armor.is_equipped = True
-        self.defense += armor.protection
-
-    def unequip_armor(self, armor):
-        """Unequips an armor from the Creature."""
-        armor.is_equipped = False
-        self.defense -= armor.protection
-
-
-@dataclass
-class Hero(Creature):
-    max_mana: int = 20
-    mana: int = 10
-
-    @property
-    def max_mana(self):
-        return self._max_mana
-
-    @property
-    def mana(self):
-        return self._mana
-
-    @max_mana.setter
-    def max_mana(self, new_max_mana):
-        self._max_mana = new_max_mana
-
-    @mana.setter
-    def mana(self, new_mana):
-        self._mana = new_mana
-
-    def equip_weapon(self, weapon):
-        """Equips a weapon to the hero."""
-        weapon.is_equipped = True
-        self.strength += weapon.damage
-
-    def unequip_weapon(self, weapon):
-        """Unequips a weapon from the hero."""
-        weapon.is_equipped = False
-        self.strength -= weapon.damage
-
     def use_item(self):
         self.inventory.show()
         choice = int(input("> "))
@@ -370,6 +190,74 @@ class Hero(Creature):
         self.dexterity += consumable.dexterity
 
         consumable.destroy()
+
+    def flee(self):
+        dice = Dice()
+        flee_chance = dice.roll("1d10")
+        print(f"You rolled {flee_chance}")
+        time.sleep(0.5)
+        if flee_chance <= 2:
+            health_lost = int(self.max_health / 20)
+            print_red(
+                f"\n{self.name} failed to escape and hurt himself for {health_lost}!\n"
+            )
+            self.health -= health_lost
+            time.sleep(1)
+            return
+        elif 2 < flee_chance <= 9:
+            print(f"\n{self.name} failed to escape from the battlefield!\n")
+            time.sleep(1)
+            return
+        elif 9 < flee_chance <= 10:
+            print_green(f"\n{self.name} escaped from the battlefield!\n")
+            time.sleep(1)
+            exit()
+
+    def handle_statuses(self):
+        for status in self.statuses:
+            if status.duration > 0:
+                setattr(
+                    self,
+                    status.attribute_to_change,
+                    max(
+                        0,
+                        getattr(self, status.attribute_to_change)
+                        - status.modification_value,
+                    ),
+                )
+                status.duration -= 1
+                if status.attribute_to_change == "health" and self.health == 0:
+                    self.is_alive = False
+
+    def equip_weapon(self, weapon):
+        """Equips a weapon to the hero."""
+        self.equipped_weapon = weapon
+        weapon.is_equipped = True
+        self.strength += weapon.damage
+
+    def unequip_weapon(self, weapon):
+        """Unequips a weapon from the hero."""
+        self.equipped_weapon = None
+        weapon.is_equipped = False
+        self.strength -= weapon.damage
+
+    def equip_armor(self, armor):
+        """Equips an armor to the Creature."""
+        self.equipped_armor = armor
+        armor.is_equipped = True
+        self.defense += armor.protection
+
+    def unequip_armor(self, armor):
+        """Unequips an armor from the Creature."""
+        self.equipped_armor = None
+        armor.is_equipped = False
+        self.defense -= armor.protection
+
+
+@dataclass
+class Hero(Creature):
+    max_mana: int = 20
+    mana: int = 10
 
     def open_chest(self, chest):
         chest.opened = True
