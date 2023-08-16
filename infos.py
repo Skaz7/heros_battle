@@ -15,35 +15,42 @@ def print_battle_stats(player, enemy):
     print((player.name).ljust(30) + "<----->" + (enemy.name).rjust(30))
     print("-" * 67)
     print(
-        f"Health : {player.health}/{player.max_health}".ljust(30)
+        f"Health     : {player.health}/{player.max_health}".ljust(30)
         + "       "
-        + f"Health : {enemy.health}/{enemy.max_health}".rjust(30)
+        + f"Health     : {enemy.health}/{enemy.max_health}".rjust(30)
     )
     print(
-        f"Level : {player.level}".ljust(30)
+        f"Level      : {player.level}".ljust(30)
         + "       "
-        + f"Level :     {enemy.level}".rjust(30)
+        + f"Level      :     {enemy.level}".rjust(30)
     )
     print(
         f"Experience : {player.experience:}".ljust(30)
         + "       "
         + f"Experience :    {enemy.experience}".rjust(30)
     )
-    print(f"Mana : {player.mana}/{player.max_mana}".ljust(30))
+    print(f"Mana       : {player.mana}/{player.max_mana}".ljust(30))
     print(
-        f"Status: {', '.join(status.name for status in player.statuses)}".ljust(30)
+        f"Status     : {', '.join(status.name for status in player.statuses)}".ljust(30)
         + "       "
-        + f"Status:    {', '.join(status.name for status in enemy.statuses)}".rjust(30)
+        + f"Status     :    {', '.join(status.name for status in enemy.statuses)}".rjust(30)
     )
-    # print(f"Weapon held: {[item.name for item in player.inventory.items if isinstance(item, Weapon) and item.is_equipped]}")
+
     try:
-        print(f"Weapon held: {player.equipped_weapon.name}")
+        print(f"Weapon    -> {player.equipped_weapon.name}")
     except AttributeError:
-        print("Weapon held: None")
+        print("Weapon    -> None")
+
     try:
-        print(f"Armor worn: {player.equipped_armor.name}")
+        print(f"Shield    -> {player.equipped_shield.name}")
     except AttributeError:
-        print("Armor worn: None")
+        print("Shield    -> None")
+
+    try:
+        print(f"Armor     -> {player.equipped_armor.name}")
+    except AttributeError:
+        print("Armor     -> None")
+
     print("-" * 67)
     print()
 

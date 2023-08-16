@@ -1,4 +1,4 @@
-from inventory import Inventory, Weapon, Armor
+from inventory import Inventory, Weapon, Shield, Armor
 
 
 # Create weapons
@@ -85,6 +85,23 @@ longspear = Weapon(
     is_broken=False,
     damage_type="stab",
     damage=15,
+)
+
+oak_shield = Shield(
+    name="Oak Shield",
+    description="Basic shield, not too good..",
+    value=15,
+    slot_size=2,
+    required_strength=10,
+    required_dexterity=0,
+    allowed_race="Human",
+    max_durability=20,
+    durability=20,
+    inventory=Inventory,
+    is_equipped=False,
+    is_broken=False,
+    resistance="Wind",
+    protection=10,
 )
 
 silver_plate = Armor(

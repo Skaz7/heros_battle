@@ -128,6 +128,16 @@ class Armor(Item):
 
 
 @dataclass
+class Shield(Item):
+    """Initializes Shield Item.
+    Shield can be used to increase player's defense, but it can't be used with two-handed weapons.
+    """
+
+    resistance: str = ""
+    protection: int = 0
+
+
+@dataclass
 class Consumable(Item):
     """Initializes a Consumable Item.
     Consuming one of this items will upgrade player statistics.

@@ -62,7 +62,7 @@ def main():
     enemy.inventory = Inventory([], 5, 5)
     player.spellbook = SpellBook([fireball, freeze])
     player.inventory.add_item(excalibur)
-    player.inventory.add_item(iceblizzard)
+    player.inventory.add_item(oak_shield)
     player.inventory.add_item(thorshammer)
     player.inventory.add_item(elvisheyes)
     player.inventory.add_item(longspear)

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from inventory import Inventory, Item, Weapon, Armor, Consumable
+from inventory import Inventory, Item, Weapon, Shield, Armor, Consumable
 from spellbook import SpellBook
 from decorators import *
 from classes import Dice, Quest
@@ -48,6 +48,7 @@ class Creature:
     is_alive: bool = True
     spellbook: SpellBook = SpellBook()
     equipped_weapon = None
+    equipped_shield = None
     equipped_armor = None
 
     # ####### Methods ########
@@ -155,6 +156,17 @@ class Creature:
                     return
                 else:
                     self.equip_weapon(selected_item)
+
+            elif isinstance(selected_item, Shield):
+                for shield in self.inventory.items:
+                    if isinstance(shield, Shield) and shield.is_equipped:
+                        self.unequip_shield(shield)
+                if selected_item.durability <= 0:
+                    print_red(f"{selected_item.name} is broken and can't be used!")
+                    return
+                else:
+                    self.equip_shield(selected_item)
+
             elif isinstance(selected_item, Armor):
                 for armor in self.inventory.items:
                     if isinstance(armor, Armor) and armor.is_equipped:
@@ -164,6 +176,7 @@ class Creature:
                     return
                 else:
                     self.equip_armor(selected_item)
+
             elif isinstance(selected_item, Consumable):
                 self.use_consumable(selected_item)
             return
@@ -240,6 +253,18 @@ class Creature:
         self.equipped_weapon = None
         weapon.is_equipped = False
         self.strength -= weapon.damage
+
+    def equip_shield(self, shield):
+        """Equips a shield to the hero."""
+        self.equipped_shield = shield
+        shield.is_equipped = True
+        self.defense += shield.protection
+
+    def unequip_shield(self, shield):
+        """Unequips a shield from the hero."""
+        self.equipped_shield = None
+        shield.is_equipped = False
+        self.defense -= shield.protection
 
     def equip_armor(self, armor):
         """Equips an armor to the Creature."""
