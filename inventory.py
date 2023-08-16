@@ -63,7 +63,7 @@ class Item:
     def set_inventory(self, inventory):
         self.inventory = inventory
 
-    def degrade(self, attacker):
+    def degrade(self):
         self.durability -= 1
         if self.durability == 0:
             if isinstance(self, Weapon):
@@ -72,13 +72,11 @@ class Item:
                     self.name + f" \033[0;31m(DESTROYED - can't be used.) \033[0m"
                 )
                 self.is_equipped = False
-                attacker.unequip_weapon(self)
-                print(self.is_equipped)
             elif isinstance(self, Armor):
                 print_red(f"Your {self.name} is broken down.")
                 self.is_equipped = False
-                attacker.unequip_armor(self)
             elif isinstance(self, Consumable):
+                print_green(f"You consumed {self.name}.")
                 self.destroy()
 
     def destroy(self) -> None:

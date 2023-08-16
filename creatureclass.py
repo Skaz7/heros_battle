@@ -95,20 +95,27 @@ class Creature:
         If the defender is defending, the damage dealt is reduced by the defender's armor.
         If the defender's health is reduced to 0 or below, the attacker wins.
         """
-        for weapon in self.inventory.items:
-            if isinstance(weapon, Weapon) and weapon.is_equipped:
-                print_green(f"{self.name} is holding {weapon.name}")
-                weapon.degrade(self)
-
-        for armor in defender.inventory.items:
-            if isinstance(armor, Armor) and armor.is_equipped:
-                print_green(f"{defender.name} wears {armor.name}")
-                additional_protection = armor.protection
-                armor.degrade(self)
+        self.check_equipped_items_state(defender)
 
         damage = self.strength - defender.defense
+        if damage < 0:
+            damage = 0
         defender.take_damage(damage)
         print(f"\n{self.name} attacks {defender.name} for {damage} damage!\n")
+
+    def check_equipped_items_state(self, defender):
+        if self.equipped_weapon is not None:
+            print_green(f"{self.name} is using {self.equipped_weapon.name}")
+            self.equipped_weapon.degrade()
+            if self.equipped_weapon.durability == 0:
+                self.unequip_weapon(self.equipped_weapon)
+
+        if defender.equipped_armor is not None:
+            print_yellow(f"{defender.name} wears {defender.equipped_armor.name}")
+            additional_protection = defender.equipped_armor.protection
+            defender.equipped_armor.degrade()
+            if defender.equipped_armor.durability == 0:
+                defender.unequip_armor(defender.equipped_armor)
 
     def defend(self):
         """
@@ -139,40 +146,40 @@ class Creature:
 
     def use_item(self):
         self.inventory.show()
+
         choice = int(input("> "))
         selected_item = self.inventory.items[choice - 1]
         selected_item.info()
+
         print(f"1 - Use {selected_item.name}?")
         print("0 - Go Back.\n")
+
         choice = int(input("> "))
+
         if choice == 1:
-            # need to check if any other weapon is equipped, if so, unequip it and equip new one
             if isinstance(selected_item, Weapon):
-                for weapon in self.inventory.items:
-                    if isinstance(weapon, Weapon) and weapon.is_equipped:
-                        self.unequip_weapon(weapon)
+                if self.equipped_weapon is not None:
+                    self.unequip_weapon(self.equipped_weapon)
                 if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} is broken and can't be used!")
+                    print_red(f"{selected_item.name} id broken and can't be used!")
                     return
                 else:
                     self.equip_weapon(selected_item)
 
             elif isinstance(selected_item, Shield):
-                for shield in self.inventory.items:
-                    if isinstance(shield, Shield) and shield.is_equipped:
-                        self.unequip_shield(shield)
+                if self.equipped_shield is not None:
+                    self.unequip_shield(self.equipped_shield)
                 if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} is broken and can't be used!")
+                    print_red(f"{selected_item.name} id broken and can't be used!")
                     return
                 else:
                     self.equip_shield(selected_item)
 
             elif isinstance(selected_item, Armor):
-                for armor in self.inventory.items:
-                    if isinstance(armor, Armor) and armor.is_equipped:
-                        self.unequip_armor(armor)
+                if self.equipped_armor is not None:
+                    self.unequip_armor(self.equipped_armor)
                 if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} is broken and can't be used!")
+                    print_red(f"{selected_item.name} id broken and can't be used!")
                     return
                 else:
                     self.equip_armor(selected_item)
