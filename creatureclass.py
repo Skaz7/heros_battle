@@ -66,14 +66,14 @@ class Creature:
         print_one_line_in_frame(f"{self.name.upper()} INFORMATION")
         for key, value in self.__dict__.items():
             if (
-                key[1:]
+                key
                 != "inventory"  # don't print this because you will get Inventory Class information
-                and key[1:]
+                and key
                 != "spellbook"  # don't print this because you will get SpellBook Class information
-                and key[1:]
+                and key
                 != "statuses"  # don't print this because you will get list of classes
             ):
-                slow_print(f"    {key[1:].title().replace('_', ' '):10} : {value}\n")
+                slow_print(f"    {key.title().replace('_', ' '):10} : {value}\n")
         print(f"    Statuses   : {', '.join(status.name for status in self.statuses)}")
         self.inventory.show()
         self.spellbook.show()
@@ -151,43 +151,41 @@ class Creature:
         selected_item = self.inventory.items[choice - 1]
         selected_item.info()
 
-        print(f"1 - Use {selected_item.name}?")
-        print("0 - Go Back.\n")
+        print(f"[ENTER] - Use {selected_item.name}?")
+        print("0 - Go back.\n")
 
-        choice = int(input("> "))
+        choice = input("> ")
 
-        if choice == 1:
+        if choice == "":
+            if selected_item.durability <= 0:
+                print_red(f"{selected_item.name} id broken and can't be used!")
+                return
+
             if isinstance(selected_item, Weapon):
                 if self.equipped_weapon is not None:
                     self.unequip_weapon(self.equipped_weapon)
-                if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} id broken and can't be used!")
-                    return
+                    self.equip_weapon((selected_item))
                 else:
                     self.equip_weapon(selected_item)
 
             elif isinstance(selected_item, Shield):
                 if self.equipped_shield is not None:
                     self.unequip_shield(self.equipped_shield)
-                if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} id broken and can't be used!")
-                    return
+                    self.equip_shield(selected_item)
                 else:
                     self.equip_shield(selected_item)
 
             elif isinstance(selected_item, Armor):
                 if self.equipped_armor is not None:
                     self.unequip_armor(self.equipped_armor)
-                if selected_item.durability <= 0:
-                    print_red(f"{selected_item.name} id broken and can't be used!")
-                    return
+                    self.equipped_armor(selected_item)
                 else:
                     self.equip_armor(selected_item)
 
             elif isinstance(selected_item, Consumable):
                 self.use_consumable(selected_item)
             return
-        elif choice == 0:
+        elif choice == "0":
             return
         else:
             print("Wrong choice! Please repeat.")
@@ -355,24 +353,8 @@ class Hero(Creature):
 
 @dataclass
 class Enemy(Creature):
-    weakness: str = None
-    resistance: str = None
-
-    @property
-    def weakness(self):
-        return self._weakness
-
-    @property
-    def resistance(self):
-        return self._resistance
-
-    @weakness.setter
-    def weakness(self, new_weakness):
-        self._weakness = new_weakness
-
-    @resistance.setter
-    def resistance(self, new_resistance):
-        self._resistance = new_resistance
+    weakness: str = ""
+    resistance: str = ""
 
     def reveal_all(self):
         """Reveals all enemy attributes."""

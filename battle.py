@@ -44,7 +44,7 @@ class Battle:
         self.print_info()
         choice = self.get_player_choice()
         self.handle_player_choice(choice)
-        input("[ENTER] - continue")
+        # input("[ENTER] - continue")
 
 
     def print_options(self):

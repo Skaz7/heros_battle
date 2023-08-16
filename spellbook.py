@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from decorators import print_green, print_red, print_yellow
+import time
 
 
 @dataclass
@@ -23,18 +24,22 @@ class Spell:
             print_red(
                 f"You discovered your opponent's resistance to {self.damage_type}!"
             )
+            time.sleep(0.5)
             defender.take_damage(self.base_damage * 0.5)
             print(
                 f"\n{attacker.name} attacks {defender.name} for {self.base_damage * 0.5} damage!\n"
             )
+            input("[ENTER] - continue.")
         elif self.damage_type == defender.weakness:
             print_green(
                 f"You discovered your opponent's weakness to {self.damage_type}!"
             )
+            time.sleep(0.5)
             defender.take_damage(self.base_damage * 2)
             print(
                 f"\n{attacker.name} attacks {defender.name} for {self.base_damage * 2} damage!\n"
             )
+            input("[ENTER] - continue.")
         elif self.damage_type == "Reveal":
             defender.reveal_all()
         else:
@@ -42,6 +47,7 @@ class Spell:
             print(
                 f"\n{attacker.name} attacks {defender.name} for {self.base_damage} damage!\n"
             )
+            input("[ENTER] - continue.")
 
 
 @dataclass
@@ -56,7 +62,7 @@ class SpellBook:
 
     def show(self):
         print(f"\n    Spells in spellbook: ")
-        print("    -------------------------")
+        print("    --------------------")
 
         for i, spell in enumerate(self.spells, start=1):
             print(f"\t\t\t[{i}] {spell.name} - {spell.description}")
